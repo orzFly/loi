@@ -1,0 +1,6 @@
+--require test/source-map
+--require ts-node/register
+--recursive
+--full-trace
+--bail
+src/**/*.spec.ts
