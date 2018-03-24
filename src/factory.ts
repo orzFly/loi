@@ -1,6 +1,10 @@
 import * as t from 'io-ts';
 import { isFunction } from 'lodash';
 
+export interface ILoiOption {
+  name?: string
+}
+
 function copyFactoryMethod(klass: Function, destination: any) {
   Object.getOwnPropertyNames(klass.prototype).forEach((i) => {
     if (i === 'constructor') return;
@@ -9,20 +13,23 @@ function copyFactoryMethod(klass: Function, destination: any) {
   })
 }
 
-export function asFactory<
-  F extends t.Any,
-  LO extends { name?: string } = { name?: string },
-  T extends t.Type<F['_A'], F['_O'], F['_I']> = t.Type<F['_A'], F['_O'], F['_I']>
-  >(
-    factory: { new(...args: any[]): F, loiTag: string },
-    t: T,
-    options: LO[] = [],
-    newOption?: LO,
-): T & F {
+export class Factory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> {
+  constructor() {
+    super(undefined, undefined, undefined, undefined);
+    throw new Error('This class cannot be constructored.');
+  }
+
+  loiOption: ILoiOption[]
+}
+
+export function decorate<
+  T extends t.Any,
+  F extends Factory<T>,
+>(
+  factory: { new(...args: any[]): F },
+  t: T
+): F & T {
   const result: any = t;
-  const newOptions = [...(options || []), ...(newOption ? [newOption] : [])];
-  result.name = `${factory.loiTag}${newOptions.length ? `(${newOptions.map((i) => i.name || JSON.stringify(i)).join(", ")})` : ""}`;
-  result.loiOption = newOptions;
   copyFactoryMethod(factory, result);
   return result;
 }

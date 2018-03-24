@@ -1,9 +1,9 @@
 import * as t from 'io-ts';
 import { isString } from 'lodash';
-import { asFactory } from '../factory';
+import { decorate, Factory, ILoiOption } from '../factory';
 import * as rt from '../RuntimeType';
 
-interface INumberOption {
+export interface INumberOption extends ILoiOption {
   name: string,
   max?: number
   min?: number
@@ -13,80 +13,95 @@ interface INumberOption {
   finite?: boolean
 }
 
-function asNumberFactory<T extends t.Any, LO = INumberOption>(t: T, options: LO[] = [], newOption?: LO) {
-  return asFactory<NumberFactory<T>>(NumberFactory, t, options, newOption);
+function metadata<T, LO extends ILoiOption>(t: T, params?: {
+  parent?: any,
+  tag?: string,
+  option?: LO
+}): T {
+  const tag: string = (params && params.tag) || (params && params.parent && params.parent.loiTag) || "unknown";
+  const options = [...(params && params.parent && params.parent.loiOption || []), ...(params && params.option ? [params && params.option] : [])];
+  (<any>t).name = `${tag}${options.length ? `(${options.map((i) => i.name || JSON.stringify(i)).join(", ")})` : ""}`;
+  (<any>t).loiTag = tag;
+  (<any>t).loiOption = options;
+  return t;
 }
 
-export class NumberFactory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> {
+export class NumberFactory<T extends t.Any> extends Factory<T> {
   static loiTag = "number"
-  constructor() {
-    super(undefined, undefined, undefined, undefined);
-    throw new Error('This class cannot be constructored.');
+  static decorate<T extends t.Any>(t: T) {
+    return decorate<T, NumberFactory<T>>(this, t);
   }
-  private loiOption: INumberOption[]
 
   public max(limit: number) {
-    return asNumberFactory(
-      t.refinement(this, (n) => n <= limit),
-      this.loiOption,
-      { name: `<=${limit}`, max: limit }
-    )
+    const type = t.refinement(this, (n) => n <= limit) as t.Type<T['_A'], T['_O'], T['_I']>;
+    return metadata(NumberFactory.decorate(type), {
+      parent: this,
+      tag: "number",
+      option: <INumberOption>{ name: `<=${limit}`, max: limit }
+    });
   }
 
   public min(limit: number) {
-    return asNumberFactory(
-      t.refinement(this, (n) => n >= limit),
-      this.loiOption,
-      { name: `>=${limit}`, min: limit }
-    )
+    const type = t.refinement(this, (n) => n >= limit) as t.Type<T['_A'], T['_O'], T['_I']>;
+    return metadata(NumberFactory.decorate(type), {
+      parent: this,
+      tag: "number",
+      option: <INumberOption>{ name: `>=${limit}`, min: limit }
+    });
   }
 
   public greater(limit: number) {
-    return asNumberFactory(
-      t.refinement(this, (n) => n > limit),
-      this.loiOption,
-      { name: `>${limit}`, greater: limit }
-    )
+    const type = t.refinement(this, (n) => n > limit) as t.Type<T['_A'], T['_O'], T['_I']>;
+    return metadata(NumberFactory.decorate(type), {
+      parent: this,
+      tag: "number",
+      option: <INumberOption>{ name: `>${limit}`, greater: limit }
+    });
   }
 
   public less(limit: number) {
-    return asNumberFactory(
-      t.refinement(this, (n) => n < limit),
-      this.loiOption,
-      { name: `<${limit}`, less: limit }
-    )
+    const type = t.refinement(this, (n) => n < limit) as t.Type<T['_A'], T['_O'], T['_I']>;
+    return metadata(NumberFactory.decorate(type), {
+      parent: this,
+      tag: "number",
+      option: <INumberOption>{ name: `<${limit}`, less: limit }
+    });
   }
 
   public negative() {
-    return asNumberFactory(
-      t.refinement(this, (n) => n < 0),
-      this.loiOption,
-      { name: `-`, less: 0 }
-    )
+    const type = t.refinement(this, (n) => n < 0) as t.Type<T['_A'], T['_O'], T['_I']>;
+    return metadata(NumberFactory.decorate(type), {
+      parent: this,
+      tag: "number",
+      option: <INumberOption>{ name: `-`, less: 0 }
+    });
   }
 
   public positive() {
-    return asNumberFactory(
-      t.refinement(this, (n) => n > 0),
-      this.loiOption,
-      { name: `+`, greater: 0 }
-    )
+    const type = t.refinement(this, (n) => n > 0) as t.Type<T['_A'], T['_O'], T['_I']>;
+    return metadata(NumberFactory.decorate(type), {
+      parent: this,
+      tag: "number",
+      option: <INumberOption>{ name: `+`, greater: 0 }
+    });
   }
 
   public integer() {
-    return asNumberFactory(
-      t.refinement(this, (n) => n % 1 === 0),
-      this.loiOption,
-      { name: `integer`, integer: true }
-    )
+    const type = t.refinement(this, (n) => n % 1 === 0) as t.Type<T['_A'], T['_O'], T['_I']>;
+    return metadata(NumberFactory.decorate(type), {
+      parent: this,
+      tag: "number",
+      option: <INumberOption>{ name: `integer`, integer: true }
+    });
   }
 
   public finite() {
-    return asNumberFactory(
-      t.refinement(this, (n) => Number.isFinite(n)),
-      this.loiOption,
-      { name: `finite`, finite: true }
-    )
+    const type = t.refinement(this, (n) => Number.isFinite(n)) as t.Type<T['_A'], T['_O'], T['_I']>;
+    return metadata(NumberFactory.decorate(type), {
+      parent: this,
+      tag: "number",
+      option: <INumberOption>{ name: `finite`, finite: true }
+    });
   }
 
   public default(value: this['_A']) {
@@ -95,12 +110,16 @@ export class NumberFactory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['
 }
 
 export function number() {
-  return asNumberFactory(new t.NumberType(), []);
+  const type = new t.NumberType();
+  return metadata(NumberFactory.decorate(type), {
+    tag: "number"
+  });
 }
 
 export function numberOrNumericString() {
-  return asNumberFactory(
-    rt.convert(t.number, (i: string) => parseFloat(i), (i) => isString(i)),
-    [{ name: "numericString" }]
-  );
+  const type = rt.convert(t.number, (i: string) => parseFloat(i), (i) => isString(i));
+  return metadata(NumberFactory.decorate(type), {
+    tag: "number",
+    option: { name: "numericString" }
+  });
 }
