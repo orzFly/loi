@@ -3,6 +3,7 @@
 --recursive
 --full-trace
 --bail
+src/RuntimeType.spec.ts
 src/utilties/*.spec.ts
 src/types/*.spec.ts
 src/**/*.spec.ts

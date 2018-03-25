@@ -14,19 +14,19 @@ export class BaseFactory<T extends t.Any> extends Factory<T> {
     return decorate<T, BaseFactory<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t);
   }
 
-  public default(value: this['_A']) {
-    const type = withDefault(this, value);
-    return metadata(BaseFactory.decorate(type), {
-      parent: this,
-      option: <IBaseOption<T>>{ name: `with default`, default: value }
-    });
-  }
-
   public nullAsUndefined() {
     const type = nullAsUndefined(this);
     return metadata(BaseFactory.decorate(type), {
       parent: this,
       option: <IBaseOption<T>>{ name: `null as undefined`, nullAsUndefined: true }
+    });
+  }
+
+  public default(value: this['_A']) {
+    const type = withDefault(this, value);
+    return metadata(BaseFactory.decorate(type), {
+      parent: this,
+      option: <IBaseOption<T>>{ name: `with default`, default: value }
     });
   }
 }
