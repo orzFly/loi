@@ -7,13 +7,6 @@ export interface ILoiOption {
   name?: string
 }
 
-function copyFactoryMethod(klass: Function, destination: any) {
-  Object.getOwnPropertyNames(klass.prototype).forEach((i) => {
-    if (i === 'constructor') return;
-    destination[i] = klass.prototype[i];
-  })
-}
-
 export class Factory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> {
   constructor() {
     super(undefined, undefined, undefined, undefined);
@@ -23,13 +16,14 @@ export class Factory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> 
   [loiOption]: ILoiOption[]
 }
 
-export function decorate<
-  T extends t.Any,
-  F extends Factory<t.Type<T['_A'], T['_O'], T['_I']>>,
->(
-  factory: { new(...args: any[]): F },
-  t: T
-): T & F {
+function copyFactoryMethod(klass: Function, destination: any) {
+  Object.getOwnPropertyNames(klass.prototype).forEach((i) => {
+    if (i === 'constructor') return;
+    destination[i] = klass.prototype[i];
+  })
+}
+
+export function decorate<T extends t.Any, F extends Factory<t.Type<T['_A'], T['_O'], T['_I']>>,>(factory: { new(...args: any[]): F }, t: T): T & F {
   const result: any = t;
   copyFactoryMethod(factory, result);
   return result;
