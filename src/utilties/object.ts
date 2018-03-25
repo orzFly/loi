@@ -2,11 +2,14 @@ import * as t from 'io-ts';
 import { mapValues } from 'lodash';
 import { nullAsUndefined } from './convert';
 
-export const getNameFromProps = (required: t.Props = {}, optional: t.Props = {}): string =>
-  `{ ${[
+export function getNameFromProps(required: t.Props = {}, optional: t.Props = {}): string {
+  const result = `{ ${[
     ...Object.keys(required).map((k) => `${k}: ${required[k].name}`),
     ...Object.keys(optional).map((k) => `${k}?: ${optional[k].name}`),
   ].join(', ')} }`
+
+  return result === "{  }" ? "{}" : result;
+}
 
 /** Specifies that only the given interface properties are allowed. Invalid properties will be just ignored, violetly. */
 export const violet = <P extends t.Props>(
