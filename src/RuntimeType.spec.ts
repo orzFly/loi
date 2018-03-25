@@ -2,14 +2,7 @@ import { expect } from 'chai';
 import { Either } from 'fp-ts/lib/Either';
 import * as t from 'io-ts';
 import * as rt from './RuntimeType';
-
-function shouldValidate<Right>(e: Either<t.ValidationError[], Right>) {
-  return e.fold((err) => { throw err }, (right) => right);
-}
-
-function shouldNotValidate<Right>(e: Either<t.ValidationError[], Right>) {
-  return e.fold((err) => err, (right) => { throw new Error('Should Not Validate') });
-}
+import { shouldNotValidate, shouldValidate } from './test-helper.spec';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
@@ -47,32 +40,6 @@ describe('RuntimeType', () => {
       expect(shouldValidate(rt.validate(true, rt.violetFalseBoolean))).to.be.equal(undefined)
       expect(shouldValidate(rt.validate(null, rt.violetFalseBoolean))).to.be.equal(undefined)
       expect(shouldValidate(rt.validate(undefined, rt.violetFalseBoolean))).to.be.equal(undefined)
-    })
-  })
-
-  describe('nullablePartial', () => {
-    it('should work', () => {
-      const test = rt.nullablePartial({
-        key: t.boolean
-      })
-
-      expect(shouldValidate(rt.validate({ key: true }, test)).key).to.be.equal(true)
-      expect(shouldValidate(rt.validate({ key: false }, test)).key).to.be.equal(false)
-      expect(shouldValidate(rt.validate({ key: null }, test)).key).to.be.equal(undefined)
-      expect(shouldValidate(rt.validate({ key: undefined }, test)).key).to.be.equal(undefined)
-      expect(shouldValidate(rt.validate({}, test)).key).to.be.equal(undefined)
-    })
-
-    it('control group should not work', () => {
-      const test = t.partial({
-        key: t.boolean
-      })
-
-      expect(shouldValidate(rt.validate({ key: true }, test)).key).to.be.equal(true)
-      expect(shouldValidate(rt.validate({ key: false }, test)).key).to.be.equal(false)
-      shouldNotValidate(rt.validate({ key: null }, test))
-      expect(shouldValidate(rt.validate({ key: undefined }, test)).key).to.be.equal(undefined)
-      expect(shouldValidate(rt.validate({}, test)).key).to.be.equal(undefined)
     })
   })
 })

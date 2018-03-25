@@ -29,6 +29,48 @@ describe('types:Object', () => {
       expect(shouldValidate(test.decode({ required: 1, extra: 1 }))).to.be.eql({ required: 1, extra: 1 })
     })
 
+    it('strict() should work', () => {
+      const test = object({
+        required: t.refinement(t.any, (i) => i != null, "any")
+      }, {
+        optional: t.refinement(t.any, (i) => i != null, "any")
+      }).strict()
+
+      expect(test.name).to.be.eql("{ required: any, optional?: any }(strict)")
+      expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
+      expect(shouldValidate(test.decode({ required: 1, optional: 2 }))).to.be.eql({ required: 1, optional: 2 })
+      expect(shouldValidate(test.decode({ required: 1, optional: [] }))).to.be.eql({ required: 1, optional: [] })
+      expect(shouldValidate(test.decode({ required: 1, optional: null }))).to.be.eql({ required: 1, optional: undefined })
+      expect(shouldValidate(test.decode({ required: 1, optional: undefined }))).to.be.eql({ required: 1, optional: undefined })
+      shouldNotValidate(test.decode({ required: undefined }))
+      shouldNotValidate(test.decode({ required: null }))
+      shouldNotValidate(test.decode({ optional: 2 }))
+      shouldNotValidate(test.decode({}))
+
+      shouldNotValidate(test.decode({ required: 1, extra: 1 }))
+    })
+
+    it('violet() should work', () => {
+      const test = object({
+        required: t.refinement(t.any, (i) => i != null, "any")
+      }, {
+        optional: t.refinement(t.any, (i) => i != null, "any")
+      }).violet()
+
+      expect(test.name).to.be.eql("{ required: any, optional?: any }(violet)")
+      expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
+      expect(shouldValidate(test.decode({ required: 1, optional: 2 }))).to.be.eql({ required: 1, optional: 2 })
+      expect(shouldValidate(test.decode({ required: 1, optional: [] }))).to.be.eql({ required: 1, optional: [] })
+      expect(shouldValidate(test.decode({ required: 1, optional: null }))).to.be.eql({ required: 1, optional: undefined })
+      expect(shouldValidate(test.decode({ required: 1, optional: undefined }))).to.be.eql({ required: 1, optional: undefined })
+      shouldNotValidate(test.decode({ required: undefined }))
+      shouldNotValidate(test.decode({ required: null }))
+      shouldNotValidate(test.decode({ optional: 2 }))
+      shouldNotValidate(test.decode({}))
+
+      expect(shouldValidate(test.decode({ required: 1, extra: 1 }))).to.be.eql({ required: 1 })
+    })
+
     it('type() should work', () => {
       const test = object({
         source: t.string

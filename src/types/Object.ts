@@ -1,20 +1,22 @@
 import * as t from 'io-ts';
 import { decorate, Factory, ILoiOption, metadata } from '../factory';
-import * as rt from '../RuntimeType';
+import { getNameFromProps, interfaceWithOptionals, strictInterfaceWithOptionals, violetInterfaceWithOptionals } from '../utilties/object';
 import { BaseFactory } from './Base';
 
-const getNameFromProps = (required: t.Props = {}, optional: t.Props = {}): string =>
-  `{ ${[
-    ...Object.keys(required).map((k) => `${k}: ${required[k].name}`),
-    ...Object.keys(optional).map((k) => `${k}?: ${optional[k].name}`),
-  ].join(', ')} }`
-
-export interface IObjectOption<T> extends ILoiOption {
+export interface IObjectOption extends ILoiOption {
   name: string,
-  type: Function,
+  type?: Function,
+  strict?: boolean,
+  violet?: boolean,
 }
 
+export const loiObjectRequired = Symbol('loiObjectRequired')
+export const loiObjectOptional = Symbol('loiObjectOptional')
+
 export class ObjectFactory<R extends t.Props, O extends t.Props, T extends t.Any> extends Factory<T> {
+  [loiObjectRequired]: R
+  [loiObjectOptional]: O
+
   static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T) {
     return BaseFactory.decorate(decorate<T, ObjectFactory<R, O, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
@@ -23,7 +25,32 @@ export class ObjectFactory<R extends t.Props, O extends t.Props, T extends t.Any
     const type = t.refinement(this, (i: any) => i instanceof constructor) as t.Type<this['_A'] & F, this['_O'] & F, this['_I']>
     return metadata(ObjectFactory.decorate<R, O, typeof type>(type), {
       parent: this,
-      option: <IObjectOption<T>>{ name: `instanceof ${constructor.name}`, type: constructor }
+      option: <IObjectOption>{ name: `instanceof ${constructor.name}`, type: constructor }
+    });
+  }
+}
+
+export class InitialObjectFactory<R extends t.Props, O extends t.Props, T extends t.Any> extends Factory<T> {
+  [loiObjectRequired]: R
+  [loiObjectOptional]: O
+
+  static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T) {
+    return ObjectFactory.decorate(BaseFactory.decorate(decorate<T, InitialObjectFactory<R, O, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t)));
+  }
+
+  public strict() {
+    const type = strictInterfaceWithOptionals(this[loiObjectRequired], this[loiObjectOptional], this.name)
+    return metadata(ObjectFactory.decorate<R, O, typeof type>(type), {
+      parent: this,
+      option: <IObjectOption>{ name: `strict`, strict: true }
+    });
+  }
+
+  public violet() {
+    const type = violetInterfaceWithOptionals(this[loiObjectRequired], this[loiObjectOptional], this.name)
+    return metadata(ObjectFactory.decorate<R, O, typeof type>(type), {
+      parent: this,
+      option: <IObjectOption>{ name: `violet`, violet: true }
     });
   }
 }
@@ -33,8 +60,11 @@ export function object<R extends t.Props = {}, O extends t.Props = {}>(
   optional: O = {} as any,
   name: string = getNameFromProps(required, optional)
 ) {
-  const type = rt.interfaceWithOptionals(required, optional, name);
-  return metadata(ObjectFactory.decorate<R, O, typeof type>(type), {
+  const type = interfaceWithOptionals(required, optional, name);
+  const decorated = metadata(InitialObjectFactory.decorate<R, O, typeof type>(type), {
     tag: name
   });
+  decorated[loiObjectRequired] = required;
+  decorated[loiObjectOptional] = optional;
+  return decorated;
 }
