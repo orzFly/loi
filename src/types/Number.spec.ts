@@ -154,6 +154,40 @@ describe('types:Number', () => {
       shouldNotValidate(test.decode(undefined))
     })
 
+    it('greater() should work', () => {
+      const test = number().greater(10)
+
+      expect(test.name).to.be.eql("number(>10)")
+      expect(shouldValidate(test.decode(11))).to.be.eql(11)
+      expect(shouldNotValidate(test.decode(1)))
+    })
+
+    it('less() should work', () => {
+      const test = number().less(10)
+
+      expect(test.name).to.be.eql("number(<10)")
+      expect(shouldValidate(test.decode(1))).to.be.eql(1)
+      expect(shouldNotValidate(test.decode(11)))
+    })
+
+    it('negative() should work', () => {
+      const test = number().negative()
+
+      expect(test.name).to.be.eql("number(-)")
+      expect(shouldValidate(test.decode(-1))).to.be.eql(-1)
+      expect(shouldValidate(test.decode(-11))).to.be.eql(-11)
+      expect(shouldNotValidate(test.decode(1)))
+    })
+
+    it('positive() should work', () => {
+      const test = number().positive()
+
+      expect(test.name).to.be.eql("number(+)")
+      expect(shouldValidate(test.decode(1))).to.be.eql(1)
+      expect(shouldValidate(test.decode(11))).to.be.eql(11)
+      expect(shouldNotValidate(test.decode(-1)))
+    })
+
     forEach({
       "parseFloat().max()": [number().parseFloat().max(5), "number(parseFloat, <=5)"],
       "max().parseFloat()": [number().max(5).parseFloat(), "number(<=5, parseFloat)"],
