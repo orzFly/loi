@@ -8,6 +8,7 @@ export interface IBooleanOption extends ILoiOption {
   name: string
   parseString?: boolean
   parseNumber?: boolean
+  only?: boolean
 }
 
 const trueValues = ["true", "t", "yes", "y"]
@@ -47,6 +48,24 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
 
   parse() {
     return this.parseNumber().parseString()
+  }
+
+  trueOnly() {
+    const type = t.refinement(this, (i) => i === true)
+
+    return metadata(BooleanFactory.decorate(type), {
+      parent: this,
+      option: <IBooleanOption>{ name: `true only`, only: true }
+    });
+  }
+
+  falseOnly() {
+    const type = t.refinement(this, (i) => i === false)
+
+    return metadata(BooleanFactory.decorate(type), {
+      parent: this,
+      option: <IBooleanOption>{ name: `false only`, only: false }
+    });
   }
 }
 
