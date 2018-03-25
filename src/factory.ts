@@ -1,6 +1,9 @@
 import * as t from 'io-ts';
 import { isFunction } from 'lodash';
 
+export const loiTag = Symbol('loiTag')
+export const loiOption = Symbol('loiOption')
+
 export interface ILoiOption {
   name?: string
 }
@@ -19,7 +22,7 @@ export class Factory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> 
     throw new Error('This class cannot be constructored.');
   }
 
-  loiOption: ILoiOption[]
+  [loiOption]: ILoiOption[]
 }
 
 export function decorate<
@@ -39,10 +42,10 @@ export function metadata<T, LO extends ILoiOption>(t: T, params?: {
   tag?: string,
   option?: LO
 }): T {
-  const tag: string = (params && params.tag) || (t && (<any>t).loiTag) || (params && params.parent && params.parent.loiTag) || (t && (<any>t).name) || "unknown";
-  const options = [...(params && params.parent && params.parent.loiOption || []), ...(params && params.option ? [params && params.option] : [])];
+  const tag: string = (params && params.tag) || (t && (<any>t)[loiTag]) || (params && params.parent && params.parent[loiTag]) || (t && (<any>t).name) || "unknown";
+  const options = [...(params && params.parent && params.parent[loiOption] || []), ...(params && params.option ? [params && params.option] : [])];
   (<any>t).name = `${tag}${options.length ? `(${options.map((i) => i.name || JSON.stringify(i)).join(", ")})` : ""}`;
-  (<any>t).loiTag = tag;
-  (<any>t).loiOption = options;
+  (<any>t)[loiTag] = tag;
+  (<any>t)[loiOption] = options;
   return t;
 }
