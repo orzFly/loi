@@ -74,7 +74,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public integer() {
-    const type = t.refinement(this, (n) => n % 1 === 0) as t.Type<T['_A'], T['_O'], T['_I']>;
+    const type = t.refinement(this, (n) => Number.isSafeInteger(n)) as t.Type<T['_A'], T['_O'], T['_I']>;
     return metadata(NumberFactory.decorate(type), {
       parent: this,
       tag: "number",
@@ -90,19 +90,20 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
       option: <INumberOption>{ name: `finite`, finite: true }
     });
   }
+
+  public parseFloat() {
+    const type = rt.convert(this, (i: string) => parseFloat(i), (i) => isString(i));
+    return metadata(NumberFactory.decorate(type), {
+      parent: this,
+      tag: "number",
+      option: { name: "parseFloat" }
+    });
+  }
 }
 
 export function number() {
   const type = new t.NumberType();
   return metadata(NumberFactory.decorate(type), {
     tag: "number"
-  });
-}
-
-export function numberOrNumericString() {
-  const type = rt.convert(t.number, (i: string) => parseFloat(i), (i) => isString(i));
-  return metadata(NumberFactory.decorate(type), {
-    tag: "number",
-    option: { name: "numericString" }
   });
 }

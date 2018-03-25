@@ -7,7 +7,6 @@ export namespace Loi {
   export type Type<RT extends t.Any> = RT['_A'];
 
   export const number = Number.number
-  export const numberOrNumericString = Number.numberOrNumericString
   export const union = t.union
   export const validate = rt.validate
 }
