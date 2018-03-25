@@ -16,6 +16,18 @@ export class Factory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> 
   [loiOption]: ILoiOption[]
 }
 
+const factoryMaps = new WeakMap<Function, Map<Function, object>>();
+
+function getFactoryMap(klass: any) {
+  if (factoryMaps.has(klass)) {
+    return factoryMaps.get(klass);
+  }
+
+  const map = new Map<Function, object>();
+  factoryMaps.set(klass, map);
+  return map;
+}
+
 function copyFactoryMethod(klass: Function, destination: any) {
   Object.getOwnPropertyNames(klass.prototype).forEach((i) => {
     if (i === 'constructor') return;
@@ -23,9 +35,28 @@ function copyFactoryMethod(klass: Function, destination: any) {
   })
 }
 
-export function decorate<T extends t.Any, F extends Factory<t.Type<T['_A'], T['_O'], T['_I']>>,>(factory: { new(...args: any[]): F }, t: T): T & F {
+function createPrototype(klass: Function, base: object) {
+  const prototype = Object.create(base)
+  copyFactoryMethod(klass, prototype);
+  return prototype;
+}
+
+export function decorate<T extends t.Any, F extends Factory<t.Type<T['_A'], T['_O'], T['_I']>>>(factory: { new(...args: any[]): F }, t: T): T & F {
+  if (!t) return t as any;
+
   const result: any = t;
-  copyFactoryMethod(factory, result);
+  const base = Object.getPrototypeOf(result)
+  if (!base) {
+    copyFactoryMethod(factory, result);
+  } else {
+    const map = getFactoryMap(base)
+    let prototype = map.get(factory)
+    if (!prototype) {
+      prototype = createPrototype(factory, base);
+      map.set(factory, prototype);
+    }
+    Object.setPrototypeOf(result, prototype);
+  }
   return result;
 }
 
