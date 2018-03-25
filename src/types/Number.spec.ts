@@ -22,7 +22,7 @@ describe('types:Number', () => {
       expect(test.name).to.be.eql("number(<=10)")
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
       expect(shouldValidate(test.decode(10))).to.be.eql(10)
-      expect(shouldNotValidate(test.decode(11)))
+      shouldNotValidate(test.decode(11))
     })
 
     it('min() should work', () => {
@@ -31,7 +31,7 @@ describe('types:Number', () => {
       expect(test.name).to.be.eql("number(>=0)")
       expect(shouldValidate(test.decode(0))).to.be.eql(0)
       expect(shouldValidate(test.decode(10))).to.be.eql(10)
-      expect(shouldNotValidate(test.decode(-1)))
+      shouldNotValidate(test.decode(-1))
     })
 
     it('min().max() should work', () => {
@@ -41,8 +41,8 @@ describe('types:Number', () => {
       expect(shouldValidate(test.decode(0))).to.be.eql(0)
       expect(shouldValidate(test.decode(5))).to.be.eql(5)
       expect(shouldValidate(test.decode(10))).to.be.eql(10)
-      expect(shouldNotValidate(test.decode(11)))
-      expect(shouldNotValidate(test.decode(-1)))
+      shouldNotValidate(test.decode(11))
+      shouldNotValidate(test.decode(-1))
     })
 
     it('integer() should work', () => {
@@ -52,11 +52,11 @@ describe('types:Number', () => {
       expect(shouldValidate(test.decode(3))).to.be.eql(3)
       expect(shouldValidate(test.decode(3.0))).to.be.eql(3.0)
       expect(shouldValidate(test.decode(Math.pow(2, 53) - 1))).to.be.eql(Math.pow(2, 53) - 1)
-      expect(shouldNotValidate(test.decode(Math.pow(2, 53))))
-      expect(shouldNotValidate(test.decode(NaN)))
-      expect(shouldNotValidate(test.decode(Infinity)))
-      expect(shouldNotValidate(test.decode('3')))
-      expect(shouldNotValidate(test.decode(3.1)))
+      shouldNotValidate(test.decode(Math.pow(2, 53)))
+      shouldNotValidate(test.decode(NaN))
+      shouldNotValidate(test.decode(Infinity))
+      shouldNotValidate(test.decode('3'))
+      shouldNotValidate(test.decode(3.1))
     })
 
     it('default() should work', () => {
@@ -68,9 +68,9 @@ describe('types:Number', () => {
       expect(shouldValidate(test.decode(10))).to.be.eql(10)
       expect(shouldValidate(test.decode(null))).to.be.eql(15)
       expect(shouldValidate(test.decode(undefined))).to.be.eql(15)
-      expect(shouldNotValidate(test.decode(NaN)))
-      expect(shouldNotValidate(test.decode("")))
-      expect(shouldNotValidate(test.decode(-1)))
+      shouldNotValidate(test.decode(NaN))
+      shouldNotValidate(test.decode(""))
+      shouldNotValidate(test.decode(-1))
     })
 
     it('finite() should work', () => {
@@ -173,14 +173,14 @@ describe('types:Number', () => {
         expect(shouldValidate(test.decode('0.0314E+2'))).to.be.eql(3.14)
         expect(shouldValidate(test.decode('3.14more non-digit characters'))).to.be.eql(3.14)
 
-        expect(shouldNotValidate(test.decode(null)))
-        expect(shouldNotValidate(test.decode(undefined)))
-        expect(shouldNotValidate(test.decode('FF2')))
-        expect(shouldNotValidate(test.decode(5.14)))
-        expect(shouldNotValidate(test.decode('5.14')))
-        expect(shouldNotValidate(test.decode('514e-2')))
-        expect(shouldNotValidate(test.decode('0.0514E+2')))
-        expect(shouldNotValidate(test.decode('5.14more non-digit characters')))
+        shouldNotValidate(test.decode(null))
+        shouldNotValidate(test.decode(undefined))
+        shouldNotValidate(test.decode('FF2'))
+        shouldNotValidate(test.decode(5.14))
+        shouldNotValidate(test.decode('5.14'))
+        shouldNotValidate(test.decode('514e-2'))
+        shouldNotValidate(test.decode('0.0514E+2'))
+        shouldNotValidate(test.decode('5.14more non-digit characters'))
       })
     })
 

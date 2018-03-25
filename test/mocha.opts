@@ -3,4 +3,6 @@
 --recursive
 --full-trace
 --bail
+src/utilties/*.spec.ts
+src/types/*.spec.ts
 src/**/*.spec.ts

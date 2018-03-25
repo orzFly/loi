@@ -1,6 +1,7 @@
 import * as t from 'io-ts';
 import { decorate, Factory, ILoiOption, metadata } from '../factory';
-import * as rt from '../RuntimeType';
+import { nullAsUndefined } from '../utilties/convert';
+import { withDefault } from '../utilties/default';
 
 export interface IBaseOption<T> extends ILoiOption {
   name: string,
@@ -14,7 +15,7 @@ export class BaseFactory<T extends t.Any> extends Factory<T> {
   }
 
   public default(value: this['_A']) {
-    const type = rt.withDefault(this, value);
+    const type = withDefault(this, value);
     return metadata(BaseFactory.decorate(type), {
       parent: this,
       option: <IBaseOption<T>>{ name: `with default`, default: value }
@@ -22,7 +23,7 @@ export class BaseFactory<T extends t.Any> extends Factory<T> {
   }
 
   public nullAsUndefined() {
-    const type = rt.nullAsUndefined(this);
+    const type = nullAsUndefined(this);
     return metadata(BaseFactory.decorate(type), {
       parent: this,
       option: <IBaseOption<T>>{ name: `null as undefined`, nullAsUndefined: true }

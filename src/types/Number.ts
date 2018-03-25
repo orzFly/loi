@@ -1,7 +1,7 @@
 import * as t from 'io-ts';
 import { isString } from 'lodash';
 import { decorate, Factory, ILoiOption, metadata } from '../factory';
-import * as rt from '../RuntimeType';
+import { convert } from '../utilties/convert';
 import { BaseFactory } from './Base';
 
 export interface INumberOption extends ILoiOption {
@@ -85,7 +85,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public parseFloat() {
-    const type = rt.convert(this, (i: string) => parseFloat(i), (i) => isString(i));
+    const type = convert(this, (i: string) => parseFloat(i), (i) => isString(i));
     return metadata(NumberFactory.decorate(type), {
       parent: this,
       option: <INumberOption>{ name: "parseFloat", parseFloat: true }

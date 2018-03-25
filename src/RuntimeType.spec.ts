@@ -14,30 +14,6 @@ function shouldNotValidate<Right>(e: Either<t.ValidationError[], Right>) {
 // tslint:disable:no-unused-expression // chai to be NaN
 
 describe('RuntimeType', () => {
-  describe('convert', () => {
-    it('should work', () => {
-      const test = rt.convert(t.number, () => 233, (i) => i === 1)
-
-      expect(shouldValidate(rt.validate(1, test))).to.be.eql(233)
-      expect(shouldValidate(rt.validate(2, test))).to.be.eql(2)
-      expect(shouldValidate(rt.validate(233, test))).to.be.eql(233)
-    })
-  })
-
-  describe('nullAsUndefined', () => {
-    it('should work', () => {
-      const test = t.partial({
-        key: rt.nullAsUndefined(t.boolean)
-      })
-
-      expect(shouldValidate(rt.validate({ key: true }, test)).key).to.be.equal(true)
-      expect(shouldValidate(rt.validate({ key: false }, test)).key).to.be.equal(false)
-      expect(shouldValidate(rt.validate({ key: null }, test)).key).to.be.equal(undefined)
-      expect(shouldValidate(rt.validate({ key: undefined }, test)).key).to.be.equal(undefined)
-      expect(shouldValidate(rt.validate({}, test)).key).to.be.equal(undefined)
-    })
-  })
-
   describe('trueBoolean', () => {
     it('should work', () => {
       expect(shouldValidate(rt.validate(true, rt.trueBoolean))).to.be.equal(true)
