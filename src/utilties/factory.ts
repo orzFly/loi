@@ -19,7 +19,7 @@ function copyFactoryMethod(klass: Function, destination: any) {
 export class Factory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> {
   constructor() {
     super(undefined, undefined, undefined, undefined);
-    throw new Error('This class cannot be constructored.');
+    throw new Error('The Loi factory class cannot be constructored.');
   }
 
   [loiOption]: ILoiOption[]

@@ -1,7 +1,7 @@
 import * as t from 'io-ts';
 import { isString } from 'lodash';
-import { decorate, Factory, ILoiOption, metadata } from '../factory';
 import { convert } from '../utilties/convert';
+import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
 import { BaseFactory } from './Base';
 
 export interface INumberOption extends ILoiOption {

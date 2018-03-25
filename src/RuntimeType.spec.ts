@@ -9,37 +9,37 @@ import { shouldNotValidate, shouldValidate } from './test-helper.spec';
 describe('RuntimeType', () => {
   describe('trueBoolean', () => {
     it('should work', () => {
-      expect(shouldValidate(rt.validate(true, rt.trueBoolean))).to.be.equal(true)
-      shouldNotValidate(rt.validate(false, rt.trueBoolean))
-      shouldNotValidate(rt.validate(null, rt.trueBoolean))
-      shouldNotValidate(rt.validate(undefined, rt.trueBoolean))
+      expect(shouldValidate(rt.trueBoolean.decode(true))).to.be.equal(true)
+      shouldNotValidate(rt.trueBoolean.decode(false))
+      shouldNotValidate(rt.trueBoolean.decode(null))
+      shouldNotValidate(rt.trueBoolean.decode(undefined))
     })
   })
 
   describe('falseBoolean', () => {
     it('should work', () => {
-      expect(shouldValidate(rt.validate(false, rt.falseBoolean))).to.be.equal(false)
-      shouldNotValidate(rt.validate(true, rt.falseBoolean))
-      shouldNotValidate(rt.validate(null, rt.falseBoolean))
-      shouldNotValidate(rt.validate(undefined, rt.falseBoolean))
+      expect(shouldValidate(rt.falseBoolean.decode(false))).to.be.equal(false)
+      shouldNotValidate(rt.falseBoolean.decode(true))
+      shouldNotValidate(rt.falseBoolean.decode(null))
+      shouldNotValidate(rt.falseBoolean.decode(undefined))
     })
   })
 
   describe('violetTrueBoolean', () => {
     it('should work', () => {
-      expect(shouldValidate(rt.validate(true, rt.violetTrueBoolean))).to.be.equal(true)
-      expect(shouldValidate(rt.validate(false, rt.violetTrueBoolean))).to.be.equal(undefined)
-      expect(shouldValidate(rt.validate(null, rt.violetTrueBoolean))).to.be.equal(undefined)
-      expect(shouldValidate(rt.validate(undefined, rt.violetTrueBoolean))).to.be.equal(undefined)
+      expect(shouldValidate(rt.violetTrueBoolean.decode(true))).to.be.equal(true)
+      expect(shouldValidate(rt.violetTrueBoolean.decode(false))).to.be.equal(undefined)
+      expect(shouldValidate(rt.violetTrueBoolean.decode(null))).to.be.equal(undefined)
+      expect(shouldValidate(rt.violetTrueBoolean.decode(undefined))).to.be.equal(undefined)
     })
   })
 
   describe('violetFalseBoolean', () => {
     it('should work', () => {
-      expect(shouldValidate(rt.validate(false, rt.violetFalseBoolean))).to.be.equal(false)
-      expect(shouldValidate(rt.validate(true, rt.violetFalseBoolean))).to.be.equal(undefined)
-      expect(shouldValidate(rt.validate(null, rt.violetFalseBoolean))).to.be.equal(undefined)
-      expect(shouldValidate(rt.validate(undefined, rt.violetFalseBoolean))).to.be.equal(undefined)
+      expect(shouldValidate(rt.violetFalseBoolean.decode(false))).to.be.equal(false)
+      expect(shouldValidate(rt.violetFalseBoolean.decode(true))).to.be.equal(undefined)
+      expect(shouldValidate(rt.violetFalseBoolean.decode(null))).to.be.equal(undefined)
+      expect(shouldValidate(rt.violetFalseBoolean.decode(undefined))).to.be.equal(undefined)
     })
   })
 })

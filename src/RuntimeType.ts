@@ -37,14 +37,6 @@ export class DateType extends t.Type<Date, string, string | Date | number> {
 export const date = new DateType();
 // #endregion
 
-// #region validate helpers
-
-export function validate<S, A>(value: S, type: t.Decoder<S, A>): t.Validation<A> {
-  return type.decode(value);
-}
-
-// #endregion
-
 export function ensureSameType<X, Y extends X>(): [X, Y] { return undefined; };
 
 export const trueBoolean = t.refinement(t.boolean, (i) => i === true, 'true');

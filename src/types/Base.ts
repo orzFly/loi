@@ -1,7 +1,7 @@
 import * as t from 'io-ts';
-import { decorate, Factory, ILoiOption, metadata } from '../factory';
 import { nullAsUndefined } from '../utilties/convert';
 import { withDefault } from '../utilties/default';
+import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
 
 export interface IBaseOption<T> extends ILoiOption {
   name: string,

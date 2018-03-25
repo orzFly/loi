@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { decorate, Factory, ILoiOption, metadata } from '../factory';
+import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
 import { getNameFromProps, interfaceWithOptionals, strictInterfaceWithOptionals, violetInterfaceWithOptionals } from '../utilties/object';
 import { BaseFactory } from './Base';
 

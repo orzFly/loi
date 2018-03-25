@@ -14,7 +14,7 @@ export function getNameFromProps(required: t.Props = {}, optional: t.Props = {})
 /** Specifies that only the given interface properties are allowed. Invalid properties will be just ignored, violetly. */
 export const violet = <P extends t.Props>(
   props: P,
-  name: string = `VioletType<${getNameFromProps(props)}>`
+  name: string = getNameFromProps(props)
 ): t.InterfaceType<P, t.TypeOfProps<P>, t.OutputOfProps<P>> => {
   const loose = t.type(props)
   return new t.InterfaceType(
