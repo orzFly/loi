@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
-import { forEach } from 'lodash';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
 import { any } from './Any';
 
