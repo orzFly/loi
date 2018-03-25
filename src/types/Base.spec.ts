@@ -7,6 +7,48 @@ import { BaseFactory } from './Base';
 
 describe('types:Base', () => {
   describe('BaseFactory', () => {
+    it('nullAsUndefined() should work', () => {
+      const test = BaseFactory.decorate(t.boolean).nullAsUndefined()
+
+      expect(shouldValidate(test.decode(true))).to.be.equal(true)
+      expect(shouldValidate(test.decode(false))).to.be.equal(false)
+      expect(shouldValidate(test.decode(null))).to.be.equal(undefined)
+      expect(shouldValidate(test.decode(undefined))).to.be.equal(undefined)
+    })
+
+    it('default() should work', () => {
+      const test = BaseFactory.decorate(t.number).default(1)
+
+      expect(shouldValidate(test.decode(0))).to.be.eql(0)
+      expect(shouldValidate(test.decode(1))).to.be.eql(1)
+      expect(shouldValidate(test.decode(undefined))).to.be.eql(1)
+      expect(shouldValidate(test.decode(null))).to.be.eql(1)
+      expect(shouldValidate(test.decode(NaN))).to.be.NaN
+
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(""))
+      shouldNotValidate(test.decode([]))
+    })
+
+    it('defaultResolver() should work', () => {
+      let i = 233
+      const test = BaseFactory.decorate(t.number).defaultResolver(() => i++)
+
+      expect(shouldValidate(test.decode(undefined))).to.be.eql(233)
+      expect(shouldValidate(test.decode(null))).to.be.eql(234)
+      expect(i).to.be.eql(235)
+
+      expect(shouldValidate(test.decode(0))).to.be.eql(0)
+      expect(shouldValidate(test.decode(1))).to.be.eql(1)
+      expect(shouldValidate(test.decode(NaN))).to.be.NaN
+
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(""))
+      shouldNotValidate(test.decode([]))
+
+      expect(i).to.be.eql(235)
+    })
+
     it('allow() should work', () => {
       const test = BaseFactory.decorate(t.string).allow(t.number).allow(t.boolean)
       expect(shouldValidate(test.decode(1))).to.be.eql(1)

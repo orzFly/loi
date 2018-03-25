@@ -1,11 +1,12 @@
 import * as t from 'io-ts';
 import { nullAsUndefined } from '../utilties/convert';
-import { withDefault } from '../utilties/default';
+import { withDefault, withDefaultResolver } from '../utilties/default';
 import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
 
 export interface IBaseOption<T> extends ILoiOption {
   name: string,
   default?: T,
+  defaultResolver?: () => T,
   nullAsUndefined?: boolean
 }
 
@@ -29,6 +30,14 @@ export class BaseFactory<T extends t.Any> extends Factory<T> {
     return metadata(BaseFactory.decorate(type), {
       parent: this,
       option: <IBaseOption<T>>{ name: `with default`, default: value }
+    });
+  }
+
+  public defaultResolver(resolver: () => this['_A']) {
+    const type = withDefaultResolver(this, resolver);
+    return metadata(BaseFactory.decorate(type), {
+      parent: this,
+      option: <IBaseOption<T>>{ name: `with default`, defaultResolver: resolver }
     });
   }
 
