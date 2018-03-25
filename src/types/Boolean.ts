@@ -11,8 +11,8 @@ export interface IBooleanOption extends ILoiOption {
   only?: boolean
 }
 
-const trueValues = ["true", "t", "yes", "y"]
-const falseValues = ["false", "f", "no", "n"]
+const trueValues = ["true", "t", "yes", "y", "on", "1"]
+const falseValues = ["false", "f", "no", "n", "off", "0"]
 
 export class BooleanFactory<T extends t.Any> extends Factory<T> {
   static decorate<T extends t.Any>(t: T) {
