@@ -42,5 +42,19 @@ describe('types:Number', () => {
       expect(shouldNotValidate(test.decode(11)))
       expect(shouldNotValidate(test.decode(-1)))
     })
+
+    it('default() should work', () => {
+      const test = number().min(0).default(15)
+
+      expect(test.name).to.be.eql("number(>=0, with default)")
+      expect(shouldValidate(test.decode(0))).to.be.eql(0)
+      expect(shouldValidate(test.decode(5))).to.be.eql(5)
+      expect(shouldValidate(test.decode(10))).to.be.eql(10)
+      expect(shouldValidate(test.decode(null))).to.be.eql(15)
+      expect(shouldValidate(test.decode(undefined))).to.be.eql(15)
+      expect(shouldNotValidate(test.decode(NaN)))
+      expect(shouldNotValidate(test.decode("")))
+      expect(shouldNotValidate(test.decode(-1)))
+    })
   })
 })

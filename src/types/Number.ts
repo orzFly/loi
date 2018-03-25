@@ -1,7 +1,8 @@
 import * as t from 'io-ts';
 import { isString } from 'lodash';
-import { decorate, Factory, ILoiOption } from '../factory';
+import { decorate, Factory, ILoiOption, metadata } from '../factory';
 import * as rt from '../RuntimeType';
+import { BaseFactory } from './Base';
 
 export interface INumberOption extends ILoiOption {
   name: string,
@@ -13,23 +14,9 @@ export interface INumberOption extends ILoiOption {
   finite?: boolean
 }
 
-function metadata<T, LO extends ILoiOption>(t: T, params?: {
-  parent?: any,
-  tag?: string,
-  option?: LO
-}): T {
-  const tag: string = (params && params.tag) || (params && params.parent && params.parent.loiTag) || "unknown";
-  const options = [...(params && params.parent && params.parent.loiOption || []), ...(params && params.option ? [params && params.option] : [])];
-  (<any>t).name = `${tag}${options.length ? `(${options.map((i) => i.name || JSON.stringify(i)).join(", ")})` : ""}`;
-  (<any>t).loiTag = tag;
-  (<any>t).loiOption = options;
-  return t;
-}
-
 export class NumberFactory<T extends t.Any> extends Factory<T> {
-  static loiTag = "number"
   static decorate<T extends t.Any>(t: T) {
-    return decorate<T, NumberFactory<T>>(this, t);
+    return BaseFactory.decorate(decorate<T, NumberFactory<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
 
   public max(limit: number) {
@@ -102,10 +89,6 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
       tag: "number",
       option: <INumberOption>{ name: `finite`, finite: true }
     });
-  }
-
-  public default(value: this['_A']) {
-    return rt.withDefault(this, value)
   }
 }
 
