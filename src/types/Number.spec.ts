@@ -160,6 +160,7 @@ describe('types:Number', () => {
       expect(test.name).to.be.eql("number(>10)")
       expect(shouldValidate(test.decode(11))).to.be.eql(11)
       expect(shouldNotValidate(test.decode(1)))
+      expect(shouldNotValidate(test.decode(10)))
     })
 
     it('less() should work', () => {
@@ -168,6 +169,7 @@ describe('types:Number', () => {
       expect(test.name).to.be.eql("number(<10)")
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
       expect(shouldNotValidate(test.decode(11)))
+      expect(shouldNotValidate(test.decode(10)))
     })
 
     it('negative() should work', () => {
@@ -177,6 +179,7 @@ describe('types:Number', () => {
       expect(shouldValidate(test.decode(-1))).to.be.eql(-1)
       expect(shouldValidate(test.decode(-11))).to.be.eql(-11)
       expect(shouldNotValidate(test.decode(1)))
+      expect(shouldNotValidate(test.decode(0)))
     })
 
     it('positive() should work', () => {
@@ -186,6 +189,7 @@ describe('types:Number', () => {
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
       expect(shouldValidate(test.decode(11))).to.be.eql(11)
       expect(shouldNotValidate(test.decode(-1)))
+      expect(shouldNotValidate(test.decode(0)))
     })
 
     forEach({
