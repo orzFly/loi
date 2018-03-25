@@ -6,6 +6,7 @@ import { BaseFactory } from './Base';
 export interface IObjectOption extends ILoiOption {
   name: string,
   type?: Function,
+  instanceof?: Function,
   strict?: boolean,
   violet?: boolean,
 }
@@ -22,10 +23,18 @@ export class ObjectFactory<R extends t.Props, O extends t.Props, T extends t.Any
   }
 
   public type<F>(constructor: { new(...args: any[]): F }) {
+    const type = t.refinement(this, (i: any) => i && i.constructor === constructor) as t.Type<this['_A'] & F, this['_O'] & F, this['_I']>
+    return metadata(ObjectFactory.decorate<R, O, typeof type>(type), {
+      parent: this,
+      option: <IObjectOption>{ name: `type ${constructor.name}`, type: constructor }
+    });
+  }
+
+  public instanceof<F>(constructor: { new(...args: any[]): F }) {
     const type = t.refinement(this, (i: any) => i instanceof constructor) as t.Type<this['_A'] & F, this['_O'] & F, this['_I']>
     return metadata(ObjectFactory.decorate<R, O, typeof type>(type), {
       parent: this,
-      option: <IObjectOption>{ name: `instanceof ${constructor.name}`, type: constructor }
+      option: <IObjectOption>{ name: `instanceof ${constructor.name}`, instanceof: constructor }
     });
   }
 }

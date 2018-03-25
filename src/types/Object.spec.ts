@@ -6,6 +6,8 @@ import { object } from './Object';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
+class MyRegExp extends RegExp { }
+
 describe('types:Object', () => {
   describe('object', () => {
     it('should work', () => {
@@ -76,10 +78,33 @@ describe('types:Object', () => {
         source: t.string
       }).type(RegExp)
 
+      expect(test.name).to.be.eql("{ source: string }(type RegExp)")
+
+      const regexp = new RegExp("test")
+      expect(shouldValidate(test.decode(regexp))).to.be.eql(regexp)
+
+      const myRegexp = new MyRegExp("test")
+      shouldNotValidate(test.decode(myRegexp))
+
+      shouldNotValidate(test.decode({ source: undefined }))
+      shouldNotValidate(test.decode({ source: null }))
+      shouldNotValidate(test.decode({ source: "hello" }))
+      shouldNotValidate(test.decode({}))
+    })
+
+    it('instanceof() should work', () => {
+      const test = object({
+        source: t.string
+      }).instanceof(RegExp)
+
       expect(test.name).to.be.eql("{ source: string }(instanceof RegExp)")
 
       const regexp = new RegExp("test")
       expect(shouldValidate(test.decode(regexp))).to.be.eql(regexp)
+
+      const myRegexp = new MyRegExp("test")
+      expect(shouldValidate(test.decode(myRegexp))).to.be.eql(myRegexp)
+
       shouldNotValidate(test.decode({ source: undefined }))
       shouldNotValidate(test.decode({ source: null }))
       shouldNotValidate(test.decode({ source: "hello" }))
