@@ -19,6 +19,16 @@ describe('utilties:default', () => {
       shouldNotValidate(test.decode({}))
       shouldNotValidate(test.decode(""))
       shouldNotValidate(test.decode([]))
+
+      expect(test.encode(1)).to.be.eql(t.number.encode(1))
+      expect(test.encode(NaN)).to.be.eql(t.number.encode(NaN))
+      expect(test.encode(undefined)).to.be.eql(t.number.encode(undefined))
+      expect(test.encode(null)).to.be.eql(t.number.encode(null))
+
+      expect(test.is(1)).to.be.eql(t.number.is(1))
+      expect(test.is(NaN)).to.be.eql(t.number.is(NaN))
+      expect(test.is(undefined)).to.be.eql(t.number.is(undefined))
+      expect(test.is(null)).to.be.eql(t.number.is(null))
     })
   })
 
@@ -38,6 +48,16 @@ describe('utilties:default', () => {
       shouldNotValidate(test.decode({}))
       shouldNotValidate(test.decode(""))
       shouldNotValidate(test.decode([]))
+
+      expect(test.encode(1)).to.be.eql(t.number.encode(1))
+      expect(test.encode(NaN)).to.be.eql(t.number.encode(NaN))
+      expect(test.encode(undefined)).to.be.eql(t.number.encode(undefined))
+      expect(test.encode(null)).to.be.eql(t.number.encode(null))
+
+      expect(test.is(1)).to.be.eql(t.number.is(1))
+      expect(test.is(NaN)).to.be.eql(t.number.is(NaN))
+      expect(test.is(undefined)).to.be.eql(t.number.is(undefined))
+      expect(test.is(null)).to.be.eql(t.number.is(null))
 
       expect(i).to.be.eql(235)
     })

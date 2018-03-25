@@ -1,5 +1,4 @@
 import * as t from 'io-ts';
-import { isFunction } from 'lodash';
 
 export const loiTag = Symbol('loiTag')
 export const loiOption = Symbol('loiOption')
@@ -11,8 +10,7 @@ export interface ILoiOption {
 function copyFactoryMethod(klass: Function, destination: any) {
   Object.getOwnPropertyNames(klass.prototype).forEach((i) => {
     if (i === 'constructor') return;
-    if (!isFunction(klass.prototype[i])) return;
-    destination[i] = klass.prototype[i].bind(destination);
+    destination[i] = klass.prototype[i];
   })
 }
 

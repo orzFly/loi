@@ -1,4 +1,5 @@
 import * as t from 'io-ts';
+import * as AnyType from './types/Any';
 import * as NumberType from './types/Number';
 import * as ObjectType from './types/Object';
 
@@ -7,6 +8,7 @@ import * as ObjectType from './types/Object';
 export namespace Loi {
   export type Type<RT extends t.Any> = RT['_A'];
 
+  export const any = AnyType.any
   export const number = NumberType.number
   export const object = ObjectType.object
 

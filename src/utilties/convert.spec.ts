@@ -13,6 +13,24 @@ describe('utilties:convert', () => {
       expect(shouldValidate(test.decode(1))).to.be.eql(233)
       expect(shouldValidate(test.decode(2))).to.be.eql(2)
       expect(shouldValidate(test.decode(233))).to.be.eql(233)
+
+      expect(test.encode(1)).to.be.eql(t.number.encode(1))
+      expect(test.encode(NaN)).to.be.eql(t.number.encode(NaN))
+      expect(test.encode(undefined)).to.be.eql(t.number.encode(undefined))
+      expect(test.encode(null)).to.be.eql(t.number.encode(null))
+
+      expect(test.is(1)).to.be.eql(t.number.is(1))
+      expect(test.is(NaN)).to.be.eql(t.number.is(NaN))
+      expect(test.is(undefined)).to.be.eql(t.number.is(undefined))
+      expect(test.is(null)).to.be.eql(t.number.is(null))
+    })
+
+    it('empty should work', () => {
+      const test = convert(t.number)
+
+      expect(shouldValidate(test.decode(1))).to.be.eql(1)
+      expect(shouldValidate(test.decode(2))).to.be.eql(2)
+      expect(shouldValidate(test.decode(233))).to.be.eql(233)
     })
   })
 
@@ -27,6 +45,17 @@ describe('utilties:convert', () => {
       expect(shouldValidate(test.decode({ key: null })).key).to.be.equal(undefined)
       expect(shouldValidate(test.decode({ key: undefined })).key).to.be.equal(undefined)
       expect(shouldValidate(test.decode({})).key).to.be.equal(undefined)
+
+      const test2 = nullAsUndefined(t.boolean)
+      expect(test2.encode(true)).to.be.eql(t.boolean.encode(true))
+      expect(test2.encode(false)).to.be.eql(t.boolean.encode(false))
+      expect(test2.encode(undefined)).to.be.eql(t.boolean.encode(undefined))
+      expect(test2.encode(null)).to.be.eql(t.boolean.encode(null))
+
+      expect(test2.is(true)).to.be.eql(t.boolean.is(true))
+      expect(test2.is(false)).to.be.eql(t.boolean.is(false))
+      expect(test2.is(undefined)).to.be.eql(t.boolean.is(undefined))
+      expect(test2.is(null)).to.be.eql(t.boolean.is(null))
     })
   })
 })

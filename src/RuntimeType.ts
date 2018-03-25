@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { isDate, isNumber, isString, keys } from 'lodash';
+import { isString, keys } from 'lodash';
 import { convert, nullAsUndefined } from './utilties/convert';
 
 // #region enum
@@ -15,26 +15,6 @@ export function makeStringEnum<E>(name: string, e: any) {
   return t.union(values.map((i) => t.literal(i)), name) as any as t.Type<E, E, string>
 }
 
-// #endregion
-
-// #region date
-export class DateType extends t.Type<Date, string, string | Date | number> {
-  constructor() {
-    super(
-      'Date',
-      (value): value is Date => isDate(value) || isString(value) || isNumber(value),
-      (input, ctx) => {
-        if (!this.is(input)) return t.failure(input, ctx);
-
-        const date = new Date(input);
-        return !isNaN(date.getTime()) ? t.success(date) : t.failure(input, ctx)
-      },
-      (output) => output.toJSON()
-    )
-  }
-}
-
-export const date = new DateType();
 // #endregion
 
 export function ensureSameType<X, Y extends X>(): [X, Y] { return undefined; };
