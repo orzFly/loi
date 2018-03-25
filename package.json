@@ -13,6 +13,7 @@
     "@types/lodash": "^4.14.105",
     "@types/mocha": "^2.2.48",
     "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
     "mocha": "^5.0.4",
     "nyc": "^11.6.0",
     "rimraf": "^2.6.2",
@@ -27,12 +28,13 @@
     "lodash": "^4.17.5"
   },
   "scripts": {
-    "watch": "node_modules/.bin/tsc -w",
-    "test": "node_modules/.bin/mocha --timeout 10000",
-    "test:coverage": "node_modules/.bin/nyc node_modules/.bin/mocha",
-    "lint": "node_modules/.bin/tslint --project tsconfig.json --config tslint.json",
-    "cleanwatch": "yarn clean && yarn watch",
+    "build": "node_modules/.bin/tsc",
     "clean": "node_modules/.bin/rimraf lib",
-    "build": "node_modules/.bin/tsc"
+    "cleanwatch": "yarn clean && yarn watch",
+    "lint": "node_modules/.bin/tslint --project tsconfig.json --config tslint.json",
+    "test:coverage": "node_modules/.bin/nyc node_modules/.bin/mocha",
+    "test:coveralls": "node_modules/.bin/nyc report --reporter=text-lcov | node_modules/.bin/coveralls",
+    "test": "node_modules/.bin/mocha --timeout 10000",
+    "watch": "node_modules/.bin/tsc -w"
   }
 }
