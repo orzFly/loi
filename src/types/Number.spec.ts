@@ -1,4 +1,6 @@
 import { expect } from 'chai';
+import * as t from 'io-ts';
+import { forEach } from 'lodash';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
 import { number } from './Number';
 
@@ -71,6 +73,42 @@ describe('types:Number', () => {
       expect(shouldNotValidate(test.decode(-1)))
     })
 
+    it('finite() should work', () => {
+      const test = number().finite()
+
+      expect(test.name).to.be.eql("number(finite)")
+      expect(shouldValidate(test.decode(1))).to.be.equal(1)
+      expect(shouldValidate(test.decode(-1))).to.be.equal(-1)
+      expect(shouldValidate(test.decode(1.233))).to.be.equal(1.233)
+      expect(shouldValidate(test.decode(-1.233))).to.be.equal(-1.233)
+      expect(shouldValidate(test.decode(1e5))).to.be.equal(1e5)
+      expect(shouldValidate(test.decode(-1e5))).to.be.equal(-1e5)
+      expect(shouldValidate(test.decode(0))).to.be.equal(0)
+      shouldNotValidate(test.decode(NaN))
+      shouldNotValidate(test.decode(Infinity))
+      shouldNotValidate(test.decode(-Infinity))
+
+      shouldNotValidate(test.decode("1"))
+      shouldNotValidate(test.decode("-1"))
+      shouldNotValidate(test.decode("1.233"))
+      shouldNotValidate(test.decode("-1.233"))
+      shouldNotValidate(test.decode("1e5"))
+      shouldNotValidate(test.decode("-1e5"))
+      shouldNotValidate(test.decode("0"))
+      shouldNotValidate(test.decode("021"))
+      shouldNotValidate(test.decode("0x32767"))
+      shouldNotValidate(test.decode("aasdaNaN"))
+      shouldNotValidate(test.decode(""))
+      shouldNotValidate(test.decode("NaN"))
+      shouldNotValidate(test.decode("-NaN"))
+      shouldNotValidate(test.decode("Infinity"))
+      shouldNotValidate(test.decode("-Infinity"))
+
+      shouldNotValidate(test.decode({ key: null }))
+      shouldNotValidate(test.decode(null))
+      shouldNotValidate(test.decode(undefined))
+    })
+
     it('parseFloat() should work', () => {
       const test = number().parseFloat()
 
@@ -83,66 +121,103 @@ describe('types:Number', () => {
       expect(shouldValidate(test.decode('0.0314E+2'))).to.be.eql(3.14)
       expect(shouldValidate(test.decode('3.14more non-digit characters'))).to.be.eql(3.14)
       expect(shouldValidate(test.decode('FF2'))).to.be.NaN
+
+      expect(shouldValidate(test.decode(1))).to.be.equal(1)
+      expect(shouldValidate(test.decode(-1))).to.be.equal(-1)
+      expect(shouldValidate(test.decode(1.233))).to.be.equal(1.233)
+      expect(shouldValidate(test.decode(-1.233))).to.be.equal(-1.233)
+      expect(shouldValidate(test.decode(1e5))).to.be.equal(1e5)
+      expect(shouldValidate(test.decode(-1e5))).to.be.equal(-1e5)
+      expect(shouldValidate(test.decode(0))).to.be.equal(0)
+      expect(shouldValidate(test.decode(NaN))).to.be.NaN;
+      expect(shouldValidate(test.decode(Infinity))).to.be.equal(Infinity)
+      expect(shouldValidate(test.decode(-Infinity))).to.be.equal(-Infinity)
+
+      expect(shouldValidate(test.decode("1"))).to.be.equal(1)
+      expect(shouldValidate(test.decode("-1"))).to.be.equal(-1)
+      expect(shouldValidate(test.decode("1.233"))).to.be.equal(1.233)
+      expect(shouldValidate(test.decode("-1.233"))).to.be.equal(-1.233)
+      expect(shouldValidate(test.decode("1e5"))).to.be.equal(1e5)
+      expect(shouldValidate(test.decode("-1e5"))).to.be.equal(-1e5)
+      expect(shouldValidate(test.decode("0"))).to.be.equal(0)
+      expect(shouldValidate(test.decode("021"))).to.be.equal(21)
+      expect(shouldValidate(test.decode("0x32767"))).to.be.equal(0)
+      expect(shouldValidate(test.decode("aasdaNaN"))).to.be.NaN;
+      expect(shouldValidate(test.decode(""))).to.be.NaN;
+      expect(shouldValidate(test.decode("NaN"))).to.be.NaN;
+      expect(shouldValidate(test.decode("-NaN"))).to.be.NaN;
+      expect(shouldValidate(test.decode("Infinity"))).to.be.equal(Infinity)
+      expect(shouldValidate(test.decode("-Infinity"))).to.be.equal(-Infinity)
+
+      shouldNotValidate(test.decode({ key: null }))
+      shouldNotValidate(test.decode(null))
+      shouldNotValidate(test.decode(undefined))
     })
 
-    it('parseFloat().max() should work', () => {
-      const test = number().parseFloat().max(5)
+    forEach({
+      "parseFloat().max()": [number().parseFloat().max(5), "number(parseFloat, <=5)"],
+      "max().parseFloat()": [number().max(5).parseFloat(), "number(<=5, parseFloat)"],
+      "parseFloat(), max().min()": [number().parseFloat().max(5).min(0), "number(parseFloat, <=5, >=0)"],
+      "max().parseFloat().min()": [number().max(5).parseFloat().min(0), "number(<=5, parseFloat, >=0)"],
+      "max().min().parseFloat()": [number().max(5).min(0).parseFloat(), "number(<=5, >=0, parseFloat)"],
+    } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
+      it(`${key} should work`, () => {
+        const test = type
 
-      expect(test.name).to.be.eql("number(parseFloat, <=5)")
-      expect(shouldValidate(test.decode('0'))).to.be.eql(0)
-      expect(shouldValidate(test.decode(0))).to.be.eql(0)
-      expect(shouldValidate(test.decode(3.14))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('3.14'))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('314e-2'))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('0.0314E+2'))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('3.14more non-digit characters'))).to.be.eql(3.14)
+        expect(test.name).to.be.eql(name)
+        expect(shouldValidate(test.decode('0'))).to.be.eql(0)
+        expect(shouldValidate(test.decode(0))).to.be.eql(0)
+        expect(shouldValidate(test.decode(3.14))).to.be.eql(3.14)
+        expect(shouldValidate(test.decode('3.14'))).to.be.eql(3.14)
+        expect(shouldValidate(test.decode('314e-2'))).to.be.eql(3.14)
+        expect(shouldValidate(test.decode('0.0314E+2'))).to.be.eql(3.14)
+        expect(shouldValidate(test.decode('3.14more non-digit characters'))).to.be.eql(3.14)
 
-      expect(shouldNotValidate(test.decode('FF2')))
-      expect(shouldNotValidate(test.decode(5.14)))
-      expect(shouldNotValidate(test.decode('5.14')))
-      expect(shouldNotValidate(test.decode('514e-2')))
-      expect(shouldNotValidate(test.decode('0.0514E+2')))
-      expect(shouldNotValidate(test.decode('5.14more non-digit characters')))
+        expect(shouldNotValidate(test.decode(null)))
+        expect(shouldNotValidate(test.decode(undefined)))
+        expect(shouldNotValidate(test.decode('FF2')))
+        expect(shouldNotValidate(test.decode(5.14)))
+        expect(shouldNotValidate(test.decode('5.14')))
+        expect(shouldNotValidate(test.decode('514e-2')))
+        expect(shouldNotValidate(test.decode('0.0514E+2')))
+        expect(shouldNotValidate(test.decode('5.14more non-digit characters')))
+      })
     })
 
-    it('max().parseFloat() should work', () => {
-      const test = number().max(5).parseFloat()
+    it('parseFloat().finite() should work', () => {
+      const test = number().parseFloat().finite()
 
-      expect(test.name).to.be.eql("number(<=5, parseFloat)")
-      expect(shouldValidate(test.decode('0'))).to.be.eql(0)
-      expect(shouldValidate(test.decode(0))).to.be.eql(0)
-      expect(shouldValidate(test.decode(3.14))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('3.14'))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('314e-2'))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('0.0314E+2'))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('3.14more non-digit characters'))).to.be.eql(3.14)
+      expect(test.name).to.be.eql("number(parseFloat, finite)")
+      expect(shouldValidate(test.decode(1))).to.be.equal(1)
+      expect(shouldValidate(test.decode(-1))).to.be.equal(-1)
+      expect(shouldValidate(test.decode(1.233))).to.be.equal(1.233)
+      expect(shouldValidate(test.decode(-1.233))).to.be.equal(-1.233)
+      expect(shouldValidate(test.decode(1e5))).to.be.equal(1e5)
+      expect(shouldValidate(test.decode(-1e5))).to.be.equal(-1e5)
+      expect(shouldValidate(test.decode(0))).to.be.equal(0)
+      shouldNotValidate(test.decode(NaN))
+      shouldNotValidate(test.decode(Infinity))
+      shouldNotValidate(test.decode(-Infinity))
 
-      expect(shouldNotValidate(test.decode('FF2')))
-      expect(shouldNotValidate(test.decode(5.14)))
-      expect(shouldNotValidate(test.decode('5.14')))
-      expect(shouldNotValidate(test.decode('514e-2')))
-      expect(shouldNotValidate(test.decode('0.0514E+2')))
-      expect(shouldNotValidate(test.decode('5.14more non-digit characters')))
-    })
+      expect(shouldValidate(test.decode("1"))).to.be.equal(1)
+      expect(shouldValidate(test.decode("-1"))).to.be.equal(-1)
+      expect(shouldValidate(test.decode("1.233"))).to.be.equal(1.233)
+      expect(shouldValidate(test.decode("-1.233"))).to.be.equal(-1.233)
+      expect(shouldValidate(test.decode("1e5"))).to.be.equal(1e5)
+      expect(shouldValidate(test.decode("-1e5"))).to.be.equal(-1e5)
+      expect(shouldValidate(test.decode("0"))).to.be.equal(0)
+      expect(shouldValidate(test.decode("021"))).to.be.equal(21)
+      expect(shouldValidate(test.decode("0x32767"))).to.be.equal(0)
+      shouldNotValidate(test.decode("aasdaNaN"))
+      shouldNotValidate(test.decode(""))
+      shouldNotValidate(test.decode("NaN"))
+      shouldNotValidate(test.decode("-NaN"))
+      shouldNotValidate(test.decode("Infinity"))
+      shouldNotValidate(test.decode("-Infinity"))
 
-    it('max().parseFloat().min() should work', () => {
-      const test = number().max(5).parseFloat().min(0)
-
-      expect(test.name).to.be.eql("number(<=5, parseFloat, >=0)")
-      expect(shouldValidate(test.decode('0'))).to.be.eql(0)
-      expect(shouldValidate(test.decode(0))).to.be.eql(0)
-      expect(shouldValidate(test.decode(3.14))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('3.14'))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('314e-2'))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('0.0314E+2'))).to.be.eql(3.14)
-      expect(shouldValidate(test.decode('3.14more non-digit characters'))).to.be.eql(3.14)
-
-      expect(shouldNotValidate(test.decode('FF2')))
-      expect(shouldNotValidate(test.decode(5.14)))
-      expect(shouldNotValidate(test.decode('5.14')))
-      expect(shouldNotValidate(test.decode('514e-2')))
-      expect(shouldNotValidate(test.decode('0.0514E+2')))
-      expect(shouldNotValidate(test.decode('5.14more non-digit characters')))
+      shouldNotValidate(test.decode({ key: null }))
+      shouldNotValidate(test.decode(null))
+      shouldNotValidate(test.decode(undefined))
     })
   })
 })

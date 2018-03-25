@@ -294,8 +294,3 @@ export const falseBoolean = t.refinement(t.boolean, (i) => i === false, 'false')
 
 export const violetTrueBoolean = convert(nullAsUndefined(trueBoolean), (i) => i = undefined, (i) => i !== true);
 export const violetFalseBoolean = convert(nullAsUndefined(falseBoolean), (i) => i = undefined, (i) => i !== false);
-
-export const stringNumber = convert(t.number, (i: string) => parseFloat(i), (i) => isString(i), 'stringNumber');
-
-export const finiteNumber = t.refinement(t.number, (i) => isFinite(i), 'finiteNumber');
-export const finiteStringNumber = t.refinement(stringNumber, (i) => isFinite(i), 'finiteStringNumber');

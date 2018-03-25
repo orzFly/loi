@@ -12,6 +12,7 @@ export interface INumberOption extends ILoiOption {
   less?: number
   integer?: boolean
   finite?: boolean
+  parseFloat?: boolean
 }
 
 export class NumberFactory<T extends t.Any> extends Factory<T> {
@@ -23,7 +24,6 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (n) => n <= limit) as t.Type<T['_A'], T['_O'], T['_I']>;
     return metadata(NumberFactory.decorate(type), {
       parent: this,
-      tag: "number",
       option: <INumberOption>{ name: `<=${limit}`, max: limit }
     });
   }
@@ -32,7 +32,6 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (n) => n >= limit) as t.Type<T['_A'], T['_O'], T['_I']>;
     return metadata(NumberFactory.decorate(type), {
       parent: this,
-      tag: "number",
       option: <INumberOption>{ name: `>=${limit}`, min: limit }
     });
   }
@@ -41,7 +40,6 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (n) => n > limit) as t.Type<T['_A'], T['_O'], T['_I']>;
     return metadata(NumberFactory.decorate(type), {
       parent: this,
-      tag: "number",
       option: <INumberOption>{ name: `>${limit}`, greater: limit }
     });
   }
@@ -50,7 +48,6 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (n) => n < limit) as t.Type<T['_A'], T['_O'], T['_I']>;
     return metadata(NumberFactory.decorate(type), {
       parent: this,
-      tag: "number",
       option: <INumberOption>{ name: `<${limit}`, less: limit }
     });
   }
@@ -59,7 +56,6 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (n) => n < 0) as t.Type<T['_A'], T['_O'], T['_I']>;
     return metadata(NumberFactory.decorate(type), {
       parent: this,
-      tag: "number",
       option: <INumberOption>{ name: `-`, less: 0 }
     });
   }
@@ -68,7 +64,6 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (n) => n > 0) as t.Type<T['_A'], T['_O'], T['_I']>;
     return metadata(NumberFactory.decorate(type), {
       parent: this,
-      tag: "number",
       option: <INumberOption>{ name: `+`, greater: 0 }
     });
   }
@@ -77,7 +72,6 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (n) => Number.isSafeInteger(n)) as t.Type<T['_A'], T['_O'], T['_I']>;
     return metadata(NumberFactory.decorate(type), {
       parent: this,
-      tag: "number",
       option: <INumberOption>{ name: `integer`, integer: true }
     });
   }
@@ -86,7 +80,6 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (n) => Number.isFinite(n)) as t.Type<T['_A'], T['_O'], T['_I']>;
     return metadata(NumberFactory.decorate(type), {
       parent: this,
-      tag: "number",
       option: <INumberOption>{ name: `finite`, finite: true }
     });
   }
@@ -95,8 +88,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
     const type = rt.convert(this, (i: string) => parseFloat(i), (i) => isString(i));
     return metadata(NumberFactory.decorate(type), {
       parent: this,
-      tag: "number",
-      option: { name: "parseFloat" }
+      option: <INumberOption>{ name: "parseFloat", parseFloat: true }
     });
   }
 }
