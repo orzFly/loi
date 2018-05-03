@@ -56,9 +56,9 @@ describe('types:Object', () => {
         required: t.refinement(t.any, (i) => i != null, "any")
       }, {
         optional: t.refinement(t.any, (i) => i != null, "any")
-      }).violet().finish()
+      }, "MyRequiredAndOptionalObject").violet().finish()
 
-      expect(test.name).to.be.eql("{ required: any, optional?: any }(violet)")
+      expect(test.name).to.be.eql("MyRequiredAndOptionalObject(violet)")
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
       expect(shouldValidate(test.decode({ required: 1, optional: 2 }))).to.be.eql({ required: 1, optional: 2 })
       expect(shouldValidate(test.decode({ required: 1, optional: [] }))).to.be.eql({ required: 1, optional: [] })
