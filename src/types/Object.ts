@@ -1,4 +1,5 @@
 import * as t from 'io-ts';
+import { isString } from 'lodash';
 import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
 import { getNameFromProps, interfaceWithOptionals, strictInterfaceWithOptionals, violetInterfaceWithOptionals } from '../utilties/object';
 import { BaseFactory } from './Base';
@@ -53,7 +54,7 @@ export class InitialObjectFactory<R extends t.Props, O extends t.Props, T extend
 
   public strict() {
     const type = strictInterfaceWithOptionals(this[loiObjectRequired], this[loiObjectOptional], this.name)
-    return metadata(ObjectFactory.decorate<R, O, Clean<typeof type>>(type), {
+    return metadata(ObjectFactory.decorate<R, O, Clean<T>>(type), {
       parent: this,
       option: <IObjectOption>{ name: `strict`, strict: true }
     });
@@ -61,24 +62,86 @@ export class InitialObjectFactory<R extends t.Props, O extends t.Props, T extend
 
   public violet() {
     const type = violetInterfaceWithOptionals(this[loiObjectRequired], this[loiObjectOptional], this.name)
-    return metadata(ObjectFactory.decorate<R, O, Clean<typeof type>>(type), {
+    return metadata(ObjectFactory.decorate<R, O, Clean<T>>(type), {
       parent: this,
       option: <IObjectOption>{ name: `violet`, violet: true }
     });
   }
 }
 
-type SimpleProps<P extends t.Props> = {
-  [K in keyof P]: t.Type<P[K]['_A'], P[K]['_O'], P[K]['_I']>;
-}
+export function object(
+  name?: string
+): InitialObjectFactoryType<
+  { },
+  { },
+  t.Type<
+    { },
+    { },
+    t.mixed
+  >
+>
+
+export function object<R extends t.Props = {}>(
+  required: R,
+  name?: string
+): InitialObjectFactoryType<
+  { [K in keyof R]: t.Type<R[K]['_A'], R[K]['_O'], R[K]['_I']> },
+  { },
+  t.Type<
+    { [K in keyof R]: t.TypeOf<R[K]> },
+    { [K in keyof R]: t.OutputOf<R[K]> },
+    t.mixed
+  >
+>
 
 export function object<R extends t.Props = {}, O extends t.Props = {}>(
-  required: R = {} as any,
-  optional: O = {} as any,
-  name: string = getNameFromProps(required, optional)
-) {
-  const type = interfaceWithOptionals(required as SimpleProps<R>, optional as SimpleProps<O>, name);
-  const decorated = metadata(InitialObjectFactory.decorate<SimpleProps<R>, SimpleProps<O>, Clean<typeof type>>(type), {
+  required: R,
+  optional: O,
+  name?: string
+): InitialObjectFactoryType<
+  { [K in keyof R]: t.Type<R[K]['_A'], R[K]['_O'], R[K]['_I']> },
+  { [K in keyof O]: t.Type<O[K]['_A'], O[K]['_O'], O[K]['_I']> },
+  t.Type<
+    { [K in keyof R]: t.TypeOf<R[K]> } & { [K in keyof O]?: t.TypeOf<O[K]> },
+    { [K in keyof R]: t.OutputOf<R[K]> } & { [K in keyof O]?: t.OutputOf<O[K]> },
+    t.mixed
+  >
+>
+
+export function object(a?: any, b?: any, c?: any) {
+  let required, optional, name
+  if ((a === null || a === undefined) && (b === null || b === undefined) && (c === null || c === undefined)) {
+    required = {}
+    optional = {}
+    name = getNameFromProps(required, optional)
+  } else if ((b === null || b === undefined) && (c === null || c === undefined)) {
+    if (isString(a)) {
+      required = {}
+      optional = {}
+      name = a
+    } else {
+      required = a
+      optional = {}
+      name = getNameFromProps(required, optional)
+    }
+  } else if ((c === null || c === undefined)) {
+    if (isString(b)) {
+      required = a
+      optional = {}
+      name = b
+    } else {
+      required = a
+      optional = b
+      name = getNameFromProps(required, optional)
+    }
+  } else {
+    required = a
+    optional = b
+    name = c
+  }
+
+  const type = interfaceWithOptionals(required, optional, name);
+  const decorated = metadata(InitialObjectFactory.decorate(type), {
     tag: name
   });
   decorated[loiObjectRequired] = required;

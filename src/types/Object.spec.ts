@@ -14,7 +14,7 @@ describe('types:Object', () => {
         required: t.refinement(t.any, (i) => i != null, "any")
       }, {
         optional: t.refinement(t.any, (i) => i != null, "any")
-      })
+      }).end()
 
       expect(test.name).to.be.eql("{ required: any, optional?: any }")
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
@@ -123,7 +123,7 @@ describe('types:Object', () => {
     it('type() should work', () => {
       const test = object({
         source: t.string
-      }).type(RegExp)
+      }).type(RegExp).end()
 
       expect(test.name).to.be.eql("{ source: string }(type RegExp)")
 
@@ -142,7 +142,7 @@ describe('types:Object', () => {
     it('instanceof() should work', () => {
       const test = object({
         source: t.string
-      }).instanceof(RegExp)
+      }).instanceof(RegExp).end()
 
       expect(test.name).to.be.eql("{ source: string }(instanceof RegExp)")
 
