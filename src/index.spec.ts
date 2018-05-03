@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import Loi from './index';
+import * as Loi from './index';
 
 // tslint:disable:no-unused-expression
 
