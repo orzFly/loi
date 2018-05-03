@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { Either } from 'fp-ts/lib/Either';
 import * as t from 'io-ts';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
 import { nullablePartial } from './object';

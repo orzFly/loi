@@ -1,7 +1,6 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
-import { number } from './Number';
 import { object } from './Object';
 
 // tslint:disable:no-unused-expression // chai to be NaN

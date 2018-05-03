@@ -6,5 +6,5 @@ export function shouldValidate<Right>(e: Either<t.ValidationError[], Right>) {
 }
 
 export function shouldNotValidate<Right>(e: Either<t.ValidationError[], Right>) {
-  return e.fold((err) => err, (right) => { throw new Error('Should Not Validate') });
+  return e.fold((err) => err, () => { throw new Error('Should Not Validate') });
 }
