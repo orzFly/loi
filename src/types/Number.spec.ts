@@ -12,10 +12,35 @@ describe('types:Number', () => {
       const test = number()
 
       expect(test.name).to.be.eql("number")
-      expect(shouldValidate(test.decode(1))).to.be.eql(1)
       expect(shouldValidate(test.decode(233))).to.be.eql(233)
+      expect(shouldValidate(test.decode(1))).to.be.equal(1)
+      expect(shouldValidate(test.decode(-1))).to.be.equal(-1)
+      expect(shouldValidate(test.decode(1.233))).to.be.equal(1.233)
+      expect(shouldValidate(test.decode(-1.233))).to.be.equal(-1.233)
+      expect(shouldValidate(test.decode(1e5))).to.be.equal(1e5)
+      expect(shouldValidate(test.decode(-1e5))).to.be.equal(-1e5)
+      expect(shouldValidate(test.decode(0))).to.be.equal(0)
+      expect(shouldValidate(test.decode(NaN))).to.be.NaN;
+      expect(shouldValidate(test.decode(Infinity))).to.be.equal(Infinity)
+      expect(shouldValidate(test.decode(-Infinity))).to.be.equal(-Infinity)
     })
 
+    it('mimicked number should work', () => {
+      const test = number
+
+      expect(test.name).to.be.eql("number")
+      expect(shouldValidate(test.decode(233))).to.be.eql(233)
+      expect(shouldValidate(test.decode(1))).to.be.equal(1)
+      expect(shouldValidate(test.decode(-1))).to.be.equal(-1)
+      expect(shouldValidate(test.decode(1.233))).to.be.equal(1.233)
+      expect(shouldValidate(test.decode(-1.233))).to.be.equal(-1.233)
+      expect(shouldValidate(test.decode(1e5))).to.be.equal(1e5)
+      expect(shouldValidate(test.decode(-1e5))).to.be.equal(-1e5)
+      expect(shouldValidate(test.decode(0))).to.be.equal(0)
+      expect(shouldValidate(test.decode(NaN))).to.be.NaN;
+      expect(shouldValidate(test.decode(Infinity))).to.be.equal(Infinity)
+      expect(shouldValidate(test.decode(-Infinity))).to.be.equal(-Infinity)
+    })
     it('max() should work', () => {
       const test = number().max(10)
 

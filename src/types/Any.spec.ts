@@ -20,6 +20,20 @@ describe('types:Any', () => {
       expect(shouldValidate(test.decode(func))).to.be.eql(func)
     })
 
+    it('mimicked should work', () => {
+      const test = any
+
+      expect(test.name).to.be.eql("any")
+      expect(shouldValidate(test.decode(1))).to.be.eql(1)
+      expect(shouldValidate(test.decode([[]]))).to.be.eql([[]])
+      expect(shouldValidate(test.decode({ any: 1 }))).to.be.eql({ any: 1 })
+      expect(shouldValidate(test.decode(null))).to.be.eql(null)
+      expect(shouldValidate(test.decode(undefined))).to.be.eql(undefined)
+
+      const func = () => { }
+      expect(shouldValidate(test.decode(func))).to.be.eql(func)
+    })
+
     it('nonNull() should work', () => {
       const test = any().nonNull()
 

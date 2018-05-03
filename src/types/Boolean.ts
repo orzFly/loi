@@ -2,6 +2,7 @@ import * as t from 'io-ts';
 import { isNumber, isString } from 'lodash';
 import { convert } from '../utilties/convert';
 import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
+import { mimic } from '../utilties/mimic';
 import { BaseFactory } from './Base';
 
 export interface IBooleanOption extends ILoiOption {
@@ -72,9 +73,10 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
   }
 }
 
-export function boolean() {
+// tslint:disable-next-line:variable-name
+export const boolean = mimic(function boolean() {
   const type = new t.BooleanType();
   return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
     tag: "boolean"
   });
-}
+}, new t.BooleanType());

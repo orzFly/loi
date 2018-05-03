@@ -2,6 +2,7 @@ import * as t from 'io-ts';
 import { isString } from 'lodash';
 import { convert } from '../utilties/convert';
 import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
+import { mimic } from '../utilties/mimic';
 import { BaseFactory } from './Base';
 
 export interface INumberOption extends ILoiOption {
@@ -96,9 +97,10 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 }
 
-export function number() {
+// tslint:disable-next-line:variable-name
+export const number = mimic(function number() {
   const type = new t.NumberType();
   return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
     tag: "number"
   });
-}
+}, new t.NumberType());

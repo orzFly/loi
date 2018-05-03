@@ -1,5 +1,6 @@
 import * as t from 'io-ts';
 import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
+import { mimic } from '../utilties/mimic';
 import { BaseFactory } from './Base';
 
 export interface IAnyOption extends ILoiOption {
@@ -24,9 +25,10 @@ export class AnyFactory<T extends t.Any> extends Factory<T> {
   }
 }
 
-export function any() {
+// tslint:disable-next-line:variable-name
+export const any = mimic(function any() {
   const type = new t.AnyType();
   return metadata(AnyFactory.decorate<Clean<typeof type>>(type), {
     tag: "any"
   });
-}
+}, new t.AnyType());
