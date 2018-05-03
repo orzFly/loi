@@ -105,9 +105,9 @@ describe('types:Object', () => {
     })
 
     it('empty.violet() should work', () => {
-      const test = object().violet().simple()
+      const test = object("Empty").violet().simple()
 
-      expect(test.name).to.be.eql("{}(violet)")
+      expect(test.name).to.be.eql("Empty(violet)")
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({})
       expect(shouldValidate(test.decode({ required: 1, optional: 2 }))).to.be.eql({})
       expect(shouldValidate(test.decode({ required: 1, optional: [] }))).to.be.eql({})
@@ -142,9 +142,9 @@ describe('types:Object', () => {
     it('instanceof() should work', () => {
       const test = object({
         source: t.string
-      }).instanceof(RegExp).end()
+      }, "RegExp").instanceof(RegExp).end()
 
-      expect(test.name).to.be.eql("{ source: string }(instanceof RegExp)")
+      expect(test.name).to.be.eql("RegExp(instanceof RegExp)")
 
       const regexp = new RegExp("test")
       expect(shouldValidate(test.decode(regexp))).to.be.eql(regexp)
