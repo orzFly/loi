@@ -25,6 +25,10 @@ export class BaseFactory<T extends t.Any> extends Factory<T> {
     });
   }
 
+  /**
+   * Sets properties default values when calling t.validate() method on models
+   * @param value default value
+   */
   public default(value: this['_A']) {
     const type = withDefault(this, value);
     return metadata(BaseFactory.decorate(type), {
@@ -33,12 +37,44 @@ export class BaseFactory<T extends t.Any> extends Factory<T> {
     });
   }
 
+  /**
+   * Sets properties default values with resolver functions when calling t.validate() method on models
+   * @param value default value resolver
+   */
   public defaultResolver(resolver: () => this['_A']) {
     const type = withDefaultResolver(this, resolver);
     return metadata(BaseFactory.decorate(type), {
       parent: this,
       option: <IBaseOption<T>>{ name: `with default`, defaultResolver: resolver }
     });
+  }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public asBaseType(): t.Type<T['_A'], T['_O'], T['_I']> {
+    return this;
+  }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public finish(): t.Type<T['_A'], T['_O'], T['_I']> {
+    return this;
+  }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public end(): t.Type<T['_A'], T['_O'], T['_I']> {
+    return this;
+  }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public simple(): t.Type<T['_A'], T['_O'], T['_I']> {
+    return this;
   }
 
   /*
