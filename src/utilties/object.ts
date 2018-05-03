@@ -2,6 +2,7 @@ import * as t from 'io-ts';
 import { mapValues } from 'lodash';
 import { nullAsUndefined } from './convert';
 
+/** @internal */
 export function getNameFromProps(required: t.Props = {}, optional: t.Props = {}): string {
   const result = `{ ${[
     ...Object.keys(required).map((k) => `${k}: ${required[k].name}`),
@@ -11,7 +12,10 @@ export function getNameFromProps(required: t.Props = {}, optional: t.Props = {})
   return result === "{  }" ? "{}" : result;
 }
 
-/** Specifies that only the given interface properties are allowed. Invalid properties will be just ignored, violetly. */
+/**
+ * Specifies that only the given interface properties are allowed. Invalid properties will be just ignored, violetly.
+ * @internal
+ */
 export const violet = <P extends t.Props>(
   props: P,
   name: string = getNameFromProps(props)
@@ -38,10 +42,12 @@ export const violet = <P extends t.Props>(
   )
 }
 
+/** @internal */
 export function nullablePartial<P extends t.Props>(props: P, name?: string): t.PartialType<P, t.TypeOfPartialProps<P>, t.OutputOfPartialProps<P>> {
   return t.partial(mapValues(props, (i) => nullAsUndefined(i)) as P, name);
 }
 
+/** @internal */
 export function interfaceWithOptionals<R extends t.Props, O extends t.Props>(
   required: R,
   optional: O,
@@ -50,14 +56,16 @@ export function interfaceWithOptionals<R extends t.Props, O extends t.Props>(
   return t.intersection([t.interface(required), nullablePartial(optional)], name)
 }
 
-// https://github.com/gunzip/digital-citizenship-functions/blob/cd5c57629cb188dbda4b03037fbb399115fd6d29/lib/utils/types.ts#L92
-// https://github.com/gcanti/io-ts/issues/106
 /**
- *  Return a new type that validates successfully only
- *  when the instance (object) contains no unknow properties.
+ * Return a new type that validates successfully only
+ * when the instance (object) contains no unknow properties.
  *
- *  @required  required properties
- *  @optional   optional object properties
+ * https://github.com/gunzip/digital-citizenship-functions/blob/cd5c57629cb188dbda4b03037fbb399115fd6d29/lib/utils/types.ts#L92
+ * https://github.com/gcanti/io-ts/issues/106
+ *
+ * @required  required properties
+ * @optional   optional object properties
+ * @internal
  */
 export function strictInterfaceWithOptionals<R extends t.Props, O extends t.Props>(
   required: R,
@@ -87,6 +95,7 @@ export function strictInterfaceWithOptionals<R extends t.Props, O extends t.Prop
   );
 }
 
+/** @internal */
 export function violetInterfaceWithOptionals<R extends t.Props, O extends t.Props>(
   required: R,
   optional: O,

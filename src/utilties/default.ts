@@ -5,6 +5,7 @@ import * as t from 'io-ts';
 /**
  * Sets properties default values when calling t.validate() method on models
  * see https://github.com/gcanti/io-ts/issues/8
+ * @internal
  */
 // tslint:disable:no-any
 export function withDefault<T extends t.Any>(
@@ -20,6 +21,11 @@ export function withDefault<T extends t.Any>(
   );
 }
 
+/**
+ * Sets properties default values with resolver functions when calling t.validate() method on models
+ * see https://github.com/gcanti/io-ts/issues/8
+ * @internal
+ */
 export function withDefaultResolver<T extends t.Any>(
   type: T,
   defaultValue: () => t.TypeOf<T>

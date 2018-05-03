@@ -1,6 +1,7 @@
 import * as t from 'io-ts';
 
 export const loiTag = Symbol('loiTag')
+
 export const loiOption = Symbol('loiOption')
 
 export interface ILoiOption {
@@ -41,6 +42,7 @@ function createPrototype(klass: Function, base: object) {
   return prototype;
 }
 
+/** @internal */
 export function decorate<T extends t.Any, F extends Factory<t.Type<T['_A'], T['_O'], T['_I']>>>(factory: { new(...args: any[]): F }, t: T): T & F {
   if (!t) return t as any;
 
@@ -60,6 +62,7 @@ export function decorate<T extends t.Any, F extends Factory<t.Type<T['_A'], T['_
   return result;
 }
 
+/** @internal */
 export function metadata<T, LO extends ILoiOption>(t: T, params?: {
   parent?: any,
   tag?: string,

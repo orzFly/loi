@@ -1,5 +1,6 @@
 import * as t from 'io-ts';
 
+/** @internal */
 export function convert<T extends t.Any, X>(
   type: T,
   convert: (val: X) => t.TypeOf<T> = (val) => val,
@@ -15,6 +16,7 @@ export function convert<T extends t.Any, X>(
   );
 }
 
+/** @internal */
 export function nullAsUndefined<T extends t.Any>(
   type: T,
   name: string = type.name

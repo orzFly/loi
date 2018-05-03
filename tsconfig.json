@@ -12,7 +12,8 @@
     "noEmitOnError": false,
     "target": "es6",
     "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "stripInternal": true
   },
   "include": [
     "src/**/*.ts"
