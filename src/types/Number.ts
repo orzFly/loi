@@ -25,7 +25,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public max(limit: number) {
-    const type = t.refinement(this, (n) => n <= limit) as t.Type<T['_A'], T['_O'], T['_I']>;
+    const type = t.refinement(this, (n) => n <= limit);
     return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `<=${limit}`, max: limit }
@@ -33,7 +33,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public min(limit: number) {
-    const type = t.refinement(this, (n) => n >= limit) as t.Type<T['_A'], T['_O'], T['_I']>;
+    const type = t.refinement(this, (n) => n >= limit);
     return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `>=${limit}`, min: limit }
@@ -41,7 +41,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public greater(limit: number) {
-    const type = t.refinement(this, (n) => n > limit) as t.Type<T['_A'], T['_O'], T['_I']>;
+    const type = t.refinement(this, (n) => n > limit);
     return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `>${limit}`, greater: limit }
@@ -49,7 +49,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public less(limit: number) {
-    const type = t.refinement(this, (n) => n < limit) as t.Type<T['_A'], T['_O'], T['_I']>;
+    const type = t.refinement(this, (n) => n < limit);
     return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `<${limit}`, less: limit }
@@ -57,7 +57,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public negative() {
-    const type = t.refinement(this, (n) => n < 0) as t.Type<T['_A'], T['_O'], T['_I']>;
+    const type = t.refinement(this, (n) => n < 0);
     return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `-`, less: 0 }
@@ -65,7 +65,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public positive() {
-    const type = t.refinement(this, (n) => n > 0) as t.Type<T['_A'], T['_O'], T['_I']>;
+    const type = t.refinement(this, (n) => n > 0);
     return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `+`, greater: 0 }
@@ -73,7 +73,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public integer() {
-    const type = t.refinement(this, (n) => Number.isSafeInteger(n)) as t.Type<T['_A'], T['_O'], T['_I']>;
+    const type = t.refinement(this, (n) => Number.isSafeInteger(n));
     return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `integer`, integer: true }
@@ -81,7 +81,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
   }
 
   public finite() {
-    const type = t.refinement(this, (n) => Number.isFinite(n)) as t.Type<T['_A'], T['_O'], T['_I']>;
+    const type = t.refinement(this, (n) => Number.isFinite(n));
     return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `finite`, finite: true }
