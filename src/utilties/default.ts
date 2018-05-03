@@ -14,7 +14,7 @@ export function withDefault<T extends t.Any>(
 ): t.Type<T["_A"], T["_O"], T["_I"]> {
   return new t.Type(
     type.name,
-    (v: any): v is T => type.is(v !== undefined && v !== null ? v : defaultValue),
+    (v: any): v is T => type.is(v),
     (v: any, c: any) =>
       type.validate(v !== undefined && v !== null ? v : defaultValue, c),
     (v: any) => type.encode(v)
@@ -32,7 +32,7 @@ export function withDefaultResolver<T extends t.Any>(
 ): t.Type<T["_A"], T["_O"], T["_I"]> {
   return new t.Type(
     type.name,
-    (v: any): v is T => type.is(v !== undefined && v !== null ? v : defaultValue()),
+    (v: any): v is T => type.is(v),
     (v: any, c: any) =>
       type.validate(v !== undefined && v !== null ? v : defaultValue(), c),
     (v: any) => type.encode(v)

@@ -27,8 +27,8 @@ describe('utilties:default', () => {
 
       expect(test.is(1)).to.be.eql(t.number.is(1))
       expect(test.is(NaN)).to.be.eql(t.number.is(NaN))
-      expect(test.is(undefined)).to.be.eql(t.number.is(1))
-      expect(test.is(null)).to.be.eql(t.number.is(1))
+      expect(test.is(undefined)).to.be.eql(t.number.is(undefined))
+      expect(test.is(null)).to.be.eql(t.number.is(null))
     })
   })
 
@@ -56,10 +56,10 @@ describe('utilties:default', () => {
 
       expect(test.is(1)).to.be.eql(t.number.is(1))
       expect(test.is(NaN)).to.be.eql(t.number.is(NaN))
-      expect(test.is(undefined)).to.be.eql(t.number.is(235)); expect(i).to.be.eql(236)
-      expect(test.is(null)).to.be.eql(t.number.is(236)); expect(i).to.be.eql(237)
+      expect(test.is(undefined)).to.be.eql(t.number.is(undefined))
+      expect(test.is(null)).to.be.eql(t.number.is(null))
 
-      expect(i).to.be.eql(237)
+      expect(i).to.be.eql(235)
     })
   })
 })
