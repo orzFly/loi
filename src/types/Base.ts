@@ -2,11 +2,14 @@ import * as t from 'io-ts';
 import { nullAsUndefined } from '../utilties/convert';
 import { withDefault, withDefaultResolver } from '../utilties/default';
 import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
+import { withRescue, withRescueResolver } from '../utilties/rescue';
 
 export interface IBaseOption<T> extends ILoiOption {
   name: string,
   default?: T,
   defaultResolver?: () => T,
+  rescue?: T,
+  rescueResolver?: () => T,
   nullAsUndefined?: boolean
 }
 
@@ -48,6 +51,30 @@ export class BaseFactory<T extends t.Any> extends Factory<T> {
     return metadata(BaseFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <IBaseOption<T>>{ name: `with default`, defaultResolver: resolver }
+    });
+  }
+
+  /**
+   * Make it never fails with rescue value
+   * @param value rescue value
+   */
+  public rescue(value: this['_A']) {
+    const type = withRescue(this, value);
+    return metadata(BaseFactory.decorate<Clean<typeof type>>(type), {
+      parent: this,
+      option: <IBaseOption<T>>{ name: `with rescue`, rescue: value }
+    });
+  }
+
+  /**
+   * Make it never fails with rescue resolver
+   * @param value rescue value resolver
+   */
+  public rescueResolver(resolver: () => this['_A']) {
+    const type = withRescueResolver(this, resolver);
+    return metadata(BaseFactory.decorate<Clean<typeof type>>(type), {
+      parent: this,
+      option: <IBaseOption<T>>{ name: `with rescue`, rescueResolver: resolver }
     });
   }
 

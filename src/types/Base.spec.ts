@@ -49,6 +49,40 @@ describe('types:Base', () => {
       expect(i).to.be.eql(235)
     })
 
+    it('rescue() should work', () => {
+      const baseType = t.union([t.number, t.null, t.undefined])
+      const test = BaseFactory.decorate(baseType).rescue(1)
+
+      expect(shouldValidate(test.decode(0))).to.be.eql(0)
+      expect(shouldValidate(test.decode(1))).to.be.eql(1)
+      expect(shouldValidate(test.decode(undefined))).to.be.eql(undefined)
+      expect(shouldValidate(test.decode(null))).to.be.eql(null)
+      expect(shouldValidate(test.decode(NaN))).to.be.NaN
+
+      expect(shouldValidate(test.decode({}))).to.be.eql(1)
+      expect(shouldValidate(test.decode(""))).to.be.eql(1)
+      expect(shouldValidate(test.decode([]))).to.be.eql(1)
+    })
+
+    it('rescueResolver() should work', () => {
+      let i = 233
+      const baseType = t.union([t.number, t.null, t.undefined])
+      const test = BaseFactory.decorate(baseType).rescueResolver(() => i++)
+
+      expect(shouldValidate(test.decode(undefined))).to.be.eql(undefined)
+      expect(shouldValidate(test.decode(null))).to.be.eql(null)
+
+      expect(shouldValidate(test.decode(0))).to.be.eql(0)
+      expect(shouldValidate(test.decode(1))).to.be.eql(1)
+      expect(shouldValidate(test.decode(NaN))).to.be.NaN
+
+      expect(i).to.be.eql(233)
+      expect(shouldValidate(test.decode({}))).to.be.eql(233)
+      expect(shouldValidate(test.decode(""))).to.be.eql(234)
+      expect(shouldValidate(test.decode([]))).to.be.eql(235)
+      expect(i).to.be.eql(236)
+    })
+
     it('allow() should work', () => {
       const test = BaseFactory.decorate(t.string).allow(t.number).allow(t.boolean)
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
