@@ -64,13 +64,17 @@ export class InitialObjectFactory<R extends t.Props, O extends t.Props, T extend
   }
 }
 
+type SimpleProps<P extends t.Props> = {
+  [K in keyof P]: t.Type<P[K]['_A'], P[K]['_O'], P[K]['_I']>;
+}
+
 export function object<R extends t.Props = {}, O extends t.Props = {}>(
   required: R = {} as any,
   optional: O = {} as any,
   name: string = getNameFromProps(required, optional)
 ) {
-  const type = interfaceWithOptionals(required, optional, name);
-  const decorated = metadata(InitialObjectFactory.decorate<R, O, typeof type>(type), {
+  const type = interfaceWithOptionals(required as SimpleProps<R>, optional as SimpleProps<O>, name);
+  const decorated = metadata(InitialObjectFactory.decorate<SimpleProps<R>, SimpleProps<O>, typeof type>(type), {
     tag: name
   });
   decorated[loiObjectRequired] = required;
