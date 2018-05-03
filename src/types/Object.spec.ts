@@ -35,7 +35,7 @@ describe('types:Object', () => {
         required: t.refinement(t.any, (i) => i != null, "any")
       }, {
         optional: t.refinement(t.any, (i) => i != null, "any")
-      }).strict()
+      }).strict().asBaseType()
 
       expect(test.name).to.be.eql("{ required: any, optional?: any }(strict)")
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
@@ -56,7 +56,7 @@ describe('types:Object', () => {
         required: t.refinement(t.any, (i) => i != null, "any")
       }, {
         optional: t.refinement(t.any, (i) => i != null, "any")
-      }).violet()
+      }).violet().finish()
 
       expect(test.name).to.be.eql("{ required: any, optional?: any }(violet)")
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
@@ -73,7 +73,7 @@ describe('types:Object', () => {
     })
 
     it('empty should work', () => {
-      const test = object()
+      const test = object().clean()
 
       expect(test.name).to.be.eql("{}")
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
@@ -89,7 +89,7 @@ describe('types:Object', () => {
     })
 
     it('empty.strict() should work', () => {
-      const test = object().strict()
+      const test = object().strict().end()
 
       expect(test.name).to.be.eql("{}(strict)")
       shouldNotValidate(test.decode({ required: 1 }))
@@ -105,7 +105,7 @@ describe('types:Object', () => {
     })
 
     it('empty.violet() should work', () => {
-      const test = object().violet()
+      const test = object().violet().simple()
 
       expect(test.name).to.be.eql("{}(violet)")
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({})

@@ -14,8 +14,11 @@ export interface IBooleanOption extends ILoiOption {
 const trueValues = ["true", "t", "yes", "y", "on", "1"]
 const falseValues = ["false", "f", "no", "n", "off", "0"]
 
+type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
+export type BooleanFactoryType<T extends t.Any> = T & BooleanFactory<T> & BaseFactory<T>
+
 export class BooleanFactory<T extends t.Any> extends Factory<T> {
-  static decorate<T extends t.Any>(t: T) {
+  static decorate<T extends t.Any>(t: T): BooleanFactoryType<T> {
     return BaseFactory.decorate(decorate<T, BooleanFactory<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
 
@@ -27,7 +30,7 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
       return i;
     }, (i) => isString(i))
 
-    return metadata(BooleanFactory.decorate(type), {
+    return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <IBooleanOption>{ name: `parseString`, parseString: true }
     });
@@ -40,7 +43,7 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
       return true;
     }, (i) => isNumber(i))
 
-    return metadata(BooleanFactory.decorate(type), {
+    return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <IBooleanOption>{ name: `parseNumber`, parseNumber: true }
     });
@@ -53,7 +56,7 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
   trueOnly() {
     const type = t.refinement(this, (i) => i === true)
 
-    return metadata(BooleanFactory.decorate(type), {
+    return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <IBooleanOption>{ name: `true only`, only: true }
     });
@@ -62,7 +65,7 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
   falseOnly() {
     const type = t.refinement(this, (i) => i === false)
 
-    return metadata(BooleanFactory.decorate(type), {
+    return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <IBooleanOption>{ name: `false only`, only: false }
     });
@@ -71,7 +74,7 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
 
 export function boolean() {
   const type = new t.BooleanType();
-  return metadata(BooleanFactory.decorate(type), {
+  return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
     tag: "boolean"
   });
 }

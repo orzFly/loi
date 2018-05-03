@@ -15,14 +15,17 @@ export interface INumberOption extends ILoiOption {
   parseFloat?: boolean
 }
 
+type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
+export type NumberFactoryType<T extends t.Any> = T & NumberFactory<T> & BaseFactory<T>
+
 export class NumberFactory<T extends t.Any> extends Factory<T> {
-  static decorate<T extends t.Any>(t: T) {
+  static decorate<T extends t.Any>(t: T): NumberFactoryType<T> {
     return BaseFactory.decorate(decorate<T, NumberFactory<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
 
   public max(limit: number) {
     const type = t.refinement(this, (n) => n <= limit) as t.Type<T['_A'], T['_O'], T['_I']>;
-    return metadata(NumberFactory.decorate(type), {
+    return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `<=${limit}`, max: limit }
     });
@@ -30,7 +33,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
 
   public min(limit: number) {
     const type = t.refinement(this, (n) => n >= limit) as t.Type<T['_A'], T['_O'], T['_I']>;
-    return metadata(NumberFactory.decorate(type), {
+    return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `>=${limit}`, min: limit }
     });
@@ -38,7 +41,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
 
   public greater(limit: number) {
     const type = t.refinement(this, (n) => n > limit) as t.Type<T['_A'], T['_O'], T['_I']>;
-    return metadata(NumberFactory.decorate(type), {
+    return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `>${limit}`, greater: limit }
     });
@@ -46,7 +49,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
 
   public less(limit: number) {
     const type = t.refinement(this, (n) => n < limit) as t.Type<T['_A'], T['_O'], T['_I']>;
-    return metadata(NumberFactory.decorate(type), {
+    return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `<${limit}`, less: limit }
     });
@@ -54,7 +57,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
 
   public negative() {
     const type = t.refinement(this, (n) => n < 0) as t.Type<T['_A'], T['_O'], T['_I']>;
-    return metadata(NumberFactory.decorate(type), {
+    return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `-`, less: 0 }
     });
@@ -62,7 +65,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
 
   public positive() {
     const type = t.refinement(this, (n) => n > 0) as t.Type<T['_A'], T['_O'], T['_I']>;
-    return metadata(NumberFactory.decorate(type), {
+    return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `+`, greater: 0 }
     });
@@ -70,7 +73,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
 
   public integer() {
     const type = t.refinement(this, (n) => Number.isSafeInteger(n)) as t.Type<T['_A'], T['_O'], T['_I']>;
-    return metadata(NumberFactory.decorate(type), {
+    return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `integer`, integer: true }
     });
@@ -78,7 +81,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
 
   public finite() {
     const type = t.refinement(this, (n) => Number.isFinite(n)) as t.Type<T['_A'], T['_O'], T['_I']>;
-    return metadata(NumberFactory.decorate(type), {
+    return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: `finite`, finite: true }
     });
@@ -86,7 +89,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
 
   public parseFloat() {
     const type = convert(this, (i: string) => parseFloat(i), (i) => isString(i));
-    return metadata(NumberFactory.decorate(type), {
+    return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <INumberOption>{ name: "parseFloat", parseFloat: true }
     });
@@ -95,7 +98,7 @@ export class NumberFactory<T extends t.Any> extends Factory<T> {
 
 export function number() {
   const type = new t.NumberType();
-  return metadata(NumberFactory.decorate(type), {
+  return metadata(NumberFactory.decorate<Clean<typeof type>>(type), {
     tag: "number"
   });
 }

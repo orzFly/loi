@@ -43,7 +43,7 @@ function createPrototype(klass: Function, base: object) {
 }
 
 /** @internal */
-export function decorate<T extends t.Any, F extends Factory<t.Type<T['_A'], T['_O'], T['_I']>>>(factory: { new(...args: any[]): F }, t: T): T & F {
+export function decorate<T extends t.Any, F extends Factory<t.Type<T['_A'], T['_O'], T['_I']>>, R extends T & F = T & F>(factory: { new(...args: any[]): F }, t: T): R {
   if (!t) return t as any;
 
   const result: any = t;
