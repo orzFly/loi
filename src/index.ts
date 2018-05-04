@@ -2,7 +2,7 @@ import * as t from 'io-ts';
 
 export type TypeOf<RT extends t.Any> = RT['_A'];
 
-export { BaseFactory } from './types/Base';
+export { start, BaseFactory } from './types/Base';
 export { any, AnyFactory } from './types/Any';
 export { boolean, BooleanFactory } from './types/Boolean';
 export { number, NumberFactory } from './types/Number';

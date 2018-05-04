@@ -1,7 +1,7 @@
 import * as t from 'io-ts';
 import { nullAsUndefined } from '../utilties/convert';
 import { withDefault, withDefaultResolver } from '../utilties/default';
-import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
+import { decorate, Factory, ILoiOption, loiTag, metadata } from '../utilties/factory';
 import { withRescue, withRescueResolver } from '../utilties/rescue';
 
 export interface IBaseOption<T> extends ILoiOption {
@@ -142,4 +142,12 @@ export class BaseFactory<T extends t.Any> extends Factory<T> {
       tag: type.name
     });
   }
+}
+
+export function start<T extends t.Any = t.Any>(type: T, name: string = (<any>type)[loiTag] || type.name) {
+  const clonedType = Object.create(type);
+  return metadata(BaseFactory.decorate<Clean<T>>(clonedType), {
+    parent: type,
+    tag: name
+  });
 }
