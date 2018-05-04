@@ -37,7 +37,7 @@ export class ArrayFactory<E extends t.Any, T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (i) => i.length <= limit)
     return metadata(ArrayFactory.decorate<Clean<E>, Clean<typeof type>>(type), {
       parent: this,
-      option: <IArrayOption>{ name: `<=${limit} items`, length: limit }
+      option: <IArrayOption>{ name: `<=${limit} items`, max: limit }
     });
   }
 
@@ -49,7 +49,7 @@ export class ArrayFactory<E extends t.Any, T extends t.Any> extends Factory<T> {
     const type = t.refinement(this, (i) => i.length >= limit)
     return metadata(ArrayFactory.decorate<Clean<E>, Clean<typeof type>>(type), {
       parent: this,
-      option: <IArrayOption>{ name: `>=${limit} items`, length: limit }
+      option: <IArrayOption>{ name: `>=${limit} items`, min: limit }
     });
   }
 }
