@@ -1,14 +1,25 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
-import { BaseFactory } from './Base';
+import { loiOption } from '../utilties/factory';
+import { start } from './Base';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
 describe('types:Base', () => {
   describe('BaseFactory', () => {
+    it('start should create a clone', () => {
+      const test1 = start(t.number).default(1)
+      const test2 = start(t.number).default(2)
+      expect(shouldValidate(test1.decode(undefined))).to.be.equal(1)
+      expect(shouldValidate(test2.decode(undefined))).to.be.equal(2)
+      expect((test1[loiOption][0] as any).default).to.be.eql(1)
+      expect((test2[loiOption][0] as any).default).to.be.eql(2)
+      expect((t.number as any)[loiOption]).to.be.undefined
+    })
+
     it('nullAsUndefined() should work', () => {
-      const test = BaseFactory.decorate(t.boolean).nullAsUndefined()
+      const test = start(t.boolean).nullAsUndefined()
 
       expect(shouldValidate(test.decode(true))).to.be.equal(true)
       expect(shouldValidate(test.decode(false))).to.be.equal(false)
@@ -17,7 +28,7 @@ describe('types:Base', () => {
     })
 
     it('default() should work', () => {
-      const test = BaseFactory.decorate(t.number).default(1)
+      const test = start(t.number).default(1)
 
       expect(shouldValidate(test.decode(0))).to.be.eql(0)
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
@@ -32,7 +43,7 @@ describe('types:Base', () => {
 
     it('defaultResolver() should work', () => {
       let i = 233
-      const test = BaseFactory.decorate(t.number).defaultResolver(() => i++)
+      const test = start(t.number).defaultResolver(() => i++)
 
       expect(shouldValidate(test.decode(undefined))).to.be.eql(233)
       expect(shouldValidate(test.decode(null))).to.be.eql(234)
@@ -51,7 +62,7 @@ describe('types:Base', () => {
 
     it('rescue() should work', () => {
       const baseType = t.union([t.number, t.null, t.undefined])
-      const test = BaseFactory.decorate(baseType).rescue(1)
+      const test = start(baseType).rescue(1)
 
       expect(shouldValidate(test.decode(0))).to.be.eql(0)
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
@@ -67,7 +78,7 @@ describe('types:Base', () => {
     it('rescueResolver() should work', () => {
       let i = 233
       const baseType = t.union([t.number, t.null, t.undefined])
-      const test = BaseFactory.decorate(baseType).rescueResolver(() => i++)
+      const test = start(baseType).rescueResolver(() => i++)
 
       expect(shouldValidate(test.decode(undefined))).to.be.eql(undefined)
       expect(shouldValidate(test.decode(null))).to.be.eql(null)
@@ -84,7 +95,7 @@ describe('types:Base', () => {
     })
 
     it('allow() should work', () => {
-      const test = BaseFactory.decorate(t.string).allow(t.number).allow(t.boolean)
+      const test = start(t.string).allow(t.number).allow(t.boolean)
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
       expect(shouldValidate(test.decode("1"))).to.be.eql("1")
       expect(shouldValidate(test.decode(true))).to.be.eql(true)
@@ -95,7 +106,7 @@ describe('types:Base', () => {
     })
 
     it('allow(...) should work', () => {
-      const test = BaseFactory.decorate(t.string).allow(t.number, t.boolean)
+      const test = start(t.string).allow(t.number, t.boolean)
 
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
       expect(shouldValidate(test.decode("1"))).to.be.eql("1")
