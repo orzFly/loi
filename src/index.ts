@@ -6,6 +6,7 @@ export { start, BaseFactory } from './types/Base';
 export { any, AnyFactory } from './types/Any';
 export { boolean, BooleanFactory } from './types/Boolean';
 export { number, NumberFactory } from './types/Number';
+export { string, StringFactory } from './types/String';
 export { array, ArrayFactory } from './types/Array';
 export { object, ObjectFactory, InitialObjectFactory } from './types/Object';
 
