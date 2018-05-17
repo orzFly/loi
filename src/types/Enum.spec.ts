@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import * as t from 'io-ts';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
 import { enumeration } from './Enum';
 
@@ -6,6 +7,18 @@ import { enumeration } from './Enum';
 
 describe('types:Enum', () => {
   describe('enumeration', () => {
+    it('should work with editor', () => {
+      enum TestEnumEditor {
+        MemberA = "a",
+        MemberB = 2,
+      }
+      const test = enumeration(TestEnumEditor)
+      const a: t.TypeOf<typeof test> = TestEnumEditor.MemberA;
+      const b: t.TypeOf<typeof test> = TestEnumEditor.MemberB;
+      expect(a).to.be.eql(TestEnumEditor.MemberA)
+      expect(b).to.be.eql(TestEnumEditor.MemberB)
+    })
+
     it('should work with string enum', () => {
       enum TestEnum1 {
         MemberA = "a",

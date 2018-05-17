@@ -38,7 +38,7 @@ function isNumericLiteralName(name: string) {
   return (+name).toString() === name;
 }
 
-export function enumeration<E extends object>(e: E, name?: string) {
+export function enumeration<E extends F[keyof F], F extends object>(e: F, name?: string) {
   const keys = Object.keys(e).filter((i) => {
     if (!isString((e as any)[i])) return true;
     return isValidTypeScriptMemberName(i);
