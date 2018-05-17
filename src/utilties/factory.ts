@@ -41,7 +41,7 @@ function copyFactoryMethod(klass: Function, destination: any) {
   })
 }
 
-function createPrototype(klass: Function, base: object) {
+function createPrototype(klass: Function, base: object): object {
   const prototype = Object.create(base)
   copyFactoryMethod(klass, prototype);
   return prototype;
@@ -59,7 +59,7 @@ export function decorate<T extends t.Any, F extends LoiFactory<t.Type<T['_A'], T
     const map = getFactoryMap(base)
     let prototype = map.get(factory)
     if (!prototype) {
-      prototype = createPrototype(factory, base) as object;
+      prototype = createPrototype(factory, base);
       map.set(factory, prototype);
     }
     Object.setPrototypeOf(result, prototype);
