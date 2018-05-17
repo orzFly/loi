@@ -4,6 +4,7 @@ import { withDefault, withDefaultResolver } from '../utilties/default';
 import { decorate, ILoiOption, LoiFactory, loiTag, metadata } from '../utilties/factory';
 import { withRescue, withRescueResolver } from '../utilties/rescue';
 
+/** @internal */
 export interface ILoiOptionBase<T> extends ILoiOption {
   name: string,
   default?: T,
@@ -18,6 +19,7 @@ export type LoiFactoryTypeBase<T extends t.Any> = T & LoiFactoryBase<T>
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
 
 export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
+  /** @internal */
   static decorate<T extends t.Any>(t: T): LoiFactoryTypeBase<T> {
     return decorate<T, LoiFactoryBase<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t);
   }

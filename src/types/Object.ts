@@ -4,6 +4,7 @@ import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory'
 import { getNameFromProps, interfaceWithOptionals, strictInterfaceWithOptionals, violetInterfaceWithOptionals } from '../utilties/object';
 import { LoiFactoryBase } from './Base';
 
+/** @internal */
 export interface ILoiOptionObject extends ILoiOption {
   name: string,
   type?: Function,
@@ -12,7 +13,9 @@ export interface ILoiOptionObject extends ILoiOption {
   violet?: boolean,
 }
 
+/** @internal */
 export const loiObjectRequired = Symbol('loiObjectRequired')
+/** @internal */
 export const loiObjectOptional = Symbol('loiObjectOptional')
 
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
@@ -20,9 +23,13 @@ export type LoiFactoryTypeObject<R extends t.Props, O extends t.Props, T extends
 export type LoiFactoryTypeObjectInitial<R extends t.Props, O extends t.Props, T extends t.Any> = T & LoiFactoryObjectInitial<R, O, T> & LoiFactoryObject<R, O, T> & LoiFactoryBase<T>
 
 export class LoiFactoryObject<R extends t.Props, O extends t.Props, T extends t.Any> extends LoiFactory<T> {
+  /** @internal */
   [loiObjectRequired]: R
+
+  /** @internal */
   [loiObjectOptional]: O
 
+  /** @internal */
   static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T): LoiFactoryTypeObject<R, O, T> {
     return LoiFactoryBase.decorate(decorate<T, LoiFactoryObject<R, O, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
@@ -45,9 +52,13 @@ export class LoiFactoryObject<R extends t.Props, O extends t.Props, T extends t.
 }
 
 export class LoiFactoryObjectInitial<R extends t.Props, O extends t.Props, T extends t.Any> extends LoiFactory<T> {
+  /** @internal */
   [loiObjectRequired]: R
+
+  /** @internal */
   [loiObjectOptional]: O
 
+  /** @internal */
   static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T): LoiFactoryTypeObjectInitial<R, O, T> {
     return LoiFactoryObject.decorate(LoiFactoryBase.decorate(decorate<T, LoiFactoryObjectInitial<R, O, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t)));
   }

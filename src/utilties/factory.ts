@@ -1,9 +1,12 @@
 import * as t from 'io-ts';
 
+/** @internal */
 export const loiTag = Symbol('loiTag')
 
+/** @internal */
 export const loiOption = Symbol('loiOption')
 
+/** @internal */
 export interface ILoiOption {
   name?: string
 }
@@ -14,6 +17,7 @@ export class LoiFactory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I'
     throw new Error('The Loi factory class cannot be constructored.');
   }
 
+  /** @internal */
   [loiOption]: ILoiOption[]
 }
 

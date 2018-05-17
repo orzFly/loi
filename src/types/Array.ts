@@ -2,6 +2,7 @@ import * as t from 'io-ts';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { LoiFactoryBase } from './Base';
 
+/** @internal */
 export interface ILoiOptionArray extends ILoiOption {
   name: string,
   length?: number,
@@ -13,6 +14,7 @@ type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
 export type LoiFactoryTypeArray<E extends t.Any, T extends t.Any> = T & LoiFactoryArray<E, T> & LoiFactoryBase<T>
 
 export class LoiFactoryArray<E extends t.Any, T extends t.Any> extends LoiFactory<T> {
+  /** @internal */
   static decorate<E extends t.Any, T extends t.Any>(t: T): LoiFactoryTypeArray<E, T> {
     return LoiFactoryBase.decorate(decorate<T, LoiFactoryArray<E, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }

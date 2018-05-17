@@ -5,6 +5,7 @@ import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory'
 import { mimic } from '../utilties/mimic';
 import { LoiFactoryBase } from './Base';
 
+/** @internal */
 export interface ILoiOptionBoolean extends ILoiOption {
   name: string
   parseString?: boolean
@@ -19,6 +20,7 @@ type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
 export type LoiFactoryTypeBoolean<T extends t.Any> = T & LoiFactoryBoolean<T> & LoiFactoryBase<T>
 
 export class LoiFactoryBoolean<T extends t.Any> extends LoiFactory<T> {
+  /** @internal */
   static decorate<T extends t.Any>(t: T): LoiFactoryTypeBoolean<T> {
     return LoiFactoryBase.decorate(decorate<T, LoiFactoryBoolean<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }

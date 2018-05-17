@@ -5,6 +5,7 @@ import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory'
 import { mimic } from '../utilties/mimic';
 import { LoiFactoryBase } from './Base';
 
+/** @internal */
 export interface ILoiOptionNumber extends ILoiOption {
   name: string,
   max?: number
@@ -20,6 +21,7 @@ type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
 export type LoiFactoryTypeNumber<T extends t.Any> = T & LoiFactoryNumber<T> & LoiFactoryBase<T>
 
 export class LoiFactoryNumber<T extends t.Any> extends LoiFactory<T> {
+  /** @internal */
   static decorate<T extends t.Any>(t: T): LoiFactoryTypeNumber<T> {
     return LoiFactoryBase.decorate(decorate<T, LoiFactoryNumber<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
