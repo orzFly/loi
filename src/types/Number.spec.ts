@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
-import { forEach } from 'lodash';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
+import { objectForEach } from '../utilties/lodash';
 import { number } from './Number';
 
 // tslint:disable:no-unused-expression // chai to be NaN
@@ -217,7 +217,7 @@ describe('types:Number', () => {
       expect(shouldNotValidate(test.decode(0)))
     })
 
-    forEach({
+    objectForEach({
       "parseFloat().max()": [number().parseFloat().max(5), "number(parseFloat, <=5)"],
       "max().parseFloat()": [number().max(5).parseFloat(), "number(<=5, parseFloat)"],
       "parseFloat(), max().min()": [number().parseFloat().max(5).min(0), "number(parseFloat, <=5, >=0)"],

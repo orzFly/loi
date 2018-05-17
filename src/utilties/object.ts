@@ -1,6 +1,6 @@
 import * as t from 'io-ts';
-import { mapValues } from 'lodash';
 import { nullAsUndefined } from './convert';
+import { objectMapValues } from './lodash';
 
 /** @internal */
 export function getNameFromProps(required: t.Props = {}, optional: t.Props = {}): string {
@@ -44,7 +44,7 @@ export const violet = <P extends t.Props>(
 
 /** @internal */
 export function nullablePartial<P extends t.Props>(props: P, name?: string): t.PartialType<P, t.TypeOfPartialProps<P>, t.OutputOfPartialProps<P>> {
-  return t.partial(mapValues(props, (i) => nullAsUndefined(i)) as P, name);
+  return t.partial(objectMapValues(props, (i) => nullAsUndefined(i)) as P, name);
 }
 
 /** @internal */

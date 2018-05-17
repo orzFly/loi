@@ -1,7 +1,7 @@
 import * as t from 'io-ts';
-import { isString } from 'lodash';
 import { convert } from '../utilties/convert';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
+import { isString } from '../utilties/lodash';
 import { mimic } from '../utilties/mimic';
 import { LoiFactoryBase } from './Base';
 

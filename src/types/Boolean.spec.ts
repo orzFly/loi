@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
-import { forEach } from 'lodash';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
+import { objectForEach } from '../utilties/lodash';
 import { boolean } from './Boolean';
 
 // tslint:disable:no-unused-expression // chai to be NaN
@@ -278,7 +278,7 @@ describe('types:Boolean', () => {
       shouldNotValidate(test.decode(() => { }))
     })
 
-    forEach({
+    objectForEach({
       "trueOnly().parseString().parseNumber()": [boolean().trueOnly().parseString().parseNumber(), "true(parseString, parseNumber)"],
       "trueOnly().parseNumber().parseString()": [boolean().trueOnly().parseNumber().parseString(), "true(parseNumber, parseString)"],
     } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
@@ -310,7 +310,7 @@ describe('types:Boolean', () => {
       })
     })
 
-    forEach({
+    objectForEach({
       "trueOnly(violet).parseString().parseNumber()": [boolean().trueOnly(true).parseString().parseNumber(), "true(violet, parseString, parseNumber)"],
       "trueOnly(violet).parseNumber().parseString()": [boolean().trueOnly(true).parseNumber().parseString(), "true(violet, parseNumber, parseString)"],
     } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
@@ -342,7 +342,7 @@ describe('types:Boolean', () => {
       })
     })
 
-    forEach({
+    objectForEach({
       "falseOnly().parseString().parseNumber()": [boolean().falseOnly().parseString().parseNumber(), "false(parseString, parseNumber)"],
       "falseOnly().parseNumber().parseString()": [boolean().falseOnly().parseNumber().parseString(), "false(parseNumber, parseString)"],
     } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
@@ -374,7 +374,7 @@ describe('types:Boolean', () => {
       })
     })
 
-    forEach({
+    objectForEach({
       "falseOnly(violet).parseString().parseNumber()": [boolean().falseOnly(true).parseString().parseNumber(), "false(violet, parseString, parseNumber)"],
       "falseOnly(violet).parseNumber().parseString()": [boolean().falseOnly(true).parseNumber().parseString(), "false(violet, parseNumber, parseString)"],
     } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
