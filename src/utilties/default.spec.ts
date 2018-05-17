@@ -22,8 +22,8 @@ describe('utilties:default', () => {
 
       expect(test.encode(1)).to.be.eql(t.number.encode(1))
       expect(test.encode(NaN)).to.be.eql(t.number.encode(NaN))
-      expect(test.encode(undefined)).to.be.eql(t.number.encode(undefined))
-      expect(test.encode(null)).to.be.eql(t.number.encode(null))
+      expect(test.encode(undefined as any)).to.be.eql(t.number.encode(undefined as any))
+      expect(test.encode(null as any)).to.be.eql(t.number.encode(null as any))
 
       expect(test.is(1)).to.be.eql(t.number.is(1))
       expect(test.is(NaN)).to.be.eql(t.number.is(NaN))
@@ -51,8 +51,8 @@ describe('utilties:default', () => {
 
       expect(test.encode(1)).to.be.eql(t.number.encode(1))
       expect(test.encode(NaN)).to.be.eql(t.number.encode(NaN))
-      expect(test.encode(undefined)).to.be.eql(t.number.encode(undefined))
-      expect(test.encode(null)).to.be.eql(t.number.encode(null))
+      expect(test.encode(undefined as any)).to.be.eql(t.number.encode(undefined as any))
+      expect(test.encode(null as any)).to.be.eql(t.number.encode(null as any))
 
       expect(test.is(1)).to.be.eql(t.number.is(1))
       expect(test.is(NaN)).to.be.eql(t.number.is(NaN))

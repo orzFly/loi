@@ -16,8 +16,8 @@ describe('utilties:convert', () => {
 
       expect(test.encode(1)).to.be.eql(t.number.encode(1))
       expect(test.encode(NaN)).to.be.eql(t.number.encode(NaN))
-      expect(test.encode(undefined)).to.be.eql(t.number.encode(undefined))
-      expect(test.encode(null)).to.be.eql(t.number.encode(null))
+      expect(test.encode(undefined as any)).to.be.eql(t.number.encode(undefined as any))
+      expect(test.encode(null as any)).to.be.eql(t.number.encode(null as any))
 
       expect(test.is(1)).to.be.eql(t.number.is(1))
       expect(test.is(NaN)).to.be.eql(t.number.is(NaN))
@@ -49,8 +49,8 @@ describe('utilties:convert', () => {
       const test2 = nullAsUndefined(t.boolean)
       expect(test2.encode(true)).to.be.eql(t.boolean.encode(true))
       expect(test2.encode(false)).to.be.eql(t.boolean.encode(false))
-      expect(test2.encode(undefined)).to.be.eql(t.boolean.encode(undefined))
-      expect(test2.encode(null)).to.be.eql(t.boolean.encode(null))
+      expect(test2.encode(undefined as any)).to.be.eql(t.boolean.encode(undefined as any))
+      expect(test2.encode(null as any)).to.be.eql(t.boolean.encode(null as any))
 
       expect(test2.is(true)).to.be.eql(t.boolean.is(true))
       expect(test2.is(false)).to.be.eql(t.boolean.is(false))
