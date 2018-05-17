@@ -91,5 +91,39 @@ describe('types:Enum', () => {
       shouldNotValidate(test.decode(Infinity))
       shouldNotValidate(test.decode(-Infinity))
     })
+
+    it('should work with no number enum', () => {
+      enum TestEnum3 { }
+
+      const test = enumeration(TestEnum3)
+      expect(test.name).to.be.eql("enum{}")
+      shouldNotValidate(test.decode("MemberA"))
+      shouldNotValidate(test.decode("3"))
+      shouldNotValidate(test.decode(3))
+      shouldNotValidate(test.decode(0))
+      shouldNotValidate(test.decode(NaN))
+      shouldNotValidate(test.decode(Infinity))
+      shouldNotValidate(test.decode(-Infinity))
+    })
+
+    it('should work with mixed enum', () => {
+      enum TestEnum4 {
+        MemberA = "a",
+        NaN = 3,
+      }
+      const test = enumeration(TestEnum4)
+
+      expect(test.name).to.be.eql("enum{3, a}")
+      expect(shouldValidate(test.decode("a"))).to.be.equal("a")
+      expect(shouldValidate(test.decode(3))).to.be.equal(3)
+      shouldNotValidate(test.decode("3"))
+      shouldNotValidate(test.decode("MemberA"))
+      shouldNotValidate(test.decode("NaN"))
+      shouldNotValidate(test.decode(0))
+      shouldNotValidate(test.decode(NaN))
+      shouldNotValidate(test.decode(Infinity))
+      shouldNotValidate(test.decode(-Infinity))
+    })
+
   })
 })

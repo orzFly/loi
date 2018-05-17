@@ -58,7 +58,7 @@ export function enumeration<E extends object>(e: E, name?: string) {
     }
   })
 
-  if (!name) name = `enum{${Object.keys(e).join(", ")}}`;
+  if (!name) name = `enum{${[...others, Object.keys(strings)].join(", ")}}`;
 
   let type: t.Type<E, E, t.mixed>;
   if (hasString && others.length == 0) {
