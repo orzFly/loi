@@ -1,26 +1,26 @@
 import * as t from 'io-ts';
-import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
+import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { mimic } from '../utilties/mimic';
-import { BaseFactory } from './Base';
+import { LoiFactoryBase } from './Base';
 
-export interface IAnyOption extends ILoiOption {
+export interface ILoiOptionAny extends ILoiOption {
   name: string,
   nonNull?: boolean
 }
 
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
-export type AnyFactoryType<T extends t.Any> = T & AnyFactory<T> & BaseFactory<T>
+export type LoiFactoryTypeAny<T extends t.Any> = T & LoiFactoryAny<T> & LoiFactoryBase<T>
 
-export class AnyFactory<T extends t.Any> extends Factory<T> {
-  static decorate<T extends t.Any>(t: T): AnyFactoryType<T> {
-    return BaseFactory.decorate(decorate<T, AnyFactory<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
+export class LoiFactoryAny<T extends t.Any> extends LoiFactory<T> {
+  static decorate<T extends t.Any>(t: T): LoiFactoryTypeAny<T> {
+    return LoiFactoryBase.decorate(decorate<T, LoiFactoryAny<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
 
   public nonNull() {
     const type = t.refinement(this, (i) => i !== undefined && i !== null)
-    return metadata(AnyFactory.decorate<Clean<typeof type>>(type), {
+    return metadata(LoiFactoryAny.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <IAnyOption>{ name: "non-null", nonNull: true }
+      option: <ILoiOptionAny>{ name: "non-null", nonNull: true }
     });
   }
 }
@@ -28,7 +28,7 @@ export class AnyFactory<T extends t.Any> extends Factory<T> {
 // tslint:disable-next-line:variable-name
 export const any = mimic(function any() {
   const type = new t.AnyType();
-  return metadata(AnyFactory.decorate<Clean<typeof type>>(type), {
+  return metadata(LoiFactoryAny.decorate<Clean<typeof type>>(type), {
     tag: "any"
   });
 }, new t.AnyType());

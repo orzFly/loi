@@ -8,7 +8,7 @@ export interface ILoiOption {
   name?: string
 }
 
-export class Factory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> {
+export class LoiFactory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> {
   constructor() {
     super(undefined, undefined, undefined, undefined);
     throw new Error('The Loi factory class cannot be constructored.');
@@ -43,7 +43,7 @@ function createPrototype(klass: Function, base: object) {
 }
 
 /** @internal */
-export function decorate<T extends t.Any, F extends Factory<t.Type<T['_A'], T['_O'], T['_I']>>, R extends T & F = T & F>(factory: { new(...args: any[]): F }, t: T): R {
+export function decorate<T extends t.Any, F extends LoiFactory<t.Type<T['_A'], T['_O'], T['_I']>>, R extends T & F = T & F>(factory: { new(...args: any[]): F }, t: T): R {
   if (!t) return t as any;
 
   const result: any = t;

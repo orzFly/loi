@@ -1,11 +1,11 @@
 import * as t from 'io-ts';
 import { isNumber, isString } from 'lodash';
 import { convert } from '../utilties/convert';
-import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
+import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { mimic } from '../utilties/mimic';
-import { BaseFactory } from './Base';
+import { LoiFactoryBase } from './Base';
 
-export interface IBooleanOption extends ILoiOption {
+export interface ILoiOptionBoolean extends ILoiOption {
   name: string
   parseString?: boolean
   parseNumber?: boolean
@@ -16,11 +16,11 @@ const trueValues = ["true", "t", "yes", "y", "on", "1"]
 const falseValues = ["false", "f", "no", "n", "off", "0"]
 
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
-export type BooleanFactoryType<T extends t.Any> = T & BooleanFactory<T> & BaseFactory<T>
+export type LoiFactoryTypeBoolean<T extends t.Any> = T & LoiFactoryBoolean<T> & LoiFactoryBase<T>
 
-export class BooleanFactory<T extends t.Any> extends Factory<T> {
-  static decorate<T extends t.Any>(t: T): BooleanFactoryType<T> {
-    return BaseFactory.decorate(decorate<T, BooleanFactory<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
+export class LoiFactoryBoolean<T extends t.Any> extends LoiFactory<T> {
+  static decorate<T extends t.Any>(t: T): LoiFactoryTypeBoolean<T> {
+    return LoiFactoryBase.decorate(decorate<T, LoiFactoryBoolean<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
 
   parseString() {
@@ -31,9 +31,9 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
       return i;
     }, (i) => isString(i))
 
-    return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
+    return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <IBooleanOption>{ name: `parseString`, parseString: true }
+      option: <ILoiOptionBoolean>{ name: `parseString`, parseString: true }
     });
   }
 
@@ -44,9 +44,9 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
       return true;
     }, (i) => isNumber(i))
 
-    return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
+    return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <IBooleanOption>{ name: `parseNumber`, parseNumber: true }
+      option: <ILoiOptionBoolean>{ name: `parseNumber`, parseNumber: true }
     });
   }
 
@@ -57,18 +57,18 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
   trueOnly() {
     const type = t.refinement(this, (i) => i === true)
 
-    return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
+    return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <IBooleanOption>{ name: `true only`, only: true }
+      option: <ILoiOptionBoolean>{ name: `true only`, only: true }
     });
   }
 
   falseOnly() {
     const type = t.refinement(this, (i) => i === false)
 
-    return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
+    return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <IBooleanOption>{ name: `false only`, only: false }
+      option: <ILoiOptionBoolean>{ name: `false only`, only: false }
     });
   }
 }
@@ -76,7 +76,7 @@ export class BooleanFactory<T extends t.Any> extends Factory<T> {
 // tslint:disable-next-line:variable-name
 export const boolean = mimic(function boolean() {
   const type = new t.BooleanType();
-  return metadata(BooleanFactory.decorate<Clean<typeof type>>(type), {
+  return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
     tag: "boolean"
   });
 }, new t.BooleanType());

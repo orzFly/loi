@@ -1,8 +1,8 @@
 import * as t from 'io-ts';
-import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
-import { BaseFactory } from './Base';
+import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
+import { LoiFactoryBase } from './Base';
 
-export interface IArrayOption extends ILoiOption {
+export interface ILoiOptionArray extends ILoiOption {
   name: string,
   length?: number,
   min?: number,
@@ -10,11 +10,11 @@ export interface IArrayOption extends ILoiOption {
 }
 
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
-export type ArrayFactoryType<E extends t.Any, T extends t.Any> = T & ArrayFactory<E, T> & BaseFactory<T>
+export type LoiFactoryTypeArray<E extends t.Any, T extends t.Any> = T & LoiFactoryArray<E, T> & LoiFactoryBase<T>
 
-export class ArrayFactory<E extends t.Any, T extends t.Any> extends Factory<T> {
-  static decorate<E extends t.Any, T extends t.Any>(t: T): ArrayFactoryType<E, T> {
-    return BaseFactory.decorate(decorate<T, ArrayFactory<E, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
+export class LoiFactoryArray<E extends t.Any, T extends t.Any> extends LoiFactory<T> {
+  static decorate<E extends t.Any, T extends t.Any>(t: T): LoiFactoryTypeArray<E, T> {
+    return LoiFactoryBase.decorate(decorate<T, LoiFactoryArray<E, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
 
   /**
@@ -23,9 +23,9 @@ export class ArrayFactory<E extends t.Any, T extends t.Any> extends Factory<T> {
    */
   public length(limit: number) {
     const type = t.refinement(this, (i) => i.length == limit)
-    return metadata(ArrayFactory.decorate<Clean<E>, Clean<typeof type>>(type), {
+    return metadata(LoiFactoryArray.decorate<Clean<E>, Clean<typeof type>>(type), {
       parent: this,
-      option: <IArrayOption>{ name: `exact ${limit} items`, length: limit }
+      option: <ILoiOptionArray>{ name: `exact ${limit} items`, length: limit }
     });
   }
 
@@ -35,9 +35,9 @@ export class ArrayFactory<E extends t.Any, T extends t.Any> extends Factory<T> {
    */
   public max(limit: number) {
     const type = t.refinement(this, (i) => i.length <= limit)
-    return metadata(ArrayFactory.decorate<Clean<E>, Clean<typeof type>>(type), {
+    return metadata(LoiFactoryArray.decorate<Clean<E>, Clean<typeof type>>(type), {
       parent: this,
-      option: <IArrayOption>{ name: `<=${limit} items`, max: limit }
+      option: <ILoiOptionArray>{ name: `<=${limit} items`, max: limit }
     });
   }
 
@@ -47,9 +47,9 @@ export class ArrayFactory<E extends t.Any, T extends t.Any> extends Factory<T> {
    */
   public min(limit: number) {
     const type = t.refinement(this, (i) => i.length >= limit)
-    return metadata(ArrayFactory.decorate<Clean<E>, Clean<typeof type>>(type), {
+    return metadata(LoiFactoryArray.decorate<Clean<E>, Clean<typeof type>>(type), {
       parent: this,
-      option: <IArrayOption>{ name: `>=${limit} items`, min: limit }
+      option: <ILoiOptionArray>{ name: `>=${limit} items`, min: limit }
     });
   }
 }
@@ -59,7 +59,7 @@ export function array<E extends t.Any = t.Any>(
   name: string = `${elementType.name}[]`
 ) {
   const type = t.array(elementType as t.Type<E['_A'], E['_O'], E['_I']>, name)
-  return metadata(ArrayFactory.decorate<Clean<E>, Clean<typeof type>>(type), {
+  return metadata(LoiFactoryArray.decorate<Clean<E>, Clean<typeof type>>(type), {
     tag: name
   });
 }

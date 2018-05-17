@@ -1,10 +1,10 @@
 import * as t from 'io-ts';
 import { isString } from 'lodash';
-import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
+import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { getNameFromProps, interfaceWithOptionals, strictInterfaceWithOptionals, violetInterfaceWithOptionals } from '../utilties/object';
-import { BaseFactory } from './Base';
+import { LoiFactoryBase } from './Base';
 
-export interface IObjectOption extends ILoiOption {
+export interface ILoiOptionObject extends ILoiOption {
   name: string,
   type?: Function,
   instanceof?: Function,
@@ -16,62 +16,62 @@ export const loiObjectRequired = Symbol('loiObjectRequired')
 export const loiObjectOptional = Symbol('loiObjectOptional')
 
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
-export type ObjectFactoryType<R extends t.Props, O extends t.Props, T extends t.Any> = T & ObjectFactory<R, O, T> & BaseFactory<T>
-export type InitialObjectFactoryType<R extends t.Props, O extends t.Props, T extends t.Any> = T & InitialObjectFactory<R, O, T> & ObjectFactory<R, O, T> & BaseFactory<T>
+export type LoiFactoryTypeObject<R extends t.Props, O extends t.Props, T extends t.Any> = T & LoiFactoryObject<R, O, T> & LoiFactoryBase<T>
+export type LoiFactoryTypeObjectInitial<R extends t.Props, O extends t.Props, T extends t.Any> = T & LoiFactoryObjectInitial<R, O, T> & LoiFactoryObject<R, O, T> & LoiFactoryBase<T>
 
-export class ObjectFactory<R extends t.Props, O extends t.Props, T extends t.Any> extends Factory<T> {
+export class LoiFactoryObject<R extends t.Props, O extends t.Props, T extends t.Any> extends LoiFactory<T> {
   [loiObjectRequired]: R
   [loiObjectOptional]: O
 
-  static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T): ObjectFactoryType<R, O, T> {
-    return BaseFactory.decorate(decorate<T, ObjectFactory<R, O, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
+  static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T): LoiFactoryTypeObject<R, O, T> {
+    return LoiFactoryBase.decorate(decorate<T, LoiFactoryObject<R, O, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
 
   public type<F>(constructor: { new(...args: any[]): F }) {
     const type = t.refinement(this, (i: any) => i && i.constructor === constructor) as t.Type<this['_A'] & F, this['_O'] & F, this['_I']>
-    return metadata(ObjectFactory.decorate<R, O, Clean<typeof type>>(type), {
+    return metadata(LoiFactoryObject.decorate<R, O, Clean<typeof type>>(type), {
       parent: this,
-      option: <IObjectOption>{ name: `type ${constructor.name}`, type: constructor }
+      option: <ILoiOptionObject>{ name: `type ${constructor.name}`, type: constructor }
     });
   }
 
   public instanceof<F>(constructor: { new(...args: any[]): F }) {
     const type = t.refinement(this, (i: any) => i instanceof constructor) as t.Type<this['_A'] & F, this['_O'] & F, this['_I']>
-    return metadata(ObjectFactory.decorate<R, O, Clean<typeof type>>(type), {
+    return metadata(LoiFactoryObject.decorate<R, O, Clean<typeof type>>(type), {
       parent: this,
-      option: <IObjectOption>{ name: `instanceof ${constructor.name}`, instanceof: constructor }
+      option: <ILoiOptionObject>{ name: `instanceof ${constructor.name}`, instanceof: constructor }
     });
   }
 }
 
-export class InitialObjectFactory<R extends t.Props, O extends t.Props, T extends t.Any> extends Factory<T> {
+export class LoiFactoryObjectInitial<R extends t.Props, O extends t.Props, T extends t.Any> extends LoiFactory<T> {
   [loiObjectRequired]: R
   [loiObjectOptional]: O
 
-  static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T): InitialObjectFactoryType<R, O, T> {
-    return ObjectFactory.decorate(BaseFactory.decorate(decorate<T, InitialObjectFactory<R, O, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t)));
+  static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T): LoiFactoryTypeObjectInitial<R, O, T> {
+    return LoiFactoryObject.decorate(LoiFactoryBase.decorate(decorate<T, LoiFactoryObjectInitial<R, O, t.Type<T['_A'], T['_O'], T['_I']>>>(this, t)));
   }
 
   public strict() {
     const type = strictInterfaceWithOptionals(this[loiObjectRequired], this[loiObjectOptional], this.name)
-    return metadata(ObjectFactory.decorate<R, O, Clean<T>>(type), {
+    return metadata(LoiFactoryObject.decorate<R, O, Clean<T>>(type), {
       parent: this,
-      option: <IObjectOption>{ name: `strict`, strict: true }
+      option: <ILoiOptionObject>{ name: `strict`, strict: true }
     });
   }
 
   public violet() {
     const type = violetInterfaceWithOptionals(this[loiObjectRequired], this[loiObjectOptional], this.name)
-    return metadata(ObjectFactory.decorate<R, O, Clean<T>>(type), {
+    return metadata(LoiFactoryObject.decorate<R, O, Clean<T>>(type), {
       parent: this,
-      option: <IObjectOption>{ name: `violet`, violet: true }
+      option: <ILoiOptionObject>{ name: `violet`, violet: true }
     });
   }
 }
 
 export function object(
   name?: string
-): InitialObjectFactoryType<
+): LoiFactoryTypeObjectInitial<
   { },
   { },
   t.Type<
@@ -84,7 +84,7 @@ export function object(
 export function object<R extends t.Props = {}>(
   required: R,
   name?: string
-): InitialObjectFactoryType<
+): LoiFactoryTypeObjectInitial<
   { [K in keyof R]: t.Type<R[K]['_A'], R[K]['_O'], R[K]['_I']> },
   { },
   t.Type<
@@ -98,7 +98,7 @@ export function object<R extends t.Props = {}, O extends t.Props = {}>(
   required: R,
   optional: O,
   name?: string
-): InitialObjectFactoryType<
+): LoiFactoryTypeObjectInitial<
   { [K in keyof R]: t.Type<R[K]['_A'], R[K]['_O'], R[K]['_I']> },
   { [K in keyof O]: t.Type<O[K]['_A'], O[K]['_O'], O[K]['_I']> },
   t.Type<
@@ -141,7 +141,7 @@ export function object(a?: any, b?: any, c?: any) {
   }
 
   const type = interfaceWithOptionals(required, optional, name);
-  const decorated = metadata(InitialObjectFactory.decorate(type), {
+  const decorated = metadata(LoiFactoryObjectInitial.decorate(type), {
     tag: name
   });
   decorated[loiObjectRequired] = required;

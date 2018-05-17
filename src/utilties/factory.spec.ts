@@ -1,13 +1,13 @@
 import { expect } from 'chai';
-import { Factory } from './factory';
+import { LoiFactory } from './factory';
 
 // tslint:disable:no-unused-expression
 
 describe('utilties:factory', () => {
-  describe('Factory', () => {
+  describe('LoiFactory', () => {
     it('cannot be constructed', () => {
       expect(() => {
-        return new Factory<any>()
+        return new LoiFactory<any>()
       }).to.throws(Error, 'The Loi factory class cannot be constructored.')
     })
   })

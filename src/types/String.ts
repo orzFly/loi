@@ -1,10 +1,10 @@
 import * as t from 'io-ts';
 import { isString } from 'lodash';
-import { decorate, Factory, ILoiOption, metadata } from '../utilties/factory';
+import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { mimic } from '../utilties/mimic';
-import { BaseFactory } from './Base';
+import { LoiFactoryBase } from './Base';
 
-export interface IStringOption extends ILoiOption {
+export interface ILoiOptionString extends ILoiOption {
   name: string
   length?: number
   min?: number
@@ -12,7 +12,7 @@ export interface IStringOption extends ILoiOption {
   regex?: RegExp
 }
 
-export class StringType extends t.Type<string> {
+export class LoiTypeString extends t.Type<string> {
   readonly _tag: 'StringType' = 'StringType'
   constructor() {
     super(
@@ -25,11 +25,11 @@ export class StringType extends t.Type<string> {
 }
 
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
-export type StringFactoryType<T extends t.Any> = T & StringFactory<T> & BaseFactory<T>
+export type LoiFactoryTypeString<T extends t.Any> = T & LoiFactoryString<T> & LoiFactoryBase<T>
 
-export class StringFactory<T extends t.Any> extends Factory<T> {
-  static decorate<T extends t.Any>(t: T): StringFactoryType<T> {
-    return BaseFactory.decorate(decorate<T, StringFactory<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
+export class LoiFactoryString<T extends t.Any> extends LoiFactory<T> {
+  static decorate<T extends t.Any>(t: T): LoiFactoryTypeString<T> {
+    return LoiFactoryBase.decorate(decorate<T, LoiFactoryString<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t));
   }
 
   /**
@@ -38,9 +38,9 @@ export class StringFactory<T extends t.Any> extends Factory<T> {
    */
   public length(limit: number) {
     const type = t.refinement(this, (i) => i.length == limit)
-    return metadata(StringFactory.decorate<Clean<typeof type>>(type), {
+    return metadata(LoiFactoryString.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <IStringOption>{ name: `exact ${limit} chars`, length: limit }
+      option: <ILoiOptionString>{ name: `exact ${limit} chars`, length: limit }
     });
   }
 
@@ -50,9 +50,9 @@ export class StringFactory<T extends t.Any> extends Factory<T> {
    */
   public max(limit: number) {
     const type = t.refinement(this, (i) => i.length <= limit)
-    return metadata(StringFactory.decorate<Clean<typeof type>>(type), {
+    return metadata(LoiFactoryString.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <IStringOption>{ name: `<=${limit} chars`, max: limit }
+      option: <ILoiOptionString>{ name: `<=${limit} chars`, max: limit }
     });
   }
 
@@ -62,9 +62,9 @@ export class StringFactory<T extends t.Any> extends Factory<T> {
    */
   public min(limit: number) {
     const type = t.refinement(this, (i) => i.length >= limit)
-    return metadata(StringFactory.decorate<Clean<typeof type>>(type), {
+    return metadata(LoiFactoryString.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <IStringOption>{ name: `>=${limit} chars`, min: limit }
+      option: <ILoiOptionString>{ name: `>=${limit} chars`, min: limit }
     });
   }
 
@@ -75,9 +75,9 @@ export class StringFactory<T extends t.Any> extends Factory<T> {
    */
   public regex(pattern: RegExp, name: string = `regexp ${pattern.toString()}`) {
     const type = t.refinement(this, (i) => i.match(pattern) !== null)
-    return metadata(StringFactory.decorate<Clean<typeof type>>(type), {
+    return metadata(LoiFactoryString.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <IStringOption>{ name: name, regexp: pattern }
+      option: <ILoiOptionString>{ name: name, regexp: pattern }
     });
   }
 
@@ -102,8 +102,8 @@ export class StringFactory<T extends t.Any> extends Factory<T> {
 
 // tslint:disable-next-line:variable-name
 export const string = mimic(function string() {
-  const type = new StringType();
-  return metadata(StringFactory.decorate<Clean<typeof type>>(type), {
+  const type = new LoiTypeString();
+  return metadata(LoiFactoryString.decorate<Clean<typeof type>>(type), {
     tag: "string"
   });
-}, new StringType());
+}, new LoiTypeString());
