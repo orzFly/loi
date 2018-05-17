@@ -23,7 +23,7 @@
     "typescript": "^2.7.2"
   },
   "dependencies": {
-    "io-ts": "^1.0.5"
+    "io-ts": "^1.1.2"
   },
   "scripts": {
     "build": "node_modules/.bin/tsc",
