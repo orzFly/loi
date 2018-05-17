@@ -67,7 +67,7 @@ export class LoiFactoryBooleanInitial<T extends t.Any> extends LoiFactory<T> {
   trueOnly(violet: true): LoiFactoryTypeBoolean<t.Type<true | undefined, true | undefined, this["_I"]>>
   trueOnly(violet?: false): LoiFactoryTypeBoolean<t.Type<true, true, this["_I"]>>
   trueOnly(violet: true | false = false) {
-    let type = t.refinement(this, (i) => i === true) as t.Type<true, true, this["_I"]>
+    let type: t.Any = t.refinement(this, (i) => i === true) as t.Type<true, true, this["_I"]>
     if (violet) {
       type = convert(nullAsUndefined(type), () => undefined, (i) => i === false)
     }
@@ -82,7 +82,7 @@ export class LoiFactoryBooleanInitial<T extends t.Any> extends LoiFactory<T> {
   falseOnly(violet: true): LoiFactoryTypeBoolean<t.Type<false | undefined, false | undefined, this["_I"]>>
   falseOnly(violet?: false): LoiFactoryTypeBoolean<t.Type<false, false, this["_I"]>>
   falseOnly(violet: true | false = false) {
-    let type = t.refinement(this, (i) => i === false) as t.Type<false, false, this["_I"]>
+    let type: t.Any = t.refinement(this, (i) => i === false) as t.Type<false, false, this["_I"]>
     if (violet) {
       type = convert(nullAsUndefined(type), () => undefined, (i) => i === true)
     }
