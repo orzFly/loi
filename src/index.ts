@@ -13,3 +13,6 @@ export { object, ObjectFactory, InitialObjectFactory } from './types/Object';
 export function validate<S, A>(value: S, type: t.Decoder<S, A>): t.Validation<A> {
   return type.decode(value);
 }
+
+export function ensureSameType<X, Y extends X>(): [X, Y] { return undefined as any; };
+export function ensureTypeSame<Y extends X, X>(): [X, Y] { return undefined as any; };
