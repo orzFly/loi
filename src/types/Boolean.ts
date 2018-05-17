@@ -1,6 +1,6 @@
 import * as t from 'io-ts';
 import { isNumber, isString } from 'lodash';
-import { convert } from '../utilties/convert';
+import { convert, nullAsUndefined } from '../utilties/convert';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { mimic } from '../utilties/mimic';
 import { LoiFactoryBase } from './Base';
@@ -10,7 +10,7 @@ export interface ILoiOptionBoolean extends ILoiOption {
   name: string
   parseString?: boolean
   parseNumber?: boolean
-  only?: boolean
+  violet?: boolean
 }
 
 const trueValues = ["true", "t", "yes", "y", "on", "1"]
@@ -18,6 +18,7 @@ const falseValues = ["false", "f", "no", "n", "off", "0"]
 
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
 export type LoiFactoryTypeBoolean<T extends t.Any> = T & LoiFactoryBoolean<T> & LoiFactoryBase<T>
+export type LoiFactoryTypeBooleanInitial<T extends t.Any> = T & LoiFactoryBooleanInitial<T> & LoiFactoryBoolean<T> & LoiFactoryBase<T>
 
 export class LoiFactoryBoolean<T extends t.Any> extends LoiFactory<T> {
   /** @internal */
@@ -55,22 +56,41 @@ export class LoiFactoryBoolean<T extends t.Any> extends LoiFactory<T> {
   parse() {
     return this.parseNumber().parseString()
   }
+}
 
-  trueOnly() {
-    const type = t.refinement(this, (i) => i === true)
+export class LoiFactoryBooleanInitial<T extends t.Any> extends LoiFactory<T> {
+  /** @internal */
+  static decorate<T extends t.Any>(t: T): LoiFactoryTypeBooleanInitial<T> {
+    return LoiFactoryBoolean.decorate(LoiFactoryBase.decorate(decorate<T, LoiFactoryBooleanInitial<t.Type<T['_A'], T['_O'], T['_I']>>>(this, t)));
+  }
+
+  trueOnly(violet: true): LoiFactoryTypeBoolean<t.Type<true | undefined, true | undefined, this["_I"]>>
+  trueOnly(violet?: false): LoiFactoryTypeBoolean<t.Type<true, true, this["_I"]>>
+  trueOnly(violet: true | false = false) {
+    let type = t.refinement(this, (i) => i === true) as t.Type<true, true, this["_I"]>
+    if (violet) {
+      type = convert(nullAsUndefined(type), () => undefined, (i) => i === false)
+    }
 
     return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <ILoiOptionBoolean>{ name: `true only`, only: true }
+      tag: "true",
+      option: violet ? <ILoiOptionBoolean>{ name: `violet`, violet: true } : undefined
     });
   }
 
-  falseOnly() {
-    const type = t.refinement(this, (i) => i === false)
+  falseOnly(violet: true): LoiFactoryTypeBoolean<t.Type<false | undefined, false | undefined, this["_I"]>>
+  falseOnly(violet?: false): LoiFactoryTypeBoolean<t.Type<false, false, this["_I"]>>
+  falseOnly(violet: true | false = false) {
+    let type = t.refinement(this, (i) => i === false) as t.Type<false, false, this["_I"]>
+    if (violet) {
+      type = convert(nullAsUndefined(type), () => undefined, (i) => i === true)
+    }
 
     return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <ILoiOptionBoolean>{ name: `false only`, only: false }
+      tag: "false",
+      option: violet ? <ILoiOptionBoolean>{ name: `violet`, violet: true } : undefined
     });
   }
 }
@@ -78,7 +98,7 @@ export class LoiFactoryBoolean<T extends t.Any> extends LoiFactory<T> {
 // tslint:disable-next-line:variable-name
 export const boolean = mimic(function boolean() {
   const type = new t.BooleanType();
-  return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
+  return metadata(LoiFactoryBooleanInitial.decorate<Clean<typeof type>>(type), {
     tag: "boolean"
   });
 }, new t.BooleanType());

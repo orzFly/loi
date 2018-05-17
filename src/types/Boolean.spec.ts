@@ -35,6 +35,10 @@ describe('types:Boolean', () => {
       shouldNotValidate(test.decode(NaN))
       shouldNotValidate(test.decode(null))
       shouldNotValidate(test.decode(undefined))
+      shouldNotValidate(test.decode([]))
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(new RegExp(/./)))
+      shouldNotValidate(test.decode(() => { }))
     })
 
     it('mimicked boolean should work', () => {
@@ -64,12 +68,16 @@ describe('types:Boolean', () => {
       shouldNotValidate(test.decode(NaN))
       shouldNotValidate(test.decode(null))
       shouldNotValidate(test.decode(undefined))
+      shouldNotValidate(test.decode([]))
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(new RegExp(/./)))
+      shouldNotValidate(test.decode(() => { }))
     })
 
     it('trueOnly() should work', () => {
       const test = boolean().trueOnly()
 
-      expect(test.name).to.be.eql("boolean(true only)")
+      expect(test.name).to.be.eql("true")
       expect(shouldValidate(test.decode(true))).to.be.eql(true)
       shouldNotValidate(test.decode(false))
       shouldNotValidate(test.decode("true"))
@@ -87,12 +95,43 @@ describe('types:Boolean', () => {
       shouldNotValidate(test.decode(NaN))
       shouldNotValidate(test.decode(null))
       shouldNotValidate(test.decode(undefined))
+      shouldNotValidate(test.decode([]))
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(new RegExp(/./)))
+      shouldNotValidate(test.decode(() => { }))
+    })
+
+    it('trueOnly(violet) should work', () => {
+      const test = boolean().trueOnly(true)
+
+      expect(test.name).to.be.eql("true(violet)")
+      expect(shouldValidate(test.decode(true))).to.be.eql(true)
+      expect(shouldValidate(test.decode(false))).to.be.eql(undefined)
+      shouldNotValidate(test.decode("true"))
+      shouldNotValidate(test.decode("false"))
+      shouldNotValidate(test.decode("yes"))
+      shouldNotValidate(test.decode("no"))
+      shouldNotValidate(test.decode("t"))
+      shouldNotValidate(test.decode("f"))
+      shouldNotValidate(test.decode("y"))
+      shouldNotValidate(test.decode("n"))
+      shouldNotValidate(test.decode(0))
+      shouldNotValidate(test.decode(1))
+      shouldNotValidate(test.decode(-1))
+      shouldNotValidate(test.decode(Infinity))
+      shouldNotValidate(test.decode(NaN))
+      expect(shouldValidate(test.decode(null))).to.be.eql(undefined)
+      expect(shouldValidate(test.decode(undefined))).to.be.eql(undefined)
+      shouldNotValidate(test.decode([]))
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(new RegExp(/./)))
+      shouldNotValidate(test.decode(() => { }))
     })
 
     it('falseOnly() should work', () => {
       const test = boolean().falseOnly()
 
-      expect(test.name).to.be.eql("boolean(false only)")
+      expect(test.name).to.be.eql("false")
       shouldNotValidate(test.decode(true))
       expect(shouldValidate(test.decode(false))).to.be.eql(false)
       shouldNotValidate(test.decode("true"))
@@ -110,36 +149,46 @@ describe('types:Boolean', () => {
       shouldNotValidate(test.decode(NaN))
       shouldNotValidate(test.decode(null))
       shouldNotValidate(test.decode(undefined))
+      shouldNotValidate(test.decode([]))
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(new RegExp(/./)))
+      shouldNotValidate(test.decode(() => { }))
     })
 
-    forEach({
-      "falseOnly().trueOnly()": [boolean().falseOnly().trueOnly(), "boolean(false only, true only)"],
-      "trueOnly().falseOnly()": [boolean().trueOnly().falseOnly(), "boolean(true only, false only)"],
-      "falseOnly().falseOnly().trueOnly()": [boolean().falseOnly().falseOnly().trueOnly(), "boolean(false only, false only, true only)"],
-      "trueOnly().trueOnly().falseOnly()": [boolean().trueOnly().trueOnly().falseOnly(), "boolean(true only, true only, false only)"],
-    } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
-      it(`${key} should work`, () => {
-        const test = type
+    it('falseOnly(violet) should work', () => {
+      const test = boolean().falseOnly(true)
 
-        expect(test.name).to.be.eql(name)
-        shouldNotValidate(test.decode(true))
-        shouldNotValidate(test.decode(false))
-        shouldNotValidate(test.decode("true"))
-        shouldNotValidate(test.decode("false"))
-        shouldNotValidate(test.decode("yes"))
-        shouldNotValidate(test.decode("no"))
-        shouldNotValidate(test.decode("t"))
-        shouldNotValidate(test.decode("f"))
-        shouldNotValidate(test.decode("y"))
-        shouldNotValidate(test.decode("n"))
-        shouldNotValidate(test.decode(0))
-        shouldNotValidate(test.decode(1))
-        shouldNotValidate(test.decode(-1))
-        shouldNotValidate(test.decode(Infinity))
-        shouldNotValidate(test.decode(NaN))
-        shouldNotValidate(test.decode(null))
-        shouldNotValidate(test.decode(undefined))
-      })
+      expect(test.name).to.be.eql("false(violet)")
+      expect(shouldValidate(test.decode(true))).to.be.eql(undefined)
+      expect(shouldValidate(test.decode(false))).to.be.eql(false)
+      shouldNotValidate(test.decode("true"))
+      shouldNotValidate(test.decode("false"))
+      shouldNotValidate(test.decode("yes"))
+      shouldNotValidate(test.decode("no"))
+      shouldNotValidate(test.decode("t"))
+      shouldNotValidate(test.decode("f"))
+      shouldNotValidate(test.decode("y"))
+      shouldNotValidate(test.decode("n"))
+      shouldNotValidate(test.decode(0))
+      shouldNotValidate(test.decode(1))
+      shouldNotValidate(test.decode(-1))
+      shouldNotValidate(test.decode(Infinity))
+      shouldNotValidate(test.decode(NaN))
+      expect(shouldValidate(test.decode(null))).to.be.eql(undefined)
+      expect(shouldValidate(test.decode(undefined))).to.be.eql(undefined)
+      shouldNotValidate(test.decode([]))
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(new RegExp(/./)))
+      shouldNotValidate(test.decode(() => { }))
+    })
+
+    it(`[false/true]Only().[false/true]Only is not available`, () => {
+      expect(boolean()).to.have.property('falseOnly');
+      expect(boolean()).to.have.property('trueOnly');
+      expect(boolean().falseOnly()).to.not.have.property('falseOnly');
+      expect(boolean().falseOnly()).to.not.have.property('trueOnly');
+      expect(boolean().trueOnly()).to.not.have.property('falseOnly');
+      expect(boolean().trueOnly()).to.not.have.property('trueOnly');
     })
 
     it('parseString() should work', () => {
@@ -169,6 +218,10 @@ describe('types:Boolean', () => {
       shouldNotValidate(test.decode(NaN))
       shouldNotValidate(test.decode(null))
       shouldNotValidate(test.decode(undefined))
+      shouldNotValidate(test.decode([]))
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(new RegExp(/./)))
+      shouldNotValidate(test.decode(() => { }))
     })
 
     it('parseNumber() should work', () => {
@@ -192,6 +245,10 @@ describe('types:Boolean', () => {
       expect(shouldValidate(test.decode(NaN))).to.be.eql(false)
       shouldNotValidate(test.decode(null))
       shouldNotValidate(test.decode(undefined))
+      shouldNotValidate(test.decode([]))
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(new RegExp(/./)))
+      shouldNotValidate(test.decode(() => { }))
     })
 
     it('parse() should work', () => {
@@ -215,12 +272,15 @@ describe('types:Boolean', () => {
       expect(shouldValidate(test.decode(NaN))).to.be.eql(false)
       shouldNotValidate(test.decode(null))
       shouldNotValidate(test.decode(undefined))
+      shouldNotValidate(test.decode([]))
+      shouldNotValidate(test.decode({}))
+      shouldNotValidate(test.decode(new RegExp(/./)))
+      shouldNotValidate(test.decode(() => { }))
     })
 
     forEach({
-      "trueOnly().parseString().parseNumber()": [boolean().trueOnly().parseString().parseNumber(), "boolean(true only, parseString, parseNumber)"],
-      "parseString().trueOnly().parseNumber()": [boolean().parseString().trueOnly().parseNumber(), "boolean(parseString, true only, parseNumber)"],
-      "parseString().parseNumber().trueOnly()": [boolean().parseString().parseNumber().trueOnly(), "boolean(parseString, parseNumber, true only)"],
+      "trueOnly().parseString().parseNumber()": [boolean().trueOnly().parseString().parseNumber(), "true(parseString, parseNumber)"],
+      "trueOnly().parseNumber().parseString()": [boolean().trueOnly().parseNumber().parseString(), "true(parseNumber, parseString)"],
     } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
       it(`${key} should work`, () => {
         const test = type
@@ -243,13 +303,48 @@ describe('types:Boolean', () => {
         shouldNotValidate(test.decode(NaN))
         shouldNotValidate(test.decode(null))
         shouldNotValidate(test.decode(undefined))
+        shouldNotValidate(test.decode([]))
+        shouldNotValidate(test.decode({}))
+        shouldNotValidate(test.decode(new RegExp(/./)))
+        shouldNotValidate(test.decode(() => { }))
       })
     })
 
     forEach({
-      "falseOnly().parseString().parseNumber()": [boolean().falseOnly().parseString().parseNumber(), "boolean(false only, parseString, parseNumber)"],
-      "parseString().falseOnly().parseNumber()": [boolean().parseString().falseOnly().parseNumber(), "boolean(parseString, false only, parseNumber)"],
-      "parseString().parseNumber().falseOnly()": [boolean().parseString().parseNumber().falseOnly(), "boolean(parseString, parseNumber, false only)"],
+      "trueOnly(violet).parseString().parseNumber()": [boolean().trueOnly(true).parseString().parseNumber(), "true(violet, parseString, parseNumber)"],
+      "trueOnly(violet).parseNumber().parseString()": [boolean().trueOnly(true).parseNumber().parseString(), "true(violet, parseNumber, parseString)"],
+    } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
+      it(`${key} should work`, () => {
+        const test = type
+
+        expect(test.name).to.be.eql(name)
+        expect(shouldValidate(test.decode(true))).to.be.eql(true)
+        expect(shouldValidate(test.decode(false))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode("true"))).to.be.eql(true)
+        expect(shouldValidate(test.decode("false"))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode("yes"))).to.be.eql(true)
+        expect(shouldValidate(test.decode("no"))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode("t"))).to.be.eql(true)
+        expect(shouldValidate(test.decode("f"))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode("y"))).to.be.eql(true)
+        expect(shouldValidate(test.decode("n"))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode(0))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode(1))).to.be.eql(true)
+        expect(shouldValidate(test.decode(-1))).to.be.eql(true)
+        expect(shouldValidate(test.decode(Infinity))).to.be.eql(true)
+        expect(shouldValidate(test.decode(NaN))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode(null))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode(undefined))).to.be.eql(undefined)
+        shouldNotValidate(test.decode([]))
+        shouldNotValidate(test.decode({}))
+        shouldNotValidate(test.decode(new RegExp(/./)))
+        shouldNotValidate(test.decode(() => { }))
+      })
+    })
+
+    forEach({
+      "falseOnly().parseString().parseNumber()": [boolean().falseOnly().parseString().parseNumber(), "false(parseString, parseNumber)"],
+      "falseOnly().parseNumber().parseString()": [boolean().falseOnly().parseNumber().parseString(), "false(parseNumber, parseString)"],
     } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
       it(`${key} should work`, () => {
         const test = type
@@ -272,6 +367,42 @@ describe('types:Boolean', () => {
         expect(shouldValidate(test.decode(NaN))).to.be.eql(false)
         shouldNotValidate(test.decode(null))
         shouldNotValidate(test.decode(undefined))
+        shouldNotValidate(test.decode([]))
+        shouldNotValidate(test.decode({}))
+        shouldNotValidate(test.decode(new RegExp(/./)))
+        shouldNotValidate(test.decode(() => { }))
+      })
+    })
+
+    forEach({
+      "falseOnly(violet).parseString().parseNumber()": [boolean().falseOnly(true).parseString().parseNumber(), "false(violet, parseString, parseNumber)"],
+      "falseOnly(violet).parseNumber().parseString()": [boolean().falseOnly(true).parseNumber().parseString(), "false(violet, parseNumber, parseString)"],
+    } as { [key: string]: [t.Any, string] }, ([type, name], key) => {
+      it(`${key} should work`, () => {
+        const test = type
+
+        expect(test.name).to.be.eql(name)
+        expect(shouldValidate(test.decode(true))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode(false))).to.be.eql(false)
+        expect(shouldValidate(test.decode("true"))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode("false"))).to.be.eql(false)
+        expect(shouldValidate(test.decode("yes"))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode("no"))).to.be.eql(false)
+        expect(shouldValidate(test.decode("t"))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode("f"))).to.be.eql(false)
+        expect(shouldValidate(test.decode("y"))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode("n"))).to.be.eql(false)
+        expect(shouldValidate(test.decode(0))).to.be.eql(false)
+        expect(shouldValidate(test.decode(1))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode(-1))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode(Infinity))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode(NaN))).to.be.eql(false)
+        expect(shouldValidate(test.decode(null))).to.be.eql(undefined)
+        expect(shouldValidate(test.decode(undefined))).to.be.eql(undefined)
+        shouldNotValidate(test.decode([]))
+        shouldNotValidate(test.decode({}))
+        shouldNotValidate(test.decode(new RegExp(/./)))
+        shouldNotValidate(test.decode(() => { }))
       })
     })
   })
