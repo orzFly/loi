@@ -18,7 +18,8 @@ export class LoiFactory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I'
     // [ts] Constructors for derived classes must contain a 'super' call.
     // [ts] Unreachable code detected.
     // @ts-ignore
-    super(undefined as any, undefined as any, undefined as any, undefined as any);
+    const pitfall: any = undefined
+    super(pitfall, pitfall, pitfall, pitfall);
   }
 
   /** @internal */
