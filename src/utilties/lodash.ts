@@ -34,6 +34,7 @@ export function objectForEach<T extends object>(
 const objectProto = Object.prototype;
 const hasOwnProperty = objectProto.hasOwnProperty;
 const nativeObjectToString = objectProto.toString;
+/* istanbul ignore next */
 const symToStringTag = Symbol ? Symbol.toStringTag : undefined;
 const nullTag = '[object Null]';
 const undefinedTag = '[object Undefined]';
