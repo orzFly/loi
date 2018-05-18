@@ -40,6 +40,7 @@ const nullTag = '[object Null]';
 const undefinedTag = '[object Undefined]';
 const numberTag = '[object Number]';
 const stringTag = '[object String]';
+const dateTag = '[object Date]';
 
 /* istanbul ignore next */
 function getRawTag(value?: any) {
@@ -95,4 +96,10 @@ export function isNumber(value?: any): value is number {
 export function isString(value?: any): value is string {
   return typeof value == 'string' ||
     (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
+}
+
+/* istanbul ignore next */
+/** @internal */
+export function isDate(value?: any): value is Date {
+  return isObjectLike(value) && baseGetTag(value) == dateTag;
 }
