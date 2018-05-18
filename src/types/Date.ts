@@ -46,7 +46,7 @@ export class LoiFactoryDate<T extends t.Any> extends LoiFactory<T> {
     const type = t.refinement(this, (n: Date) => n.getTime() <= time);
     return metadata(LoiFactoryDate.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <ILoiOptionDate>{ name: `<=${date.toUTCString()}`, max: time }
+      option: <ILoiOptionDate>{ name: `<=${date.toJSON()}`, max: time }
     });
   }
 
@@ -56,7 +56,7 @@ export class LoiFactoryDate<T extends t.Any> extends LoiFactory<T> {
     const type = t.refinement(this, (n: Date) => n.getTime() >= time);
     return metadata(LoiFactoryDate.decorate<Clean<typeof type>>(type), {
       parent: this,
-      option: <ILoiOptionDate>{ name: `>=${date.toUTCString()}`, min: limit }
+      option: <ILoiOptionDate>{ name: `>=${date.toJSON()}`, min: limit }
     });
   }
 

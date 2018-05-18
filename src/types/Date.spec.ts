@@ -56,6 +56,33 @@ describe('types:Date', () => {
       shouldNotValidate(test.decode(-Infinity))
     })
 
+    it('min() should work', () => {
+      const test = date().min(new Date("2017-01-01T00:00:00.000Z"))
+      let time: Date
+
+      expect(test.name).to.be.eql("date(>=2017-01-01T00:00:00.000Z)")
+      expect(shouldValidate(test.decode(time = new Date("2017-01-01T00:00:00.000Z")))).to.be.eql(time)
+      expect(shouldValidate(test.decode(time = new Date("2017-01-01T00:00:00.001Z")))).to.be.eql(time)
+      expect(shouldValidate(test.decode(time = new Date("2017-01-02T00:00:00.000Z")))).to.be.eql(time)
+      expect(shouldValidate(test.decode(time = new Date("2017-01-03T00:00:00.000Z")))).to.be.eql(time)
+      shouldNotValidate(test.decode("2016-12-31T23:59:59.999Z"))
+      shouldNotValidate(test.decode("1970-01-01T00:00:00.000Z"))
+    })
+
+    it('max() should work', () => {
+      const test = date().max(new Date("2017-01-01T00:00:00.000Z"))
+      let time: Date
+
+      expect(test.name).to.be.eql("date(<=2017-01-01T00:00:00.000Z)")
+      expect(shouldValidate(test.decode(time = new Date("2016-12-31T23:59:59.999Z")))).to.be.eql(time)
+      expect(shouldValidate(test.decode(time = new Date("2016-12-30T23:59:59.999Z")))).to.be.eql(time)
+      expect(shouldValidate(test.decode(time = new Date("1970-01-01T00:00:00.000Z")))).to.be.eql(time)
+      expect(shouldValidate(test.decode(time = new Date("2017-01-01T00:00:00.000Z")))).to.be.eql(time)
+      shouldNotValidate(test.decode("2017-01-01T00:00:00.001Z"))
+      shouldNotValidate(test.decode("2017-01-02T00:00:00.000Z"))
+      shouldNotValidate(test.decode("2017-01-03T00:00:00.000Z"))
+    })
+
     it('parseDateString should work', () => {
       const test = date().parseDateString()
       let time: Date
