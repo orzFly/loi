@@ -13,9 +13,12 @@ export interface ILoiOption {
 
 export class LoiFactory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I']> {
   constructor() {
-    // HACK: [ts] Constructors for derived classes must contain a 'super' call.
-    super(undefined as any, undefined as any, undefined as any, undefined as any);
     throw new Error('The Loi factory class cannot be constructored.');
+
+    // [ts] Constructors for derived classes must contain a 'super' call.
+    // [ts] Unreachable code detected.
+    // @ts-ignore
+    super(undefined as any, undefined as any, undefined as any, undefined as any);
   }
 
   /** @internal */
