@@ -13,9 +13,5 @@ export { enumeration, LoiFactoryEnum } from './types/Enum';
 export { date, LoiFactoryDate } from './types/Date';
 export { set } from './types/Set';
 
-export function validate<S, A>(value: S, type: t.Decoder<S, A>): t.Validation<A> {
-  return type.decode(value);
-}
-
-export function ensureSameType<X, Y extends X>(): [X, Y] { return undefined as any; };
-export function ensureTypeSame<X extends Y, Y>(): [X, Y] { return undefined as any; };
+export { validate } from './helpers/validate';
+export { ensureSameType, ensureTypeSame } from './helpers/ensureSameType';
