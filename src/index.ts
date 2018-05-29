@@ -11,6 +11,7 @@ export { array, LoiFactoryArray } from './types/Array';
 export { object, LoiFactoryObject, LoiFactoryObjectInitial } from './types/Object';
 export { enumeration, LoiFactoryEnum } from './types/Enum';
 export { date, LoiFactoryDate } from './types/Date';
+export { set } from './types/Set';
 
 export function validate<S, A>(value: S, type: t.Decoder<S, A>): t.Validation<A> {
   return type.decode(value);

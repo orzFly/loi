@@ -31,8 +31,12 @@ export function objectForEach<T extends object>(
 
 // The following code copied from lodash@4.17.10
 
+const funcProto = Function.prototype;
 const objectProto = Object.prototype;
+const getPrototypeOf = Object.getPrototypeOf.bind(Object);
 const hasOwnProperty = objectProto.hasOwnProperty;
+const funcToString = funcProto.toString;
+const objectCtorString = funcToString.call(Object);
 const nativeObjectToString = objectProto.toString;
 /* istanbul ignore next */
 const symToStringTag = Symbol ? Symbol.toStringTag : undefined;
@@ -41,6 +45,7 @@ const undefinedTag = '[object Undefined]';
 const numberTag = '[object Number]';
 const stringTag = '[object String]';
 const dateTag = '[object Date]';
+const objectTag = '[object Object]';
 
 /* istanbul ignore next */
 function getRawTag(value?: any) {
@@ -102,4 +107,19 @@ export function isString(value?: any): value is string {
 /** @internal */
 export function isDate(value?: any): value is Date {
   return isObjectLike(value) && baseGetTag(value) == dateTag;
+}
+
+/* istanbul ignore next */
+/** @internal */
+export function isPlainObject(value?: any): boolean {
+  if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
+    return false;
+  }
+  const proto = getPrototypeOf(value);
+  if (proto === null) {
+    return true;
+  }
+  const Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
+    funcToString.call(Ctor) == objectCtorString;
 }
