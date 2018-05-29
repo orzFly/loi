@@ -140,7 +140,6 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
   public allow<T extends t.Any>(...ts: T[]) {
     const type = t.union([this, ...ts]);
     return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
-      parent: this,
       tag: type.name
     });
   }

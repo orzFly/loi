@@ -13,5 +13,6 @@ export { enumeration, LoiFactoryEnum } from './types/Enum';
 export { date, LoiFactoryDate } from './types/Date';
 export { set } from './types/Set';
 
-export { validate } from './helpers/validate';
+export { validate, validateOrReturn, validateOrThrow, createError } from './helpers/validate';
+export { LoiValidationError, LoiValidationErrorItem, LoiValidationResult } from './helpers/errorType';
 export { ensureSameType, ensureTypeSame } from './helpers/ensureSameType';
