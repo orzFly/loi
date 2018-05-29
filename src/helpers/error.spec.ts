@@ -1,4 +1,4 @@
-import * as errorType from './errorType'
+import * as errorType from './error'
 
 describe('helpers:errorType', () => {
   it('works', () => {
