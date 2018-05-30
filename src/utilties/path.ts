@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { isArrayType, isCompoundType, isDictType } from './tag';
+import { isArrayType, isDictType, isUnionType } from './tag';
 
 /** @internal */
 export function getContextPath(context: t.Context): string {
@@ -12,17 +12,17 @@ export function getRealContextPath(context: t.Context): string {
   return ["$", ...context.slice(1).filter((i) => {
     const realLast = last;
     last = i.type;
-    return isCompoundType(realLast);
-  }).filter((i) => i)].join(".")
+    return !isUnionType(realLast);
+  }).map((i) => i.key)].join(".")
 }
 
 /** @internal */
 export function getJavaScriptContextPath(context: t.Context): string {
   let last: t.Decoder<any, any> = context[0].type;
-  return ["$", ...context.slice(0).map((i) => {
+  return ["$", ...context.slice(1).map((i) => {
     const realLast = last;
     last = i.type;
-    if (isCompoundType(realLast)) {
+    if (isUnionType(realLast)) {
       return "";
     } else if (isArrayType(realLast)) {
       return `[${i.key}]`

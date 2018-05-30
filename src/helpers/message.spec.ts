@@ -18,14 +18,14 @@ describe('helpers:message', () => {
 
       expect(createMessage(result.value)).to.be.eql(tidyText(`
         #Invalid value supplied to $: { a: (string | number)[] }
-        #  Invalid value supplied to $: (string | number)[]
-        #    Invalid value supplied to $[0]
+        #  Invalid value supplied to $.a: (string | number)[]
+        #    Invalid value supplied to $.a[0]
         #      Supplied value \`false' is not string
         #      Supplied value \`false' is not number
-        #    Invalid value supplied to $[1]
+        #    Invalid value supplied to $.a[1]
         #      Supplied value \`true' is not string
         #      Supplied value \`true' is not number
-        #    Invalid value supplied to $[2]
+        #    Invalid value supplied to $.a[2]
         #      Supplied value \`null' is not string
         #      Supplied value \`null' is not number
       `))
@@ -49,26 +49,26 @@ describe('helpers:message', () => {
       if (!result.isLeft()) throw new Error("Didn't fail!");
 
       expect(createMessage(result.value)).to.be.eql(tidyText(`
-        #Invalid value supplied to $[]: (InterfaceA(violet) | number)[]
-        #  Invalid value supplied to $[][0]
+        #Invalid value supplied to $: (InterfaceA(violet) | number)[]
+        #  Invalid value supplied to $[0]
         #    Supplied value is not InterfaceA(violet)
-        #      Invalid value supplied to $[][0].a
+        #      Invalid value supplied to $[0].a
         #        Supplied value is not InterfaceB(violet)
-        #          Invalid value supplied to $[][0].a.b
+        #          Invalid value supplied to $[0].a.b
         #            Supplied value is not InterfaceC(violet)
-        #              Invalid value supplied to $[][0].a.b.c
+        #              Invalid value supplied to $[0].a.b.c
         #                Supplied value is not InterfaceDE(violet)
-        #                  Invalid value supplied to $[][0].a.b.c.d
+        #                  Invalid value supplied to $[0].a.b.c.d
         #                    Supplied value \`{}' is not string
         #                    Supplied value \`{}' is not number
-        #                  Invalid value supplied to $[][0].a.b.c.e
+        #                  Invalid value supplied to $[0].a.b.c.e
         #                    Supplied value \`"hello"' is not number
         #                    Supplied value \`"hello"' is not undefined
         #                Supplied value \`{"d":{},"e":"hello"}' is not number
         #            Supplied value \`{"c":{"d":{},"e":"hello"}}' is not number
         #        Supplied value \`{"b":{"c":{"d":{},"e":"hello"}}}' is not number
         #    Supplied value \`{"a":{"b":{"c":{"d":{},"e":"hello"}}}}' is not number
-        #  Invalid value supplied to $[][1]
+        #  Invalid value supplied to $[1]
         #    Supplied value \`"str"' is not InterfaceA(violet)
         #    Supplied value \`"str"' is not number
       `))
