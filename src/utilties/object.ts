@@ -74,7 +74,7 @@ export function strictInterfaceWithOptionals<R extends t.Props, O extends t.Prop
 ): t.Type<t.TypeOfProps<R> & t.TypeOfPartialProps<O>, t.OutputOfProps<R> & t.OutputOfPartialProps<O>, {}> {
   const loose = t.intersection([t.interface(required), nullablePartial(optional)]);
   const props = Object.assign({}, required, optional);
-  return new t.Type(
+  const newType = new t.Type(
     name,
     (v): v is t.TypeOfProps<R> & t.TypeOfPartialProps<O> =>
       loose.is(v) &&
@@ -93,6 +93,8 @@ export function strictInterfaceWithOptionals<R extends t.Props, O extends t.Prop
       }),
     loose.encode
   );
+  (<any>newType)._tag = 'StrictInterfaceWithOptionalsType';
+  return newType as any;
 }
 
 /** @internal */
@@ -103,7 +105,7 @@ export function violetInterfaceWithOptionals<R extends t.Props, O extends t.Prop
 ): t.Type<t.TypeOfProps<R> & t.TypeOfPartialProps<O>, t.OutputOfProps<R> & t.OutputOfPartialProps<O>, {}> {
   const loose = t.intersection([t.interface(required), nullablePartial(optional)]);
   const props = Object.assign({}, required, optional);
-  return new t.Type(
+  const newType = new t.Type(
     name,
     (v): v is t.TypeOfProps<R> & t.TypeOfPartialProps<O> => loose.is(v),
     (s, c) =>
@@ -121,4 +123,6 @@ export function violetInterfaceWithOptionals<R extends t.Props, O extends t.Prop
       }),
     loose.encode
   );
+  (<any>newType)._tag = 'VioletInterfaceWithOptionalsType';
+  return newType as any;
 }

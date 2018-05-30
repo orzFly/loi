@@ -1,4 +1,5 @@
 import * as t from 'io-ts';
+import { loiDecoratorTypeTag } from './tag';
 
 /** @internal */
 // tslint:disable:no-any
@@ -6,7 +7,7 @@ export function withRescue<T extends t.Any>(
   type: T,
   rescueValue: t.TypeOf<T>
 ): t.Type<T["_A"], T["_O"], T["_I"]> {
-  return new t.Type(
+  const newType = new t.Type(
     type.name,
     (v: any): v is T => type.is(v) || type.is(rescueValue),
     (v: any, c: any) => {
@@ -15,6 +16,10 @@ export function withRescue<T extends t.Any>(
     },
     (v: any) => type.encode(v)
   );
+  (<any>newType)[loiDecoratorTypeTag] = true;
+  (<any>newType)._tag = 'RescueType';
+  (<any>newType).type = type;
+  return newType;
 }
 
 /** @internal */
@@ -22,7 +27,7 @@ export function withRescueResolver<T extends t.Any>(
   type: T,
   rescueValue: () => t.TypeOf<T>
 ): t.Type<T["_A"], T["_O"], T["_I"]> {
-  return new t.Type(
+  const newType = new t.Type(
     type.name,
     (v: any): v is T => type.is(v) || type.is(rescueValue()),
     (v: any, c: any) => {
@@ -31,4 +36,8 @@ export function withRescueResolver<T extends t.Any>(
     },
     (v: any) => type.encode(v)
   );
+  (<any>newType)[loiDecoratorTypeTag] = true;
+  (<any>newType)._tag = 'RescueResolverType';
+  (<any>newType).type = type;
+  return newType;
 }
