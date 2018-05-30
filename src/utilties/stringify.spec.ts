@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import * as t from 'io-ts';
 import { stringify } from './stringify';
 
 // tslint:disable:no-unused-expression // chai to be NaN
@@ -26,6 +27,9 @@ describe('utilties:stringify', () => {
         x.x = x;
         return x;
       })())).to.be.eql('#<object>');
+
+      const fn1 = () => null
+      expect(stringify(fn1)).to.be.eql(t.getFunctionName(fn1));
     })
   })
 })
