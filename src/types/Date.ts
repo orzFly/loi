@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { convert } from '../utilties/convert';
+import { LoiTypeConvert } from '../utilties/convert';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { isDate, isString } from '../utilties/lodash';
 import { mimic } from '../utilties/mimic';
@@ -65,7 +65,7 @@ export class LoiFactoryDate<T extends t.Any> extends LoiFactory<T> {
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
    */
   public parseDateString() {
-    const type = convert(this, (i: string) => {
+    const type = new LoiTypeConvert(this, (i: string) => {
       const date = Date.parse(i);
       return Number.isFinite(date) ? new Date(date) : i;
     }, (i) => isString(i));

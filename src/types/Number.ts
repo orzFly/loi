@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { convert } from '../utilties/convert';
+import { LoiTypeConvert } from '../utilties/convert';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { isString } from '../utilties/lodash';
 import { mimic } from '../utilties/mimic';
@@ -91,7 +91,7 @@ export class LoiFactoryNumber<T extends t.Any> extends LoiFactory<T> {
   }
 
   public parseFloat() {
-    const type = convert(this, (i: string) => parseFloat(i), (i) => isString(i));
+    const type = new LoiTypeConvert(this, (i: string) => parseFloat(i), (i) => isString(i));
     return metadata(LoiFactoryNumber.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <ILoiOptionNumber>{ name: "parseFloat", parseFloat: true }

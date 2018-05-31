@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
-import { convert, nullAsUndefined } from './convert';
+import { LoiTypeConvert, nullAsUndefined } from './convert';
 import { withDefault, withDefaultResolver } from './default';
 import { withRescue, withRescueResolver } from './rescue';
 import { getRealTypeTag, getTypeTag, isArrayType, isCompoundType, isDecoratorType, isDictType, isUnionType } from './tag';
@@ -49,8 +49,8 @@ const data = [
     dict: true
   },
   {
-    type: convert(t.string, () => "", () => false),
-    tag: "ConvertType",
+    type: new LoiTypeConvert(t.string, () => "", () => false),
+    tag: LoiTypeConvert._tag,
     realTag: "StringType",
     decorator: true,
   },
