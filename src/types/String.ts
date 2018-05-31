@@ -14,7 +14,8 @@ export interface ILoiOptionString extends ILoiOption {
 }
 
 export class LoiTypeString extends t.Type<string> {
-  readonly _tag: 'StringType' = 'StringType'
+  static readonly _tag: 'LoiTypeString' = 'LoiTypeString'
+  readonly _tag: 'LoiTypeString' = 'LoiTypeString'
   constructor() {
     super(
       'string',
