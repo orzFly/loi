@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { LoiDecoratorConvert } from '../decorators/convert';
+import { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from '../decorators/default';
 import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
-import { withDefault, withDefaultResolver } from './default';
 import { withRescue, withRescueResolver } from './rescue';
 import { getRealTypeTag, getTypeTag, isArrayType, isCompoundType, isDecoratorType, isDictType, isUnionType } from './tag';
 
@@ -62,14 +62,14 @@ const data = [
     decorator: true,
   },
   {
-    type: withDefault(t.string, ""),
-    tag: "DefaultType",
+    type: new LoiDecoratorDefault(t.string, ""),
+    tag: LoiDecoratorDefault._tag,
     realTag: "StringType",
     decorator: true,
   },
   {
-    type: withDefaultResolver(t.string, () => ""),
-    tag: "DefaultResolverType",
+    type: new LoiDecoratorDefaultResolver(t.string, () => ""),
+    tag: LoiDecoratorDefaultResolver._tag,
     realTag: "StringType",
     decorator: true,
   },

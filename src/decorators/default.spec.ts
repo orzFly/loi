@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
-import { withDefault, withDefaultResolver } from './default';
+import { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from './default';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
-describe('utilties:default', () => {
-  describe('withDefault', () => {
+describe('decorators:default', () => {
+  describe('LoiDecoratorDefault', () => {
     it('should work', () => {
-      const test = withDefault(t.number, 1)
+      const test = new LoiDecoratorDefault(t.number, 1)
 
       expect(shouldValidate(test.decode(0))).to.be.eql(0)
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
@@ -32,10 +32,10 @@ describe('utilties:default', () => {
     })
   })
 
-  describe('withDefaultResolver', () => {
+  describe('LoiDecoratorDefaultResolver', () => {
     it('should work', () => {
       let i = 233
-      const test = withDefaultResolver(t.number, () => i++)
+      const test = new LoiDecoratorDefaultResolver(t.number, () => i++)
 
       expect(shouldValidate(test.decode(undefined))).to.be.eql(233)
       expect(shouldValidate(test.decode(null))).to.be.eql(234)

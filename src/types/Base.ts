@@ -1,6 +1,6 @@
 import * as t from 'io-ts';
+import { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from '../decorators/default';
 import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
-import { withDefault, withDefaultResolver } from '../utilties/default';
 import { decorate, ILoiOption, LoiFactory, loiTag, metadata } from '../utilties/factory';
 import { withRescue, withRescueResolver } from '../utilties/rescue';
 
@@ -37,7 +37,7 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
    * @param value default value
    */
   public default(value: this['_A']) {
-    const type = withDefault(this, value);
+    const type = new LoiDecoratorDefault(this, value);
     return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <ILoiOptionBase<T>>{ name: `with default`, default: value }
@@ -49,7 +49,7 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
    * @param value default value resolver
    */
   public defaultResolver(resolver: () => this['_A']) {
-    const type = withDefaultResolver(this, resolver);
+    const type = new LoiDecoratorDefaultResolver(this, resolver);
     return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <ILoiOptionBase<T>>{ name: `with default`, defaultResolver: resolver }
