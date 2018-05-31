@@ -4,5 +4,6 @@
 --full-trace
 --bail
 src/utilties/*.spec.ts
+src/decorators/*.spec.ts
 src/types/*.spec.ts
 src/**/*.spec.ts

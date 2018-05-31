@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { LoiDecoratorNullAsUndefined } from './convert';
+import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
 import { objectMapValues } from './lodash';
 
 /** @internal */

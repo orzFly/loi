@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
-import { LoiDecoratorConvert, LoiDecoratorNullAsUndefined } from './convert';
+import { LoiDecoratorConvert } from '../decorators/convert';
+import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
 import { withDefault, withDefaultResolver } from './default';
 import { withRescue, withRescueResolver } from './rescue';
 import { getRealTypeTag, getTypeTag, isArrayType, isCompoundType, isDecoratorType, isDictType, isUnionType } from './tag';

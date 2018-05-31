@@ -1,5 +1,6 @@
 import * as t from 'io-ts';
-import { LoiDecoratorConvert, LoiDecoratorNullAsUndefined } from '../utilties/convert';
+import { LoiDecoratorConvert } from '../decorators/convert';
+import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { isNumber, isString } from '../utilties/lodash';
 import { mimic } from '../utilties/mimic';

@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { LoiDecoratorNullAsUndefined } from '../utilties/convert';
+import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
 import { withDefault, withDefaultResolver } from '../utilties/default';
 import { decorate, ILoiOption, LoiFactory, loiTag, metadata } from '../utilties/factory';
 import { withRescue, withRescueResolver } from '../utilties/rescue';

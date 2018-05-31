@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { LoiDecoratorConvert } from '../utilties/convert';
+import { LoiDecoratorConvert } from '../decorators/convert';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { isString } from '../utilties/lodash';
 import { mimic } from '../utilties/mimic';
