@@ -13,7 +13,6 @@ export interface ILoiOptionObject extends ILoiOption {
   violet?: boolean,
 }
 
-
 /** @internal */
 export function getNameFromProps(required: t.Props = {}, optional: t.Props = {}): string {
   const result = `{ ${[
@@ -24,18 +23,52 @@ export function getNameFromProps(required: t.Props = {}, optional: t.Props = {})
   return result === "{  }" ? "{}" : result;
 }
 
+export declare type TypeOfPartialUndefinedableProps<P extends t.AnyProps> = {
+  [K in keyof P]?: t.TypeOf<P[K]> | undefined;
+};
+
+export declare type OutputOfPartialUndefinedableProps<P extends t.AnyProps> = {
+  [K in keyof P]?: t.OutputOf<P[K]> | undefined;
+};
+
 /** @internal */
-export function nullablePartial<P extends t.Props>(props: P, name?: string): t.PartialType<P, t.TypeOfPartialProps<P>, t.OutputOfPartialProps<P>> {
+export function nullablePartial<P extends t.Props>(props: P, name?: string): t.PartialType<
+  P,
+  TypeOfPartialUndefinedableProps<P>,
+  OutputOfPartialUndefinedableProps<P>
+> {
   return t.partial(objectMapValues(props, (i) => new LoiDecoratorNullAsUndefined(i) as typeof i) as P, name);
 }
 
-/** @internal */
-export function interfaceWithOptionals<R extends t.Props, O extends t.Props>(
-  required: R,
-  optional: O,
-  name?: string
-): t.IntersectionType<[t.InterfaceType<R, t.TypeOfProps<R>, t.OutputOfProps<R>>, t.PartialType<O, t.TypeOfPartialProps<O>, t.OutputOfPartialProps<O>>], t.TypeOfProps<R> & t.TypeOfPartialProps<O>, t.OutputOfProps<R> & t.OutputOfPartialProps<O>> {
-  return t.intersection([t.interface(required), nullablePartial(optional)], name)
+export class LoiTypeObject<R extends t.Props, O extends t.Props> extends t.Type<
+  t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
+  t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+> {
+  static readonly _tag: 'LoiTypeObject' = 'LoiTypeObject'
+  readonly _tag: 'LoiTypeObject' = 'LoiTypeObject'
+  constructor(
+    readonly props: R,
+    readonly optionalProps: O,
+    name: string = getNameFromProps(props, optionalProps),
+  ) {
+    super(
+      name,
+      (loose = t.intersection([t.interface(props), nullablePartial(optionalProps)])).is,
+      loose.validate,
+      loose.encode
+    )
+
+    // [ts] A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+    // tslint:disable-next-line:no-var-keyword
+    var loose: t.IntersectionType<
+      [
+        t.InterfaceType<R, t.TypeOfProps<R>, t.OutputOfProps<R>>,
+        t.PartialType<O, TypeOfPartialUndefinedableProps<O>, OutputOfPartialUndefinedableProps<O>>
+      ],
+      t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
+      t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+    >;
+  }
 }
 
 /**
@@ -59,8 +92,7 @@ export function strictInterfaceWithOptionals<R extends t.Props, O extends t.Prop
   const newType = new t.Type(
     name,
     (v): v is t.TypeOfProps<R> & t.TypeOfPartialProps<O> =>
-      loose.is(v) &&
-      Object.getOwnPropertyNames(v).every((k) => props.hasOwnProperty(k)),
+      loose.is(v) && Object.getOwnPropertyNames(v).every((k) => props.hasOwnProperty(k) || optional.hasOwnProperty(k)),
     (s, c) =>
       loose.validate(s, c).chain((o) => {
         const errors: t.Errors = Object.getOwnPropertyNames(o)
@@ -247,7 +279,7 @@ export function object(a?: any, b?: any, c?: any) {
     name = c
   }
 
-  const type = interfaceWithOptionals(required, optional, name);
+  const type = new LoiTypeObject(required, optional, name);
   const decorated = metadata(LoiFactoryObjectInitial.decorate(type), {
     tag: name
   });
