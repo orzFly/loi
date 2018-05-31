@@ -1,7 +1,7 @@
 import * as t from 'io-ts';
 import { loiTagTypeDecorator } from '../utilties/tag';
 
-export class LoiDecoratorConvert<RT extends t.Any, X = any, A = RT['_A'], O = RT['_O'], I = RT['_I']> extends t.Type<A, O, I> {
+export class LoiDecoratorConvert<RT extends t.Any, X = RT['_I']> extends t.Type<RT['_A'], RT['_O'], RT['_I']> {
   static readonly _tag: 'LoiDecoratorConvert' = 'LoiDecoratorConvert'
   readonly _tag: 'LoiDecoratorConvert' = 'LoiDecoratorConvert'
   readonly [loiTagTypeDecorator] = true;
@@ -13,7 +13,7 @@ export class LoiDecoratorConvert<RT extends t.Any, X = any, A = RT['_A'], O = RT
   ) {
     super(
       name,
-      (v: any): v is A => type.is(v),
+      (v: any): v is RT['_A'] => type.is(v),
       (v: any, c: any) =>
         type.validate(guard(v) ? convert(v) : v, c),
       (v: any) => type.encode(v)

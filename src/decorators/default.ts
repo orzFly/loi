@@ -8,18 +8,18 @@ import { loiTagTypeDecorator } from '../utilties//tag';
  * see https://github.com/gcanti/io-ts/issues/8
  * @internal
  */
-export class LoiDecoratorDefault<RT extends t.Any, A = RT['_A'], O = RT['_O'], I = RT['_I']> extends t.Type<A, O, I> {
+export class LoiDecoratorDefault<RT extends t.Any> extends t.Type<RT['_A'], RT['_O'], RT['_I']> {
   static readonly _tag: 'LoiDecoratorDefault' = 'LoiDecoratorDefault'
   readonly _tag: 'LoiDecoratorDefault' = 'LoiDecoratorDefault'
   readonly [loiTagTypeDecorator] = true;
   constructor(
     readonly type: RT,
-    readonly defaultValue: A,
+    readonly defaultValue: RT['_A'],
     name: string = type.name,
   ) {
     super(
       name,
-      (v: any): v is A => type.is(v),
+      (v: any): v is RT['_A'] => type.is(v),
       (v: any, c: any) =>
         type.validate(v !== undefined && v !== null ? v : defaultValue, c),
       (v: any) => type.encode(v)
@@ -32,18 +32,18 @@ export class LoiDecoratorDefault<RT extends t.Any, A = RT['_A'], O = RT['_O'], I
  * see https://github.com/gcanti/io-ts/issues/8
  * @internal
  */
-export class LoiDecoratorDefaultResolver<RT extends t.Any, A = RT['_A'], O = RT['_O'], I = RT['_I']> extends t.Type<A, O, I> {
+export class LoiDecoratorDefaultResolver<RT extends t.Any> extends t.Type<RT['_A'], RT['_O'], RT['_I']> {
   static readonly _tag: 'LoiDecoratorDefaultResolver' = 'LoiDecoratorDefaultResolver'
   readonly _tag: 'LoiDecoratorDefaultResolver' = 'LoiDecoratorDefaultResolver'
   readonly [loiTagTypeDecorator] = true;
   constructor(
     readonly type: RT,
-    readonly defaultValueResolver: () => A,
+    readonly defaultValueResolver: () => RT['_A'],
     name: string = type.name,
   ) {
     super(
       name,
-      (v: any): v is A => type.is(v),
+      (v: any): v is RT['_A'] => type.is(v),
       (v: any, c: any) =>
         type.validate(v !== undefined && v !== null ? v : defaultValueResolver(), c),
       (v: any) => type.encode(v)
