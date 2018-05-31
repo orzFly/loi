@@ -12,36 +12,6 @@ export function getNameFromProps(required: t.Props = {}, optional: t.Props = {})
   return result === "{  }" ? "{}" : result;
 }
 
-/**
- * Specifies that only the given interface properties are allowed. Invalid properties will be just ignored, violetly.
- * @internal
- */
-export const violet = <P extends t.Props>(
-  props: P,
-  name: string = getNameFromProps(props)
-): t.InterfaceType<P, t.TypeOfProps<P>, t.OutputOfProps<P>> => {
-  const loose = t.type(props)
-  return new t.InterfaceType(
-    name,
-    (v): v is t.TypeOfProps<P> => loose.is(v),
-    (s, c) =>
-      loose.validate(s, c).chain((o) => {
-        const keys = Object.getOwnPropertyNames(o)
-        const newObject: t.OutputOfProps<P> = {} as any;
-        const len = keys.length
-        for (let i = 0; i < len; i++) {
-          const key = keys[i]
-          if (props.hasOwnProperty(key)) {
-            newObject[key] = o[key];
-          }
-        }
-        return t.success(newObject)
-      }),
-    loose.encode,
-    props
-  )
-}
-
 /** @internal */
 export function nullablePartial<P extends t.Props>(props: P, name?: string): t.PartialType<P, t.TypeOfPartialProps<P>, t.OutputOfPartialProps<P>> {
   return t.partial(objectMapValues(props, (i) => new LoiDecoratorNullAsUndefined(i) as typeof i) as P, name);
