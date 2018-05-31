@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { nullAsUndefined } from '../utilties/convert';
+import { LoiDecoratorNullAsUndefined } from '../utilties/convert';
 import { withDefault, withDefaultResolver } from '../utilties/default';
 import { decorate, ILoiOption, LoiFactory, loiTag, metadata } from '../utilties/factory';
 import { withRescue, withRescueResolver } from '../utilties/rescue';
@@ -25,7 +25,7 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
   }
 
   public nullAsUndefined() {
-    const type = nullAsUndefined(this);
+    const type = new LoiDecoratorNullAsUndefined(this);
     return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <ILoiOptionBase<T>>{ name: `null as undefined`, nullAsUndefined: true }

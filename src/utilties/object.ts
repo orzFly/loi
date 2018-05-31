@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { nullAsUndefined } from './convert';
+import { LoiDecoratorNullAsUndefined } from './convert';
 import { objectMapValues } from './lodash';
 
 /** @internal */
@@ -44,7 +44,7 @@ export const violet = <P extends t.Props>(
 
 /** @internal */
 export function nullablePartial<P extends t.Props>(props: P, name?: string): t.PartialType<P, t.TypeOfPartialProps<P>, t.OutputOfPartialProps<P>> {
-  return t.partial(objectMapValues(props, (i) => nullAsUndefined(i)) as P, name);
+  return t.partial(objectMapValues(props, (i) => new LoiDecoratorNullAsUndefined(i) as typeof i) as P, name);
 }
 
 /** @internal */

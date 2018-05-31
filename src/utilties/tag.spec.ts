@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
-import { LoiDecoratorConvert, nullAsUndefined } from './convert';
+import { LoiDecoratorConvert, LoiDecoratorNullAsUndefined } from './convert';
 import { withDefault, withDefaultResolver } from './default';
 import { withRescue, withRescueResolver } from './rescue';
 import { getRealTypeTag, getTypeTag, isArrayType, isCompoundType, isDecoratorType, isDictType, isUnionType } from './tag';
@@ -55,8 +55,8 @@ const data = [
     decorator: true,
   },
   {
-    type: nullAsUndefined(t.string),
-    tag: "LoiTypeNullAsUndefined",
+    type: new LoiDecoratorNullAsUndefined(t.string),
+    tag: LoiDecoratorNullAsUndefined._tag,
     realTag: "StringType",
     decorator: true,
   },

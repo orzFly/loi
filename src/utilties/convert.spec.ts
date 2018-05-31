@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { shouldValidate } from '../test-helper.spec';
-import { LoiDecoratorConvert, nullAsUndefined } from './convert';
+import { LoiDecoratorConvert, LoiDecoratorNullAsUndefined } from './convert';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
 describe('utilties:convert', () => {
-  describe('convert', () => {
+  describe('LoiDecoratorConvert', () => {
     it('should work', () => {
       const test = new LoiDecoratorConvert(t.number, () => 233, (i) => i === 1)
 
@@ -34,10 +34,10 @@ describe('utilties:convert', () => {
     })
   })
 
-  describe('nullAsUndefined', () => {
+  describe('LoiDecoratorNullAsUndefined', () => {
     it('should work', () => {
       const test = t.partial({
-        key: nullAsUndefined(t.boolean)
+        key: new LoiDecoratorNullAsUndefined(t.boolean)
       })
 
       expect(shouldValidate(test.decode({ key: true })).key).to.be.equal(true)
@@ -46,7 +46,7 @@ describe('utilties:convert', () => {
       expect(shouldValidate(test.decode({ key: undefined })).key).to.be.equal(undefined)
       expect(shouldValidate(test.decode({})).key).to.be.equal(undefined)
 
-      const test2 = nullAsUndefined(t.boolean)
+      const test2 = new LoiDecoratorNullAsUndefined(t.boolean)
       expect(test2.encode(true)).to.be.eql(t.boolean.encode(true))
       expect(test2.encode(false)).to.be.eql(t.boolean.encode(false))
       expect(test2.encode(undefined as any)).to.be.eql(t.boolean.encode(undefined as any))

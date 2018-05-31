@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { LoiDecoratorConvert, nullAsUndefined } from '../utilties/convert';
+import { LoiDecoratorConvert, LoiDecoratorNullAsUndefined } from '../utilties/convert';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { isNumber, isString } from '../utilties/lodash';
 import { mimic } from '../utilties/mimic';
@@ -69,7 +69,7 @@ export class LoiFactoryBooleanInitial<T extends t.Any> extends LoiFactory<T> {
   trueOnly(violet: true | false = false) {
     let type: t.Any = t.refinement(this, (i) => i === true) as t.Type<true, true, this["_I"]>
     if (violet) {
-      type = new LoiDecoratorConvert(nullAsUndefined(type), () => undefined, (i) => i === false)
+      type = new LoiDecoratorConvert(new LoiDecoratorNullAsUndefined(type), () => undefined, (i) => i === false)
     }
 
     return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
@@ -84,7 +84,7 @@ export class LoiFactoryBooleanInitial<T extends t.Any> extends LoiFactory<T> {
   falseOnly(violet: true | false = false) {
     let type: t.Any = t.refinement(this, (i) => i === false) as t.Type<false, false, this["_I"]>
     if (violet) {
-      type = new LoiDecoratorConvert(nullAsUndefined(type), () => undefined, (i) => i === true)
+      type = new LoiDecoratorConvert(new LoiDecoratorNullAsUndefined(type), () => undefined, (i) => i === true)
     }
 
     return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
