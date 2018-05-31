@@ -1,8 +1,8 @@
 import * as t from 'io-ts';
 import { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from '../decorators/default';
 import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
+import { LoiDecoratorRescue, LoiDecoratorRescueResolver } from '../decorators/rescue';
 import { decorate, ILoiOption, LoiFactory, loiTag, metadata } from '../utilties/factory';
-import { withRescue, withRescueResolver } from '../utilties/rescue';
 
 /** @internal */
 export interface ILoiOptionBase<T> extends ILoiOption {
@@ -61,7 +61,7 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
    * @param value rescue value
    */
   public rescue(value: this['_A']) {
-    const type = withRescue(this, value);
+    const type = new LoiDecoratorRescue(this, value);
     return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <ILoiOptionBase<T>>{ name: `with rescue`, rescue: value }
@@ -73,7 +73,7 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
    * @param value rescue value resolver
    */
   public rescueResolver(resolver: () => this['_A']) {
-    const type = withRescueResolver(this, resolver);
+    const type = new LoiDecoratorRescueResolver(this, resolver);
     return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <ILoiOptionBase<T>>{ name: `with rescue`, rescueResolver: resolver }

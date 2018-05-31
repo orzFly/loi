@@ -3,7 +3,7 @@ import * as t from 'io-ts';
 import { LoiDecoratorConvert } from '../decorators/convert';
 import { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from '../decorators/default';
 import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
-import { withRescue, withRescueResolver } from './rescue';
+import { LoiDecoratorRescue, LoiDecoratorRescueResolver } from '../decorators/rescue';
 import { getRealTypeTag, getTypeTag, isArrayType, isCompoundType, isDecoratorType, isDictType, isUnionType } from './tag';
 
 // tslint:disable:no-unused-expression // chai to be NaN
@@ -74,14 +74,14 @@ const data = [
     decorator: true,
   },
   {
-    type: withRescue(t.string, ""),
-    tag: "RescueType",
+    type: new LoiDecoratorRescue(t.string, ""),
+    tag: LoiDecoratorRescue._tag,
     realTag: "StringType",
     decorator: true,
   },
   {
-    type: withRescueResolver(t.string, () => ""),
-    tag: "RescueResolverType",
+    type: new LoiDecoratorRescueResolver(t.string, () => ""),
+    tag: LoiDecoratorRescueResolver._tag,
     realTag: "StringType",
     decorator: true,
   }

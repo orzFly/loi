@@ -1,15 +1,15 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { shouldValidate } from '../test-helper.spec';
-import { withRescue, withRescueResolver } from './rescue';
+import { LoiDecoratorRescue, LoiDecoratorRescueResolver } from './rescue';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
-describe('utilties:rescue', () => {
-  describe('withRescue', () => {
+describe('decorators:rescue', () => {
+  describe('LoiDecoratorRescue', () => {
     it('should work', () => {
       const baseType = t.union([t.number, t.null, t.undefined])
-      const test = withRescue(baseType, 1)
+      const test = new LoiDecoratorRescue(baseType, 1)
 
       expect(shouldValidate(test.decode(0))).to.be.eql(0)
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
@@ -33,11 +33,11 @@ describe('utilties:rescue', () => {
     })
   })
 
-  describe('withRescueResolver', () => {
+  describe('LoiDecoratorRescueResolver', () => {
     it('should work', () => {
       let i = 233
       const baseType = t.union([t.number, t.null, t.undefined])
-      const test = withRescueResolver(baseType, () => i++)
+      const test = new LoiDecoratorRescueResolver(baseType, () => i++)
 
       expect(shouldValidate(test.decode(undefined))).to.be.eql(undefined)
       expect(shouldValidate(test.decode(null))).to.be.eql(null)
