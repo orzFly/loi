@@ -1,13 +1,34 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
-import { nullablePartial, object } from './Object';
+import { getNameFromProps, nullablePartial, object } from './Object';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
 class MyRegExp extends RegExp { }
 
 describe('types:Object', () => {
+  describe('getNameFromProps', () => {
+    it('should work', () => {
+      expect(getNameFromProps()).to.be.eql("{}");
+
+      expect(getNameFromProps({
+        a: t.string, b: t.string
+      })).to.be.eql("{ a: string, b: string }");
+
+      expect(getNameFromProps({
+        a: t.string
+      }, {
+        b: t.string
+      })).to.be.eql("{ a: string, b?: string }");
+
+      expect(getNameFromProps({}, {
+        a: t.string,
+        b: t.string
+      })).to.be.eql("{ a?: string, b?: string }");
+    })
+  })
+
   describe('nullablePartial', () => {
     it('should work', () => {
       const test = nullablePartial({
