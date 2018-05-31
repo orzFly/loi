@@ -14,7 +14,8 @@ export interface ILoiOptionDate extends ILoiOption {
 }
 
 export class LoiTypeDate extends t.Type<Date, Date, t.mixed> {
-  readonly _tag: 'DateType' = 'DateType'
+  static readonly _tag: 'LoiTypeDate' = 'LoiTypeDate'
+  readonly _tag: 'LoiTypeDate' = 'LoiTypeDate'
 
   constructor() {
     super(

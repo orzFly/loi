@@ -4,6 +4,9 @@ import { LoiDecoratorConvert } from '../decorators/convert';
 import { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from '../decorators/default';
 import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
 import { LoiDecoratorRescue, LoiDecoratorRescueResolver } from '../decorators/rescue';
+import * as Loi from '../index';
+import { LoiTypeDate } from '../types/Date';
+import { LoiTypeString } from '../types/String';
 import { getRealTypeTag, getTypeTag, isArrayType, isCompoundType, isDecoratorType, isDictType, isUnionType } from './tag';
 
 // tslint:disable:no-unused-expression // chai to be NaN
@@ -84,7 +87,33 @@ const data = [
     tag: LoiDecoratorRescueResolver._tag,
     realTag: "StringType",
     decorator: true,
-  }
+  },
+  {
+    type: Loi.string(),
+    tag: LoiTypeString._tag,
+  },
+  {
+    type: Loi.string().max(15),
+    tag: "RefinementType",
+    realTag: LoiTypeString._tag,
+    decorator: true,
+  },
+  {
+    type: Loi.date(),
+    tag: LoiTypeDate._tag,
+  },
+  {
+    type: Loi.date().max(15),
+    tag: "RefinementType",
+    realTag: LoiTypeDate._tag,
+    decorator: true,
+  },
+  {
+    type: Loi.date().parseDateString(),
+    tag: LoiDecoratorConvert._tag,
+    realTag: LoiTypeDate._tag,
+    decorator: true,
+  },
 ];
 
 describe('utilties:tag', () => {
