@@ -12,7 +12,7 @@ export { object, LoiFactoryObject, LoiFactoryObjectInitial } from './types/Objec
 export { enumeration, LoiFactoryEnum } from './types/Enum';
 export { date, LoiFactoryDate } from './types/Date';
 export { set } from './types/Set';
-export { never } from 'io-ts';
+export { literal, never } from 'io-ts';
 
 export { validate, validateOrReturn, validateOrThrow } from './helpers/validate';
 export { LoiValidationError, LoiValidationErrorItem, LoiValidationResult, createError } from './helpers/error';
