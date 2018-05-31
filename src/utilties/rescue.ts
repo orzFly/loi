@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { loiDecoratorTypeTag } from './tag';
+import { loiTagTypeDecorator } from './tag';
 
 /** @internal */
 // tslint:disable:no-any
@@ -16,7 +16,7 @@ export function withRescue<T extends t.Any>(
     },
     (v: any) => type.encode(v)
   );
-  (<any>newType)[loiDecoratorTypeTag] = true;
+  (<any>newType)[loiTagTypeDecorator] = true;
   (<any>newType)._tag = 'RescueType';
   (<any>newType).type = type;
   return newType;
@@ -36,7 +36,7 @@ export function withRescueResolver<T extends t.Any>(
     },
     (v: any) => type.encode(v)
   );
-  (<any>newType)[loiDecoratorTypeTag] = true;
+  (<any>newType)[loiTagTypeDecorator] = true;
   (<any>newType)._tag = 'RescueResolverType';
   (<any>newType).type = type;
   return newType;

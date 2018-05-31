@@ -1,10 +1,10 @@
 import * as t from 'io-ts';
 
-export const loiDecoratorTypeTag = Symbol('loiDecoratorTypeTag')
-export const loiCompoundTypeTag = Symbol('loiCompoundTypeTag')
-export const loiUnionTypeTag = Symbol('loiUnionTypeTag')
-export const loiArrayTypeTag = Symbol('loiArrayTypeTag')
-export const loiDictTypeTag = Symbol('loiDictTypeTag')
+export const loiTagTypeDecorator = Symbol('loiTagTypeDecorator')
+export const loiTagTypeCompound = Symbol('loiTagTypeCompound')
+export const loiTagTypeUnion = Symbol('loiTagTypeUnion')
+export const loiTagTypeArray = Symbol('loiTagTypeArray')
+export const loiTagTypeDict = Symbol('loiTagTypeDict')
 
 /** @internal */
 export function getTypeTag(type: t.Any | t.Decoder<any, any>): string | undefined {
@@ -26,29 +26,29 @@ export function getRealTypeTag(type: t.Any | t.Decoder<any, any>): string | unde
 /** @internal */
 export function isDecoratorType(type: t.Any | t.Decoder<any, any>): boolean {
   const tag = getTypeTag(type);
-  return !!tag && !!(<any>type).type && (!!(<any>type)[loiDecoratorTypeTag] || ['RefinementType', 'ReadonlyType'].indexOf(tag) >= 0);
+  return !!tag && !!(<any>type).type && (!!(<any>type)[loiTagTypeDecorator] || ['RefinementType', 'ReadonlyType'].indexOf(tag) >= 0);
 }
 
 /** @internal */
 export function isCompoundType(type: t.Any | t.Decoder<any, any>): boolean {
   const tag = getRealTypeTag(type);
-  return !!tag && (!!(<any>type)[loiCompoundTypeTag] || ['UnionType', 'IntersectionType'].indexOf(tag) >= 0);
+  return !!tag && (!!(<any>type)[loiTagTypeCompound] || ['UnionType', 'IntersectionType'].indexOf(tag) >= 0);
 }
 
 /** @internal */
 export function isUnionType(type: t.Any | t.Decoder<any, any>): boolean {
   const tag = getRealTypeTag(type);
-  return !!tag && (!!(<any>type)[loiUnionTypeTag] || ['UnionType'].indexOf(tag) >= 0);
+  return !!tag && (!!(<any>type)[loiTagTypeUnion] || ['UnionType'].indexOf(tag) >= 0);
 }
 
 /** @internal */
 export function isArrayType(type: t.Any | t.Decoder<any, any>): boolean {
   const tag = getRealTypeTag(type);
-  return !!tag && (!!(<any>type)[loiArrayTypeTag] || ['ReadonlyArrayType', 'ArrayType', 'AnyArrayType', 'TupleType'].indexOf(tag) >= 0);
+  return !!tag && (!!(<any>type)[loiTagTypeArray] || ['ReadonlyArrayType', 'ArrayType', 'AnyArrayType', 'TupleType'].indexOf(tag) >= 0);
 }
 
 /** @internal */
 export function isDictType(type: t.Any | t.Decoder<any, any>): boolean {
   const tag = getRealTypeTag(type);
-  return !!tag && (!!(<any>type)[loiDictTypeTag] || ['DictionaryType', 'AnyDictionaryType'].indexOf(tag) >= 0);
+  return !!tag && (!!(<any>type)[loiTagTypeDict] || ['DictionaryType', 'AnyDictionaryType'].indexOf(tag) >= 0);
 }

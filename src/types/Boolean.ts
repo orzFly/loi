@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { LoiTypeConvert, nullAsUndefined } from '../utilties/convert';
+import { LoiDecoratorConvert, nullAsUndefined } from '../utilties/convert';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { isNumber, isString } from '../utilties/lodash';
 import { mimic } from '../utilties/mimic';
@@ -27,7 +27,7 @@ export class LoiFactoryBoolean<T extends t.Any> extends LoiFactory<T> {
   }
 
   parseString() {
-    const type = new LoiTypeConvert(this, (i) => {
+    const type = new LoiDecoratorConvert(this, (i) => {
       const val = (i as string).toLowerCase()
       if (trueValues.indexOf(val) >= 0) return true;
       if (falseValues.indexOf(val) >= 0) return false;
@@ -41,7 +41,7 @@ export class LoiFactoryBoolean<T extends t.Any> extends LoiFactory<T> {
   }
 
   parseNumber() {
-    const type = new LoiTypeConvert(this, (i) => {
+    const type = new LoiDecoratorConvert(this, (i) => {
       if (Number.isNaN(i as number)) return false;
       if (i === 0) return false;
       return true;
@@ -69,7 +69,7 @@ export class LoiFactoryBooleanInitial<T extends t.Any> extends LoiFactory<T> {
   trueOnly(violet: true | false = false) {
     let type: t.Any = t.refinement(this, (i) => i === true) as t.Type<true, true, this["_I"]>
     if (violet) {
-      type = new LoiTypeConvert(nullAsUndefined(type), () => undefined, (i) => i === false)
+      type = new LoiDecoratorConvert(nullAsUndefined(type), () => undefined, (i) => i === false)
     }
 
     return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {
@@ -84,7 +84,7 @@ export class LoiFactoryBooleanInitial<T extends t.Any> extends LoiFactory<T> {
   falseOnly(violet: true | false = false) {
     let type: t.Any = t.refinement(this, (i) => i === false) as t.Type<false, false, this["_I"]>
     if (violet) {
-      type = new LoiTypeConvert(nullAsUndefined(type), () => undefined, (i) => i === true)
+      type = new LoiDecoratorConvert(nullAsUndefined(type), () => undefined, (i) => i === true)
     }
 
     return metadata(LoiFactoryBoolean.decorate<Clean<typeof type>>(type), {

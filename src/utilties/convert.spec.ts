@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { shouldValidate } from '../test-helper.spec';
-import { LoiTypeConvert, nullAsUndefined } from './convert';
+import { LoiDecoratorConvert, nullAsUndefined } from './convert';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
 describe('utilties:convert', () => {
   describe('convert', () => {
     it('should work', () => {
-      const test = new LoiTypeConvert(t.number, () => 233, (i) => i === 1)
+      const test = new LoiDecoratorConvert(t.number, () => 233, (i) => i === 1)
 
       expect(shouldValidate(test.decode(1))).to.be.eql(233)
       expect(shouldValidate(test.decode(2))).to.be.eql(2)
@@ -26,7 +26,7 @@ describe('utilties:convert', () => {
     })
 
     it('empty should work', () => {
-      const test = new LoiTypeConvert(t.number)
+      const test = new LoiDecoratorConvert(t.number)
 
       expect(shouldValidate(test.decode(1))).to.be.eql(1)
       expect(shouldValidate(test.decode(2))).to.be.eql(2)

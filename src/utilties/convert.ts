@@ -1,10 +1,10 @@
 import * as t from 'io-ts';
-import { loiDecoratorTypeTag } from './tag';
+import { loiTagTypeDecorator } from './tag';
 
-export class LoiTypeConvert<RT extends t.Any, X = any, A = any, O = A, I = t.mixed> extends t.Type<A, O, I> {
-  static readonly _tag: 'LoiTypeConvert' = 'LoiTypeConvert'
-  readonly _tag: 'LoiTypeConvert' = 'LoiTypeConvert'
-  readonly [loiDecoratorTypeTag] = true;
+export class LoiDecoratorConvert<RT extends t.Any, X = any, A = any, O = A, I = t.mixed> extends t.Type<A, O, I> {
+  static readonly _tag: 'LoiDecoratorConvert' = 'LoiDecoratorConvert'
+  readonly _tag: 'LoiDecoratorConvert' = 'LoiDecoratorConvert'
+  readonly [loiTagTypeDecorator] = true;
   constructor(
     readonly type: RT,
     readonly convert: (val: X) => t.TypeOf<RT> = (val) => val,
@@ -33,8 +33,8 @@ export function nullAsUndefined<T extends t.Any>(
       (v === null || v === undefined) ? t.success(undefined) : type.validate(v, c),
     (v: any) => type.encode(v)
   );
-  (<any>newType)[loiDecoratorTypeTag] = true;
-  (<any>newType)._tag = 'NullAsUndefinedType';
+  (<any>newType)[loiTagTypeDecorator] = true;
+  (<any>newType)._tag = 'LoiTypeNullAsUndefined';
   (<any>newType).type = type;
   return newType;
 }

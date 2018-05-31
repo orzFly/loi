@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { loiDecoratorTypeTag } from './tag';
+import { loiTagTypeDecorator } from './tag';
 
 // https://github.com/teamdigitale/italia-ts-commons/blob/1688059556e3b3532a73032ab923933f0403fcc5/src/types.ts#L158
 
@@ -20,7 +20,7 @@ export function withDefault<T extends t.Any>(
       type.validate(v !== undefined && v !== null ? v : defaultValue, c),
     (v: any) => type.encode(v)
   );
-  (<any>newType)[loiDecoratorTypeTag] = true;
+  (<any>newType)[loiTagTypeDecorator] = true;
   (<any>newType)._tag = 'DefaultType';
   (<any>newType).type = type;
   return newType;
@@ -42,7 +42,7 @@ export function withDefaultResolver<T extends t.Any>(
       type.validate(v !== undefined && v !== null ? v : defaultValue(), c),
     (v: any) => type.encode(v)
   );
-  (<any>newType)[loiDecoratorTypeTag] = true;
+  (<any>newType)[loiTagTypeDecorator] = true;
   (<any>newType)._tag = 'DefaultResolverType';
   (<any>newType).type = type;
   return newType;
