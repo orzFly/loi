@@ -4,21 +4,7 @@ import { LoiTypeObject, LoiTypeObjectStrict, LoiTypeObjectViolet } from './Objec
 
 // tslint:disable:interface-name
 
-declare module 'io-ts' {
-  interface Type<A, O, I> {
-    __taggedAssertion: this['_A'] extends object ? {
-      [K in keyof this['_A']]: IsLiteral<this['_A'][K] >
-    } : {}
-  }
-}
-
-export type IsLiteral<T> =
-  T extends string ? (string extends T ? false : true) :
-  T extends number ? (number extends T ? false : true) :
-  T extends boolean ? true :
-  false
-
-export type Tagged<Tag extends string, A = any, O = A> = Type<A, O> & { __taggedAssertion: { [K in Tag]: true } }
+export type Tagged<Tag extends string, A = any, O = A> = Type<A, O> & { _A: { [K in Tag]: string | number | boolean } }
 
 export const isTagged = <Tag extends string>(tag: Tag): ((type: Mixed) => type is Tagged<Tag>) => {
   const f = (type: Mixed): type is Tagged<Tag> => {

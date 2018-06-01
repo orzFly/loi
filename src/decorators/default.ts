@@ -6,7 +6,6 @@ import { loiTagTypeDecorator } from '../utilties//tag';
 /**
  * Sets properties default values when calling t.validate() method on models
  * see https://github.com/gcanti/io-ts/issues/8
- * @internal
  */
 export class LoiDecoratorDefault<RT extends t.Any> extends t.Type<RT['_A'], RT['_O'], RT['_I']> {
   static readonly _tag: 'LoiDecoratorDefault' = 'LoiDecoratorDefault'
@@ -30,7 +29,6 @@ export class LoiDecoratorDefault<RT extends t.Any> extends t.Type<RT['_A'], RT['
 /**
  * Sets properties default values with resolver functions when calling t.validate() method on models
  * see https://github.com/gcanti/io-ts/issues/8
- * @internal
  */
 export class LoiDecoratorDefaultResolver<RT extends t.Any> extends t.Type<RT['_A'], RT['_O'], RT['_I']> {
   static readonly _tag: 'LoiDecoratorDefaultResolver' = 'LoiDecoratorDefaultResolver'
