@@ -12,7 +12,12 @@ export { object, LoiFactoryObject, LoiFactoryObjectInitial } from './types/Objec
 export { enumeration, LoiFactoryEnum } from './types/Enum';
 export { date, LoiFactoryDate } from './types/Date';
 export { set } from './types/Set';
+export { taggedUnion } from './types/TaggedUnion';
 export { literal, never } from 'io-ts';
+
+export { LoiDecoratorConvert } from './decorators/convert';
+export { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from './decorators/default';
+export { LoiDecoratorNullAsUndefined } from './decorators/nullAsUndefined';
 
 export { validate, validateOrReturn, validateOrThrow } from './helpers/validate';
 export { LoiValidationError, LoiValidationErrorItem, LoiValidationResult, createError } from './helpers/error';

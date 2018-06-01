@@ -24,9 +24,9 @@ export function getRealTypeTag(type: t.Any | t.Decoder<any, any>): string | unde
 }
 
 /** @internal */
-export function isDecoratorType(type: t.Any | t.Decoder<any, any>): boolean {
+export function isDecoratorType(type: t.Any | t.Decoder<any, any>): type is ({ type: t.Any } & typeof type) {
   const tag = getTypeTag(type);
-  return !!tag && !!(<any>type).type && (!!(<any>type)[loiTagTypeDecorator] || ['RefinementType', 'ReadonlyType'].indexOf(tag) >= 0);
+  return !!tag && !!(<any>type).type && (!!(<any>type)[loiTagTypeDecorator] || ['RefinementType', 'ReadonlyType', 'ExactType'].indexOf(tag) >= 0);
 }
 
 /** @internal */
