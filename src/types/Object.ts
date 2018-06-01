@@ -78,67 +78,97 @@ export class LoiTypeObject<R extends t.Props, O extends t.Props> extends t.Type<
  * https://github.com/gunzip/digital-citizenship-functions/blob/cd5c57629cb188dbda4b03037fbb399115fd6d29/lib/utils/types.ts#L92
  * https://github.com/gcanti/io-ts/issues/106
  *
- * @required  required properties
- * @optional   optional object properties
- * @internal
  */
-export function strictInterfaceWithOptionals<R extends t.Props, O extends t.Props>(
-  required: R,
-  optional: O,
-  name: string
-): t.Type<t.TypeOfProps<R> & t.TypeOfPartialProps<O>, t.OutputOfProps<R> & t.OutputOfPartialProps<O>, {}> {
-  const loose = t.intersection([t.interface(required), nullablePartial(optional)]);
-  const props = Object.assign({}, required, optional);
-  const newType = new t.Type(
-    name,
-    (v): v is t.TypeOfProps<R> & t.TypeOfPartialProps<O> =>
-      loose.is(v) && Object.getOwnPropertyNames(v).every((k) => props.hasOwnProperty(k) || optional.hasOwnProperty(k)),
-    (s, c) =>
-      loose.validate(s, c).chain((o) => {
-        const errors: t.Errors = Object.getOwnPropertyNames(o)
-          .map(
-            (key) =>
-              !props.hasOwnProperty(key)
-                ? t.getValidationError(o[key], t.appendContext(c, key, t.never))
-                : undefined
-          )
-          .filter((e): e is t.ValidationError => e !== undefined);
-        return errors.length ? t.failures(errors) : t.success(o);
-      }),
-    loose.encode
-  );
-  (<any>newType)._tag = 'StrictInterfaceWithOptionalsType';
-  return newType as any;
+export class LoiTypeObjectStrict<R extends t.Props, O extends t.Props> extends t.Type<
+  t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
+  t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+  > {
+  static readonly _tag: 'LoiTypeObjectStrict' = 'LoiTypeObjectStrict'
+  readonly _tag: 'LoiTypeObjectStrict' = 'LoiTypeObjectStrict'
+  constructor(
+    readonly props: R,
+    readonly optionalProps: O,
+    name: string = getNameFromProps(props, optionalProps),
+  ) {
+    super(
+      name,
+      (v): v is t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O> =>
+        loose.is(v) && Object.getOwnPropertyNames(v).every((k) => allProps.hasOwnProperty(k)),
+      (s, c) =>
+        loose.validate(s, c).chain((o) => {
+          const errors: t.Errors = Object.getOwnPropertyNames(o)
+            .map(
+              (key) =>
+                !allProps.hasOwnProperty(key)
+                  ? t.getValidationError(o[key], t.appendContext(c, key, t.never))
+                  : undefined
+            )
+            .filter((e): e is t.ValidationError => e !== undefined);
+          return errors.length ? t.failures(errors) : t.success(o);
+        }),
+      (loose = t.intersection([t.interface(props), nullablePartial(optionalProps)])).encode
+    );
+
+    // [ts] A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+    // tslint:disable-next-line:no-var-keyword
+    var loose: t.IntersectionType<
+      [
+        t.InterfaceType<R, t.TypeOfProps<R>, t.OutputOfProps<R>>,
+        t.PartialType<O, TypeOfPartialUndefinedableProps<O>, OutputOfPartialUndefinedableProps<O>>
+      ],
+      t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
+      t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+      >;
+
+    // tslint:disable-next-line:prefer-const no-var-keyword
+    var allProps: R & O & {} = Object.assign({}, props, optionalProps);
+  }
 }
 
-/** @internal */
-export function violetInterfaceWithOptionals<R extends t.Props, O extends t.Props>(
-  required: R,
-  optional: O,
-  name: string
-): t.Type<t.TypeOfProps<R> & t.TypeOfPartialProps<O>, t.OutputOfProps<R> & t.OutputOfPartialProps<O>, {}> {
-  const loose = t.intersection([t.interface(required), nullablePartial(optional)]);
-  const props = Object.assign({}, required, optional);
-  const newType = new t.Type(
-    name,
-    (v): v is t.TypeOfProps<R> & t.TypeOfPartialProps<O> => loose.is(v),
-    (s, c) =>
-      loose.validate(s, c).chain((o) => {
-        const keys = Object.getOwnPropertyNames(o)
-        const newObject: t.OutputOfProps<R> & t.OutputOfPartialProps<O> = {} as any;
-        const len = keys.length
-        for (let i = 0; i < len; i++) {
-          const key = keys[i]
-          if (props.hasOwnProperty(key)) {
-            newObject[key] = o[key];
+export class LoiTypeObjectViolet<R extends t.Props, O extends t.Props> extends t.Type<
+  t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
+  t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+  > {
+  static readonly _tag: 'LoiTypeObjectViolet' = 'LoiTypeObjectViolet'
+  readonly _tag: 'LoiTypeObjectViolet' = 'LoiTypeObjectViolet'
+  constructor(
+    readonly props: R,
+    readonly optionalProps: O,
+    name: string = getNameFromProps(props, optionalProps),
+  ) {
+    super(
+      name,
+      (v): v is t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O> => loose.is(v),
+      (s, c) =>
+        loose.validate(s, c).chain((o) => {
+          const keys = Object.getOwnPropertyNames(o)
+          const newObject: t.OutputOfProps<R> & t.OutputOfPartialProps<O> = {} as any;
+          const len = keys.length
+          for (let i = 0; i < len; i++) {
+            const key = keys[i]
+            if (allProps.hasOwnProperty(key)) {
+              newObject[key] = o[key];
+            }
           }
-        }
-        return t.success(newObject)
-      }),
-    loose.encode
-  );
-  (<any>newType)._tag = 'VioletInterfaceWithOptionalsType';
-  return newType as any;
+          return t.success(newObject)
+        }),
+      (loose = t.intersection([t.interface(props), nullablePartial(optionalProps)])).encode
+    );
+
+    // [ts] A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+    // tslint:disable-next-line:no-var-keyword
+    var loose: t.IntersectionType<
+      [
+        t.InterfaceType<R, t.TypeOfProps<R>, t.OutputOfProps<R>>,
+        t.PartialType<O, TypeOfPartialUndefinedableProps<O>, OutputOfPartialUndefinedableProps<O>>
+      ],
+      t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
+      t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+      >;
+
+    // tslint:disable-next-line:prefer-const no-var-keyword
+    var allProps: R & O & {} = Object.assign({}, props, optionalProps);
+  }
 }
 
 /** @internal */
@@ -192,7 +222,7 @@ export class LoiFactoryObjectInitial<R extends t.Props, O extends t.Props, T ext
   }
 
   public strict() {
-    const type = strictInterfaceWithOptionals(this[loiObjectRequired], this[loiObjectOptional], this.name)
+    const type = new LoiTypeObjectStrict(this[loiObjectRequired], this[loiObjectOptional], this.name)
     return metadata(LoiFactoryObject.decorate<R, O, Clean<T>>(type), {
       parent: this,
       option: <ILoiOptionObject>{ name: `strict`, strict: true }
@@ -200,7 +230,7 @@ export class LoiFactoryObjectInitial<R extends t.Props, O extends t.Props, T ext
   }
 
   public violet() {
-    const type = violetInterfaceWithOptionals(this[loiObjectRequired], this[loiObjectOptional], this.name)
+    const type = new LoiTypeObjectViolet(this[loiObjectRequired], this[loiObjectOptional], this.name)
     return metadata(LoiFactoryObject.decorate<R, O, Clean<T>>(type), {
       parent: this,
       option: <ILoiOptionObject>{ name: `violet`, violet: true }
