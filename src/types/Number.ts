@@ -1,3 +1,4 @@
+import { Predicate } from 'fp-ts/lib/function';
 import * as t from 'io-ts';
 import { LoiDecoratorConvert } from '../decorators/convert';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
@@ -15,6 +16,7 @@ export interface ILoiOptionNumber extends ILoiOption {
   integer?: boolean
   finite?: boolean
   parseFloat?: boolean
+  refinement?: Predicate<any>
 }
 
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
@@ -95,6 +97,14 @@ export class LoiFactoryNumber<T extends t.Any> extends LoiFactory<T> {
     return metadata(LoiFactoryNumber.decorate<Clean<typeof type>>(type), {
       parent: this,
       option: <ILoiOptionNumber>{ name: "parseFloat", parseFloat: true }
+    });
+  }
+
+  public refinement(callback: Predicate<this["_A"]>, name?: string) {
+    const type = t.refinement(this, callback);
+    return metadata(LoiFactoryNumber.decorate<Clean<typeof type>>(type), {
+      parent: this,
+      option: <ILoiOptionNumber>{ name: name || `custom refinement`, refinement: callback }
     });
   }
 }

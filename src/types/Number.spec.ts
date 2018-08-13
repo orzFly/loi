@@ -282,5 +282,37 @@ describe('types:Number', () => {
       shouldNotValidate(test.decode(null))
       shouldNotValidate(test.decode(undefined))
     })
+
+    it('refinement() should work', () => {
+      const test = number().refinement((i) => Number.isSafeInteger(i))
+
+      expect(test.name).to.be.eql("number(custom refinement)")
+      expect(shouldValidate(test.decode(3))).to.be.eql(3)
+      expect(shouldValidate(test.decode(3.0))).to.be.eql(3.0)
+      expect(shouldValidate(test.decode(Math.pow(2, 53) - 1))).to.be.eql(Math.pow(2, 53) - 1)
+      shouldNotValidate(test.decode(Math.pow(2, 53)))
+      shouldNotValidate(test.decode(NaN))
+      shouldNotValidate(test.decode(Infinity))
+      shouldNotValidate(test.decode('3'))
+      shouldNotValidate(test.decode(3.1))
+    })
+
+    it('refinement(multiples of 0.5) should work', () => {
+      const test = number().refinement((i) => Number.isSafeInteger(i * 2), "multiples of 0.5")
+
+      expect(test.name).to.be.eql("number(multiples of 0.5)")
+      expect(shouldValidate(test.decode(3))).to.be.eql(3)
+      expect(shouldValidate(test.decode(3.0))).to.be.eql(3.0)
+      expect(shouldValidate(test.decode(1.5))).to.be.eql(1.5)
+      expect(shouldValidate(test.decode(2.5))).to.be.eql(2.5)
+      expect(shouldValidate(test.decode(0.5))).to.be.eql(0.5)
+      expect(shouldValidate(test.decode(-0.5))).to.be.eql(-0.5)
+      shouldNotValidate(test.decode(NaN))
+      shouldNotValidate(test.decode(Infinity))
+      shouldNotValidate(test.decode(3.1))
+      shouldNotValidate(test.decode(0.6))
+      shouldNotValidate(test.decode(1.4))
+      shouldNotValidate(test.decode(-1.4))
+    })
   })
 })
