@@ -9,11 +9,11 @@ export class LoiDecoratorConvert<RT extends t.Any, X = RT['_I']> extends t.Type<
     readonly type: RT,
     readonly convert: (val: X) => t.TypeOf<RT> = (val) => val,
     readonly guard: (val: X) => boolean = () => true,
-    name: string = type.name,
+    name: string = type.name
   ) {
     super(
       name,
-      (v: any): v is RT['_A'] => type.is(v),
+      (v: any): v is RT['_A'] => type.is(v) || (guard(v) && type.is(convert(v))),
       (v: any, c: any) =>
         type.validate(guard(v) ? convert(v) : v, c),
       (v: any) => type.encode(v)
