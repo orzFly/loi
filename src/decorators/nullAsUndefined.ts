@@ -11,7 +11,7 @@ export class LoiDecoratorNullAsUndefined<RT extends t.Any> extends t.Type<RT['_A
   ) {
     super(
       name,
-      (v: any): v is RT['_A'] | undefined => type.is(v),
+      (v: any): v is RT['_A'] | undefined => (v === null || v === undefined) ? true : type.is(v),
       (v: any, c: any) =>
         (v === null || v === undefined) ? t.success(undefined) : type.validate(v, c),
       (v: any) => type.encode(v)

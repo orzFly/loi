@@ -40,6 +40,12 @@ describe('types:Object', () => {
       expect(shouldValidate(test.decode({ key: null })).key).to.be.equal(undefined)
       expect(shouldValidate(test.decode({ key: undefined })).key).to.be.equal(undefined)
       expect(shouldValidate(test.decode({})).key).to.be.equal(undefined)
+
+      expect(test.is({ key: true })).to.be.equal(true)
+      expect(test.is({ key: false })).to.be.equal(true)
+      expect(test.is({ key: null })).to.be.equal(true)
+      expect(test.is({ key: undefined })).to.be.equal(true)
+      expect(test.is({})).to.be.equal(true)
     })
 
     it('control group should not work', () => {
@@ -52,6 +58,12 @@ describe('types:Object', () => {
       shouldNotValidate(test.decode({ key: null }))
       expect(shouldValidate(test.decode({ key: undefined })).key).to.be.equal(undefined)
       expect(shouldValidate(test.decode({})).key).to.be.equal(undefined)
+
+      expect(test.is({ key: true })).to.be.equal(true)
+      expect(test.is({ key: false })).to.be.equal(true)
+      expect(test.is({ key: undefined })).to.be.equal(true)
+      expect(test.is({})).to.be.equal(true)
+      expect(test.is({ key: null })).to.be.equal(false)
     })
   })
 
@@ -117,6 +129,16 @@ describe('types:Object', () => {
       shouldNotValidate(test.decode({}))
 
       expect(shouldValidate(test.decode({ required: 1, extra: 1 }))).to.be.eql({ required: 1 })
+
+      expect(test.is({ required: 1 })).to.be.eql(true)
+      expect(test.is({ required: 1, optional: 2 })).to.be.eql(true)
+      expect(test.is({ required: 1, optional: [] })).to.be.eql(true)
+      expect(test.is({ required: 1, optional: null })).to.be.eql(true)
+      expect(test.is({ required: 1, optional: undefined })).to.be.eql(true)
+      expect(test.is({ required: undefined })).to.be.eql(false)
+      expect(test.is({ required: null })).to.be.eql(false)
+      expect(test.is({ optional: 2 })).to.be.eql(false)
+      expect(test.is({})).to.be.eql(false)
     })
 
     it('empty should work', () => {
