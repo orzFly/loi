@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
+import { LoiDecoratorUndefinedable } from '../decorators/undefinedable';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { isString, objectMapValues } from '../utilties/lodash';
 import { LoiFactoryBase } from './Base';
@@ -32,12 +32,12 @@ export declare type OutputOfPartialUndefinedableProps<P extends t.AnyProps> = {
 };
 
 /** @internal */
-export function nullablePartial<P extends t.Props>(props: P, name?: string): t.PartialType<
+export function undefinedablePartial<P extends t.Props>(props: P, name?: string): t.PartialType<
   P,
   TypeOfPartialUndefinedableProps<P>,
   OutputOfPartialUndefinedableProps<P>
 > {
-  return t.partial(objectMapValues(props, (i) => new LoiDecoratorNullAsUndefined(i) as typeof i) as P, name);
+  return t.partial(objectMapValues(props, (i) => new LoiDecoratorUndefinedable(i) as typeof i) as P, name);
 }
 
 export class LoiTypeObject<R extends t.Props, O extends t.Props> extends t.Type<
@@ -53,7 +53,7 @@ export class LoiTypeObject<R extends t.Props, O extends t.Props> extends t.Type<
   ) {
     super(
       name,
-      (loose = t.intersection([t.interface(props), nullablePartial(optionalProps)])).is,
+      (loose = t.intersection([t.interface(props), undefinedablePartial(optionalProps)])).is,
       loose.validate,
       loose.encode
     )
@@ -106,7 +106,7 @@ export class LoiTypeObjectStrict<R extends t.Props, O extends t.Props> extends t
             .filter((e): e is t.ValidationError => e !== undefined);
           return errors.length ? t.failures(errors) : t.success(o);
         }),
-      (loose = t.intersection([t.interface(props), nullablePartial(optionalProps)])).encode
+      (loose = t.intersection([t.interface(props), undefinedablePartial(optionalProps)])).encode
     );
 
     // [ts] A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
@@ -152,7 +152,7 @@ export class LoiTypeObjectViolet<R extends t.Props, O extends t.Props> extends t
           }
           return t.success(newObject)
         }),
-      (loose = t.intersection([t.interface(props), nullablePartial(optionalProps)])).encode
+      (loose = t.intersection([t.interface(props), undefinedablePartial(optionalProps)])).encode
     );
 
     // [ts] A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.

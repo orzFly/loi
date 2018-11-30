@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
-import { getNameFromProps, nullablePartial, object } from './Object';
+import { getNameFromProps, object, undefinedablePartial } from './Object';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
@@ -29,21 +29,21 @@ describe('types:Object', () => {
     })
   })
 
-  describe('nullablePartial', () => {
+  describe('undefinedablePartial', () => {
     it('should work', () => {
-      const test = nullablePartial({
+      const test = undefinedablePartial({
         key: t.boolean
       })
 
       expect(shouldValidate(test.decode({ key: true })).key).to.be.equal(true)
       expect(shouldValidate(test.decode({ key: false })).key).to.be.equal(false)
-      expect(shouldValidate(test.decode({ key: null })).key).to.be.equal(undefined)
+      expect(shouldNotValidate(test.decode({ key: null })))
       expect(shouldValidate(test.decode({ key: undefined })).key).to.be.equal(undefined)
       expect(shouldValidate(test.decode({})).key).to.be.equal(undefined)
 
       expect(test.is({ key: true })).to.be.equal(true)
       expect(test.is({ key: false })).to.be.equal(true)
-      expect(test.is({ key: null })).to.be.equal(true)
+      expect(test.is({ key: null })).to.be.equal(false)
       expect(test.is({ key: undefined })).to.be.equal(true)
       expect(test.is({})).to.be.equal(true)
     })
@@ -79,7 +79,7 @@ describe('types:Object', () => {
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
       expect(shouldValidate(test.decode({ required: 1, optional: 2 }))).to.be.eql({ required: 1, optional: 2 })
       expect(shouldValidate(test.decode({ required: 1, optional: [] }))).to.be.eql({ required: 1, optional: [] })
-      expect(shouldValidate(test.decode({ required: 1, optional: null }))).to.be.eql({ required: 1, optional: undefined })
+      shouldNotValidate(test.decode({ required: 1, optional: null }))
       expect(shouldValidate(test.decode({ required: 1, optional: undefined }))).to.be.eql({ required: 1, optional: undefined })
       shouldNotValidate(test.decode({ required: undefined }))
       shouldNotValidate(test.decode({ required: null }))
@@ -100,7 +100,7 @@ describe('types:Object', () => {
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
       expect(shouldValidate(test.decode({ required: 1, optional: 2 }))).to.be.eql({ required: 1, optional: 2 })
       expect(shouldValidate(test.decode({ required: 1, optional: [] }))).to.be.eql({ required: 1, optional: [] })
-      expect(shouldValidate(test.decode({ required: 1, optional: null }))).to.be.eql({ required: 1, optional: undefined })
+      shouldNotValidate(test.decode({ required: 1, optional: null }))
       expect(shouldValidate(test.decode({ required: 1, optional: undefined }))).to.be.eql({ required: 1, optional: undefined })
       shouldNotValidate(test.decode({ required: undefined }))
       shouldNotValidate(test.decode({ required: null }))
@@ -121,7 +121,7 @@ describe('types:Object', () => {
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })
       expect(shouldValidate(test.decode({ required: 1, optional: 2 }))).to.be.eql({ required: 1, optional: 2 })
       expect(shouldValidate(test.decode({ required: 1, optional: [] }))).to.be.eql({ required: 1, optional: [] })
-      expect(shouldValidate(test.decode({ required: 1, optional: null }))).to.be.eql({ required: 1, optional: undefined })
+      shouldNotValidate(test.decode({ required: 1, optional: null }))
       expect(shouldValidate(test.decode({ required: 1, optional: undefined }))).to.be.eql({ required: 1, optional: undefined })
       shouldNotValidate(test.decode({ required: undefined }))
       shouldNotValidate(test.decode({ required: null }))
@@ -133,7 +133,7 @@ describe('types:Object', () => {
       expect(test.is({ required: 1 })).to.be.eql(true)
       expect(test.is({ required: 1, optional: 2 })).to.be.eql(true)
       expect(test.is({ required: 1, optional: [] })).to.be.eql(true)
-      expect(test.is({ required: 1, optional: null })).to.be.eql(true)
+      expect(test.is({ required: 1, optional: null })).to.be.eql(false)
       expect(test.is({ required: 1, optional: undefined })).to.be.eql(true)
       expect(test.is({ required: undefined })).to.be.eql(false)
       expect(test.is({ required: null })).to.be.eql(false)
