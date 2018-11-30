@@ -1,6 +1,9 @@
 import * as t from 'io-ts';
 
+export type Any = t.Type<any, any, any>;
 export type TypeOf<RT extends t.Any> = RT['_A'];
+export type InputOf<RT extends t.Any> = RT['_I'];
+export type OutputOf<RT extends t.Any> = RT['_O'];
 
 export { start, LoiFactoryBase } from './types/Base';
 export { any, LoiFactoryAny } from './types/Any';
@@ -13,7 +16,7 @@ export { enumeration, LoiFactoryEnum } from './types/Enum';
 export { date, LoiFactoryDate } from './types/Date';
 export { set } from './types/Set';
 export { taggedUnion } from './types/TaggedUnion';
-export { literal, never } from 'io-ts';
+export { literal, never, null, undefined } from 'io-ts';
 
 export { LoiDecoratorConvert } from './decorators/convert';
 export { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from './decorators/default';
