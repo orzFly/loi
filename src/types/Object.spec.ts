@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as t from 'io-ts';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
-import { getNameFromProps, object, undefinedablePartial } from './Object';
+import { getNameFromProps, object } from './Object';
 
 // tslint:disable:no-unused-expression // chai to be NaN
 
@@ -26,44 +26,6 @@ describe('types:Object', () => {
         a: t.string,
         b: t.string
       })).to.be.eql("{ a?: string, b?: string }");
-    })
-  })
-
-  describe('undefinedablePartial', () => {
-    it('should work', () => {
-      const test = undefinedablePartial({
-        key: t.boolean
-      })
-
-      expect(shouldValidate(test.decode({ key: true })).key).to.be.equal(true)
-      expect(shouldValidate(test.decode({ key: false })).key).to.be.equal(false)
-      expect(shouldNotValidate(test.decode({ key: null })))
-      expect(shouldValidate(test.decode({ key: undefined })).key).to.be.equal(undefined)
-      expect(shouldValidate(test.decode({})).key).to.be.equal(undefined)
-
-      expect(test.is({ key: true })).to.be.equal(true)
-      expect(test.is({ key: false })).to.be.equal(true)
-      expect(test.is({ key: null })).to.be.equal(false)
-      expect(test.is({ key: undefined })).to.be.equal(true)
-      expect(test.is({})).to.be.equal(true)
-    })
-
-    it('control group should not work', () => {
-      const test = t.partial({
-        key: t.boolean
-      })
-
-      expect(shouldValidate(test.decode({ key: true })).key).to.be.equal(true)
-      expect(shouldValidate(test.decode({ key: false })).key).to.be.equal(false)
-      shouldNotValidate(test.decode({ key: null }))
-      expect(shouldValidate(test.decode({ key: undefined })).key).to.be.equal(undefined)
-      expect(shouldValidate(test.decode({})).key).to.be.equal(undefined)
-
-      expect(test.is({ key: true })).to.be.equal(true)
-      expect(test.is({ key: false })).to.be.equal(true)
-      expect(test.is({ key: undefined })).to.be.equal(true)
-      expect(test.is({})).to.be.equal(true)
-      expect(test.is({ key: null })).to.be.equal(false)
     })
   })
 

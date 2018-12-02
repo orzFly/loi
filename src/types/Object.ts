@@ -1,7 +1,6 @@
 import * as t from 'io-ts';
-import { LoiDecoratorUndefinedable } from '../decorators/undefinedable';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
-import { isString, objectMapValues } from '../utilties/lodash';
+import { isString } from '../utilties/lodash';
 import { LoiFactoryBase } from './Base';
 
 /** @internal */
@@ -23,26 +22,18 @@ export function getNameFromProps(required: t.Props = {}, optional: t.Props = {})
   return result === "{  }" ? "{}" : result;
 }
 
-export declare type TypeOfPartialUndefinedableProps<P extends t.AnyProps> = {
+export declare type TypeOfPartialProps<P extends t.AnyProps> = {
   [K in keyof P]?: t.TypeOf<P[K]> | undefined;
 };
 
-export declare type OutputOfPartialUndefinedableProps<P extends t.AnyProps> = {
+export declare type OutputOfPartialProps<P extends t.AnyProps> = {
   [K in keyof P]?: t.OutputOf<P[K]> | undefined;
 };
 
-/** @internal */
-export function undefinedablePartial<P extends t.Props>(props: P, name?: string): t.PartialType<
-  P,
-  TypeOfPartialUndefinedableProps<P>,
-  OutputOfPartialUndefinedableProps<P>
-> {
-  return t.partial(objectMapValues(props, (i) => new LoiDecoratorUndefinedable(i) as typeof i) as P, name);
-}
 
 export class LoiTypeObject<R extends t.Props, O extends t.Props> extends t.Type<
-  t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
-  t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+  t.TypeOfProps<R> & TypeOfPartialProps<O>,
+  t.OutputOfProps<R> & OutputOfPartialProps<O>
 > {
   static readonly _tag: 'LoiTypeObject' = 'LoiTypeObject'
   readonly _tag: 'LoiTypeObject' = 'LoiTypeObject'
@@ -53,7 +44,7 @@ export class LoiTypeObject<R extends t.Props, O extends t.Props> extends t.Type<
   ) {
     super(
       name,
-      (loose = t.intersection([t.interface(props), undefinedablePartial(optionalProps)])).is,
+      (loose = t.intersection([t.interface(props), t.partial(optionalProps)])).is,
       loose.validate,
       loose.encode
     )
@@ -63,10 +54,10 @@ export class LoiTypeObject<R extends t.Props, O extends t.Props> extends t.Type<
     var loose: t.IntersectionType<
       [
         t.InterfaceType<R, t.TypeOfProps<R>, t.OutputOfProps<R>>,
-        t.PartialType<O, TypeOfPartialUndefinedableProps<O>, OutputOfPartialUndefinedableProps<O>>
+        t.PartialType<O, TypeOfPartialProps<O>, OutputOfPartialProps<O>>
       ],
-      t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
-      t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+      t.TypeOfProps<R> & TypeOfPartialProps<O>,
+      t.OutputOfProps<R> & OutputOfPartialProps<O>
     >;
   }
 }
@@ -80,8 +71,8 @@ export class LoiTypeObject<R extends t.Props, O extends t.Props> extends t.Type<
  *
  */
 export class LoiTypeObjectStrict<R extends t.Props, O extends t.Props> extends t.Type<
-  t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
-  t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+  t.TypeOfProps<R> & TypeOfPartialProps<O>,
+  t.OutputOfProps<R> & OutputOfPartialProps<O>
   > {
   static readonly _tag: 'LoiTypeObjectStrict' = 'LoiTypeObjectStrict'
   readonly _tag: 'LoiTypeObjectStrict' = 'LoiTypeObjectStrict'
@@ -92,7 +83,7 @@ export class LoiTypeObjectStrict<R extends t.Props, O extends t.Props> extends t
   ) {
     super(
       name,
-      (v): v is t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O> =>
+      (v): v is t.TypeOfProps<R> & TypeOfPartialProps<O> =>
         loose.is(v) && Object.getOwnPropertyNames(v).every((k) => allProps.hasOwnProperty(k)),
       (s, c) =>
         loose.validate(s, c).chain((o) => {
@@ -106,7 +97,7 @@ export class LoiTypeObjectStrict<R extends t.Props, O extends t.Props> extends t
             .filter((e): e is t.ValidationError => e !== undefined);
           return errors.length ? t.failures(errors) : t.success(o);
         }),
-      (loose = t.intersection([t.interface(props), undefinedablePartial(optionalProps)])).encode
+      (loose = t.intersection([t.interface(props), t.partial(optionalProps)])).encode
     );
 
     // [ts] A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
@@ -114,10 +105,10 @@ export class LoiTypeObjectStrict<R extends t.Props, O extends t.Props> extends t
     var loose: t.IntersectionType<
       [
         t.InterfaceType<R, t.TypeOfProps<R>, t.OutputOfProps<R>>,
-        t.PartialType<O, TypeOfPartialUndefinedableProps<O>, OutputOfPartialUndefinedableProps<O>>
+        t.PartialType<O, TypeOfPartialProps<O>, OutputOfPartialProps<O>>
       ],
-      t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
-      t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+      t.TypeOfProps<R> & TypeOfPartialProps<O>,
+      t.OutputOfProps<R> & OutputOfPartialProps<O>
       >;
 
     // tslint:disable-next-line:prefer-const no-var-keyword
@@ -126,8 +117,8 @@ export class LoiTypeObjectStrict<R extends t.Props, O extends t.Props> extends t
 }
 
 export class LoiTypeObjectViolet<R extends t.Props, O extends t.Props> extends t.Type<
-  t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
-  t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+  t.TypeOfProps<R> & TypeOfPartialProps<O>,
+  t.OutputOfProps<R> & OutputOfPartialProps<O>
   > {
   static readonly _tag: 'LoiTypeObjectViolet' = 'LoiTypeObjectViolet'
   readonly _tag: 'LoiTypeObjectViolet' = 'LoiTypeObjectViolet'
@@ -138,7 +129,7 @@ export class LoiTypeObjectViolet<R extends t.Props, O extends t.Props> extends t
   ) {
     super(
       name,
-      (v): v is t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O> => loose.is(v),
+      (v): v is t.TypeOfProps<R> & TypeOfPartialProps<O> => loose.is(v),
       (s, c) =>
         loose.validate(s, c).chain((o) => {
           const keys = Object.getOwnPropertyNames(o)
@@ -152,7 +143,7 @@ export class LoiTypeObjectViolet<R extends t.Props, O extends t.Props> extends t
           }
           return t.success(newObject)
         }),
-      (loose = t.intersection([t.interface(props), undefinedablePartial(optionalProps)])).encode
+      (loose = t.intersection([t.interface(props), t.partial(optionalProps)])).encode
     );
 
     // [ts] A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
@@ -160,10 +151,10 @@ export class LoiTypeObjectViolet<R extends t.Props, O extends t.Props> extends t
     var loose: t.IntersectionType<
       [
         t.InterfaceType<R, t.TypeOfProps<R>, t.OutputOfProps<R>>,
-        t.PartialType<O, TypeOfPartialUndefinedableProps<O>, OutputOfPartialUndefinedableProps<O>>
+        t.PartialType<O, TypeOfPartialProps<O>, OutputOfPartialProps<O>>
       ],
-      t.TypeOfProps<R> & TypeOfPartialUndefinedableProps<O>,
-      t.OutputOfProps<R> & OutputOfPartialUndefinedableProps<O>
+      t.TypeOfProps<R> & TypeOfPartialProps<O>,
+      t.OutputOfProps<R> & OutputOfPartialProps<O>
       >;
 
     // tslint:disable-next-line:prefer-const no-var-keyword
