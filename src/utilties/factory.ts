@@ -18,8 +18,7 @@ export class LoiFactory<T extends t.Any> extends t.Type<T['_A'], T['_O'], T['_I'
     // [ts] Constructors for derived classes must contain a 'super' call.
     // [ts] Unreachable code detected.
     // @ts-ignore
-    /* istanbul ignore next */ const pitfall: any = undefined
-    /* istanbul ignore next */ super(pitfall, pitfall, pitfall, pitfall);
+    /* istanbul ignore next */ const pitfall: any = undefined; /* istanbul ignore next */ super(pitfall, pitfall, pitfall, pitfall);
   }
 
   /** @internal */
@@ -75,10 +74,15 @@ export function decorate<T extends t.Any, F extends LoiFactory<t.Type<T['_A'], T
 export function metadata<T, LO extends ILoiOption>(t: T, params?: {
   parent?: any,
   tag?: string,
-  option?: LO
+  option?: LO,
+  optionFilter?: (item: ILoiOption) => boolean
 }): T {
+  let previousOptions: ILoiOption[] = (params && params.parent && params.parent[loiOption] || []);
+  if (params && params.optionFilter) {
+    previousOptions = Array.prototype.filter.call(previousOptions, params.optionFilter);
+  }
   const tag: string = (params && params.tag) || (t && (<any>t)[loiTag]) || (params && params.parent && params.parent[loiTag]) || (t && (<any>t).name) || "unknown";
-  const options = [...(params && params.parent && params.parent[loiOption] || []), ...(params && params.option ? [params && params.option] : [])];
+  const options = [...previousOptions, ...(params && params.option ? [params && params.option] : [])];
   (<any>t).name = `${tag}${options.length ? `(${options.map((i) => i.name || JSON.stringify(i)).join(", ")})` : ""}`;
   (<any>t)[loiTag] = tag;
   (<any>t)[loiOption] = options;

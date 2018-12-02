@@ -27,6 +27,68 @@ describe('types:Base', () => {
       expect(shouldValidate(test.decode(undefined))).to.be.equal(undefined)
     })
 
+    it('nullable([true]) should work', () => {
+      for (const test of [
+        start(t.boolean).nullable(),
+        start(t.boolean).nullable(true),
+        start(t.boolean).nullable(true).nullable(true),
+        start(t.boolean).nullable(false).nullable(true),
+        start(t.boolean).nullable(false).nullable(true).nullable(false).nullable(true),
+      ]) {
+        expect(test.name).to.be.eql("boolean(nullable)");
+        expect(shouldValidate(test.decode(true))).to.be.equal(true)
+        expect(shouldValidate(test.decode(false))).to.be.equal(false)
+        expect(shouldValidate(test.decode(null))).to.be.equal(null)
+        shouldNotValidate(test.decode(undefined))
+      }
+    })
+
+    it('nullable(false) should work', () => {
+      for (const test of [
+        start(t.boolean).nullable(false),
+        start(t.boolean).nullable(false).nullable(false),
+        start(t.boolean).nullable(true).nullable(false),
+        start(t.boolean).nullable(true).nullable(false).nullable(true).nullable(false),
+      ]) {
+        expect(test.name).to.be.eql("boolean(not nullable)");
+        expect(shouldValidate(test.decode(true))).to.be.equal(true)
+        expect(shouldValidate(test.decode(false))).to.be.equal(false)
+        shouldNotValidate(test.decode(null))
+        shouldNotValidate(test.decode(undefined))
+      }
+    })
+
+    it('undefinedable([true]) should work', () => {
+      for (const test of [
+        start(t.boolean).undefinedable(),
+        start(t.boolean).undefinedable(true),
+        start(t.boolean).undefinedable(true).undefinedable(true),
+        start(t.boolean).undefinedable(false).undefinedable(true),
+        start(t.boolean).undefinedable(false).undefinedable(true).undefinedable(false).undefinedable(true),
+      ]) {
+        expect(test.name).to.be.eql("boolean(undefinedable)");
+        expect(shouldValidate(test.decode(true))).to.be.equal(true)
+        expect(shouldValidate(test.decode(false))).to.be.equal(false)
+        shouldNotValidate(test.decode(null))
+        expect(shouldValidate(test.decode(undefined))).to.be.equal(undefined)
+      }
+    })
+
+    it('undefinedable(false) should work', () => {
+      for (const test of [
+        start(t.boolean).undefinedable(false),
+        start(t.boolean).undefinedable(false).undefinedable(false),
+        start(t.boolean).undefinedable(true).undefinedable(false),
+        start(t.boolean).undefinedable(true).undefinedable(false).undefinedable(true).undefinedable(false),
+      ]) {
+        expect(test.name).to.be.eql("boolean(not undefinedable)");
+        expect(shouldValidate(test.decode(true))).to.be.equal(true)
+        expect(shouldValidate(test.decode(false))).to.be.equal(false)
+        shouldNotValidate(test.decode(null))
+        shouldNotValidate(test.decode(undefined))
+      }
+    })
+
     it('default() should work', () => {
       const test = start(t.number).default(1)
 

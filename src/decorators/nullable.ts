@@ -18,3 +18,21 @@ export class LoiDecoratorNullable<RT extends t.Any> extends t.Type<RT['_A'] | nu
     )
   }
 }
+
+export class LoiDecoratorNotNullable<RT extends t.Any> extends t.Type<Exclude<RT['_A'], null>, Exclude<RT['_O'], null>, RT['_I']> {
+  static readonly _tag: 'LoiDecoratorNotNullable' = 'LoiDecoratorNotNullable'
+  readonly _tag: 'LoiDecoratorNotNullable' = 'LoiDecoratorNotNullable'
+  readonly [loiTagTypeDecorator] = true;
+  constructor(
+    readonly type: RT,
+    name: string = type.name,
+  ) {
+    super(
+      name,
+      (v: any): v is Exclude<RT['_A'], null> => (v === null) ? false : type.is(v),
+      (v: any, c: any) =>
+        (v === null) ? t.failure(null, c) : type.validate(v, c),
+      (v: any) => type.encode(v)
+    )
+  }
+}

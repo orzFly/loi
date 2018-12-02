@@ -21,6 +21,8 @@ export { literal, never, null, undefined } from 'io-ts';
 export { LoiDecoratorConvert } from './decorators/convert';
 export { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from './decorators/default';
 export { LoiDecoratorNullAsUndefined } from './decorators/nullAsUndefined';
+export { LoiDecoratorUndefinedable } from './decorators/undefinedable';
+export { LoiDecoratorNullable } from './decorators/nullable';
 
 export { validate, validateOrReturn, validateOrThrow } from './helpers/validate';
 export { LoiValidationError, LoiValidationErrorItem, LoiValidationResult, createError } from './helpers/error';

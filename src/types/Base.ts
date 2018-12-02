@@ -1,7 +1,9 @@
 import * as t from 'io-ts';
 import { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from '../decorators/default';
+import { LoiDecoratorNotNullable, LoiDecoratorNullable } from '../decorators/nullable';
 import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
 import { LoiDecoratorRescue, LoiDecoratorRescueResolver } from '../decorators/rescue';
+import { LoiDecoratorNotUndefinedable, LoiDecoratorUndefinedable } from '../decorators/undefinedable';
 import { decorate, ILoiOption, LoiFactory, loiTag, metadata } from '../utilties/factory';
 
 /** @internal */
@@ -11,7 +13,9 @@ export interface ILoiOptionBase<T> extends ILoiOption {
   defaultResolver?: () => T,
   rescue?: T,
   rescueResolver?: () => T,
-  nullAsUndefined?: boolean
+  nullAsUndefined?: boolean,
+  nullable?: boolean,
+  undefinedable?: boolean,
 }
 
 export type LoiFactoryTypeBaseUnion<T extends t.Any> = t.UnionType<(T)[], (T)["_A"], (T)["_O"], t.mixed> & LoiFactoryBase<t.Type<(T)["_A"], (T)["_O"], t.mixed>>;
@@ -30,6 +34,46 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
       parent: this,
       option: <ILoiOptionBase<T>>{ name: `null as undefined`, nullAsUndefined: true }
     });
+  }
+
+  public nullable(allow?: true): LoiFactoryTypeBase<t.Type<this["_A"] | null, this["_O"] | null, this["_I"]>>;
+  public nullable(allow: false): LoiFactoryTypeBase<t.Type<Exclude<this["_A"], null>, Exclude<this["_O"], null>, this["_I"]>>;
+  public nullable(_allow: boolean = true): any {
+    if (_allow) {
+      const type = new LoiDecoratorNullable(this);
+      return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
+        parent: this,
+        option: <ILoiOptionBase<T>>{ name: `nullable`, nullable: true },
+        optionFilter: (i: ILoiOptionBase<any>) => i.nullable !== true && i.nullable !== false
+      });
+    } else {
+      const type = new LoiDecoratorNotNullable(this);
+      return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
+        parent: this,
+        option: <ILoiOptionBase<T>>{ name: `not nullable`, nullable: false },
+        optionFilter: (i: ILoiOptionBase<any>) => i.nullable !== true && i.nullable !== false
+      });
+    }
+  }
+
+  public undefinedable(allow?: true): LoiFactoryTypeBase<t.Type<this["_A"] | undefined, this["_O"] | undefined, this["_I"]>>;
+  public undefinedable(allow: false): LoiFactoryTypeBase<t.Type<Exclude<this["_A"], undefined>, Exclude<this["_O"], undefined>, this["_I"]>>;
+  public undefinedable(_allow: boolean = true): any {
+    if (_allow) {
+      const type = new LoiDecoratorUndefinedable(this);
+      return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
+        parent: this,
+        option: <ILoiOptionBase<T>>{ name: `undefinedable`, undefinedable: true },
+        optionFilter: (i: ILoiOptionBase<any>) => i.undefinedable !== true && i.undefinedable !== false
+      });
+    } else {
+      const type = new LoiDecoratorNotUndefinedable(this);
+      return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
+        parent: this,
+        option: <ILoiOptionBase<T>>{ name: `not undefinedable`, undefinedable: false },
+        optionFilter: (i: ILoiOptionBase<any>) => i.undefinedable !== true && i.undefinedable !== false
+      });
+    }
   }
 
   /**
