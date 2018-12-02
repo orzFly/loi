@@ -29,9 +29,22 @@ export class LoiDecoratorNotUndefinedable<RT extends t.Any> extends t.Type<Exclu
   ) {
     super(
       name,
-      (v: any): v is Exclude<RT['_A'], undefined> => (v === undefined) ? false : type.is(v),
-      (v: any, c: any) =>
-        (v === undefined) ? t.failure(undefined, c) : type.validate(v, c),
+      (v: any): v is Exclude<RT['_A'], undefined> => {
+        if (v === undefined) return false;
+        if (!type.is(v)) return false;
+        const result = type.decode(v);
+        if (result.isLeft()) return false;
+        if (result.value === undefined) return false;
+        return true;
+      },
+      (v: any, c: any) => {
+        if (v === undefined) return t.failure(undefined, c);
+        const result = type.validate(v, c);
+
+        if (result.isLeft()) return result
+        if (result.value === undefined) return t.failure(undefined, c);
+        return result;
+      },
       (v: any) => type.encode(v)
     )
   }

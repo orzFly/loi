@@ -29,9 +29,22 @@ export class LoiDecoratorNotNullable<RT extends t.Any> extends t.Type<Exclude<RT
   ) {
     super(
       name,
-      (v: any): v is Exclude<RT['_A'], null> => (v === null) ? false : type.is(v),
-      (v: any, c: any) =>
-        (v === null) ? t.failure(null, c) : type.validate(v, c),
+      (v: any): v is Exclude<RT['_A'], null> => {
+        if (v === null) return false;
+        if (!type.is(v)) return false;
+        const result = type.decode(v);
+        if (result.isLeft()) return false;
+        if (result.value === null) return false;
+        return true;
+      },
+      (v: any, c: any) => {
+        if (v === null) return t.failure(null, c);
+        const result = type.validate(v, c);
+
+        if (result.isLeft()) return result
+        if (result.value === null) return t.failure(null, c);
+        return result;
+      },
       (v: any) => type.encode(v)
     )
   }
