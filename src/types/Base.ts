@@ -36,11 +36,11 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
     });
   }
 
-  public nullable(allow?: true): LoiFactoryTypeBase<t.Type<this["_A"] | null, this["_O"] | null, this["_I"]>>;
+  public nullable<CVS extends (string | number | boolean | null | undefined)[]>(allow?: true, ...castValues: CVS): LoiFactoryTypeBase<t.Type<this["_A"] | null, this["_O"] | null, this["_I"]>>;
   public nullable(allow: false): LoiFactoryTypeBase<t.Type<Exclude<this["_A"], null>, Exclude<this["_O"], null>, this["_I"]>>;
-  public nullable(_allow: boolean = true): any {
+  public nullable(_allow: boolean = true, ...castValues: any[]): any {
     if (_allow) {
-      const type = new LoiDecoratorNullable(this);
+      const type = new LoiDecoratorNullable(this, castValues);
       return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
         parent: this,
         option: <ILoiOptionBase<T>>{ name: `nullable`, nullable: true },
@@ -56,11 +56,11 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
     }
   }
 
-  public undefinedable(allow?: true): LoiFactoryTypeBase<t.Type<this["_A"] | undefined, this["_O"] | undefined, this["_I"]>>;
+  public undefinedable<CVS extends (string | number | boolean | null | undefined)[]>(allow?: true, ...castValues: CVS): LoiFactoryTypeBase<t.Type<this["_A"] | undefined, this["_O"] | undefined, this["_I"]>>;
   public undefinedable(allow: false): LoiFactoryTypeBase<t.Type<Exclude<this["_A"], undefined>, Exclude<this["_O"], undefined>, this["_I"]>>;
-  public undefinedable(_allow: boolean = true): any {
+  public undefinedable(_allow: boolean = true, ...castValues: any[]): any {
     if (_allow) {
-      const type = new LoiDecoratorUndefinedable(this);
+      const type = new LoiDecoratorUndefinedable(this, castValues);
       return metadata(LoiFactoryBase.decorate<Clean<typeof type>>(type), {
         parent: this,
         option: <ILoiOptionBase<T>>{ name: `undefinedable`, undefinedable: true },

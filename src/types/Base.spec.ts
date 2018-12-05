@@ -34,6 +34,7 @@ describe('types:Base', () => {
         start(t.boolean).nullable(true).nullable(true),
         start(t.boolean).nullable(false).nullable(true),
         start(t.boolean).nullable(false).nullable(true).nullable(false).nullable(true),
+        start(t.boolean).nullable(true, undefined).nullable(false).nullable(true),
       ]) {
         expect(test.name).to.be.eql("boolean(nullable)");
         expect(shouldValidate(test.decode(true))).to.be.equal(true)
@@ -43,12 +44,29 @@ describe('types:Base', () => {
       }
     })
 
+    it('nullable(true, ...) should work', () => {
+      const types = (<T extends [string, t.Any, any[]][]>(t: T) => t)([
+        ["boolean(nullable)", start(t.boolean).nullable(true, "1", 1, 2, false, true), ["1", 1, 2, false, true]],
+        ["boolean(nullable)", start(t.boolean).nullable(true, null, undefined), [null, undefined]],
+        ["boolean(not undefinedable, nullable)", start(t.boolean).nullable(false).undefinedable(false).nullable(true, null, undefined), [null, undefined]],
+        ["boolean(undefinedable, nullable)", start(t.boolean).nullable(false).undefinedable(true).nullable(true, null, undefined), [null, undefined]],
+      ])
+      for (const [name, test, values] of types) {
+        expect(test.name).to.be.eql(name);
+        expect(shouldValidate(test.decode(null))).to.be.equal(null)
+        for (const value of values) {
+          expect(shouldValidate(test.decode(value))).to.be.equal(null)
+        }
+      }
+    })
+
     it('nullable(false) should work', () => {
       for (const test of [
         start(t.boolean).nullable(false),
         start(t.boolean).nullable(false).nullable(false),
         start(t.boolean).nullable(true).nullable(false),
         start(t.boolean).nullable(true).nullable(false).nullable(true).nullable(false),
+        start(t.boolean).nullable(true, undefined).nullable(false),
       ]) {
         expect(test.name).to.be.eql("boolean(not nullable)");
         expect(shouldValidate(test.decode(true))).to.be.equal(true)
@@ -65,6 +83,7 @@ describe('types:Base', () => {
         start(t.boolean).undefinedable(true).undefinedable(true),
         start(t.boolean).undefinedable(false).undefinedable(true),
         start(t.boolean).undefinedable(false).undefinedable(true).undefinedable(false).undefinedable(true),
+        start(t.boolean).undefinedable(true, null).undefinedable(false).undefinedable(true),
       ]) {
         expect(test.name).to.be.eql("boolean(undefinedable)");
         expect(shouldValidate(test.decode(true))).to.be.equal(true)
@@ -74,12 +93,29 @@ describe('types:Base', () => {
       }
     })
 
+    it('undefinedable(true, ...) should work', () => {
+      const types = (<T extends [string, t.Any, any[]][]>(t: T) => t)([
+        ["boolean(undefinedable)", start(t.boolean).undefinedable(true, "1", 1, 2, false, true), ["1", 1, 2, false, true]],
+        ["boolean(undefinedable)", start(t.boolean).undefinedable(true, undefined, null), [undefined, null]],
+        ["boolean(not nullable, undefinedable)", start(t.boolean).undefinedable(false).nullable(false).undefinedable(true, undefined, null), [undefined, null]],
+        ["boolean(nullable, undefinedable)", start(t.boolean).undefinedable(false).nullable(true).undefinedable(true, undefined, null), [undefined, null]],
+      ])
+      for (const [name, test, values] of types) {
+        expect(test.name).to.be.eql(name);
+        expect(shouldValidate(test.decode(undefined))).to.be.equal(undefined)
+        for (const value of values) {
+          expect(shouldValidate(test.decode(value))).to.be.equal(undefined)
+        }
+      }
+    })
+
     it('undefinedable(false) should work', () => {
       for (const test of [
         start(t.boolean).undefinedable(false),
         start(t.boolean).undefinedable(false).undefinedable(false),
         start(t.boolean).undefinedable(true).undefinedable(false),
         start(t.boolean).undefinedable(true).undefinedable(false).undefinedable(true).undefinedable(false),
+        start(t.boolean).undefinedable(true, null).undefinedable(false),
       ]) {
         expect(test.name).to.be.eql("boolean(not undefinedable)");
         expect(shouldValidate(test.decode(true))).to.be.equal(true)
