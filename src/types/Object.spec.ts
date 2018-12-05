@@ -31,11 +31,18 @@ describe('types:Object', () => {
 
   describe('object', () => {
     it('should work', () => {
+      const anyType1 = t.refinement(t.any, (i) => i != null, "any")
+      const anyType2 = t.refinement(t.any, (i) => i != null, "any")
+      expect(anyType1).to.not.be.eql(anyType2);
+
       const test = object({
-        required: t.refinement(t.any, (i) => i != null, "any")
+        required: anyType1
       }, {
-        optional: t.refinement(t.any, (i) => i != null, "any")
+        optional: anyType2
       }).end()
+
+      expect(test.props.required).to.be.eql(anyType1);
+      expect(test.optionalProps.optional).to.be.eql(anyType2);
 
       expect(test.name).to.be.eql("{ required: any, optional?: any }")
       expect(shouldValidate(test.decode({ required: 1 }))).to.be.eql({ required: 1 })

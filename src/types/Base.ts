@@ -134,30 +134,22 @@ export class LoiFactoryBase<T extends t.Any> extends LoiFactory<T> {
   /**
    * Return the base io-ts type without Loi decorators.
    */
-  public finish(): t.Type<T['_A'], T['_O'], T['_I']> {
-    return this;
-  }
+  public finish() { return this.asBaseType(); }
 
   /**
    * Return the base io-ts type without Loi decorators.
    */
-  public end(): t.Type<T['_A'], T['_O'], T['_I']> {
-    return this;
-  }
+  public end() { return this.asBaseType(); }
 
   /**
    * Return the base io-ts type without Loi decorators.
    */
-  public simple(): t.Type<T['_A'], T['_O'], T['_I']> {
-    return this;
-  }
+  public simple() { return this.asBaseType(); }
 
   /**
    * Return the base io-ts type without Loi decorators.
    */
-  public clean(): t.Type<T['_A'], T['_O'], T['_I']> {
-    return this;
-  }
+  public clean() { return this.asBaseType(); }
 
   /*
     [...Array(16)].map((_, i) =>

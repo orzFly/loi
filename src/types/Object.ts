@@ -162,21 +162,14 @@ export class LoiTypeObjectViolet<R extends t.Props, O extends t.Props> extends t
   }
 }
 
-/** @internal */
-export const loiObjectRequired = Symbol('loiObjectRequired')
-/** @internal */
-export const loiObjectOptional = Symbol('loiObjectOptional')
-
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
 export type LoiFactoryTypeObject<R extends t.Props, O extends t.Props, T extends t.Any> = T & LoiFactoryObject<R, O, T> & LoiFactoryBase<T>
 export type LoiFactoryTypeObjectInitial<R extends t.Props, O extends t.Props, T extends t.Any> = T & LoiFactoryObjectInitial<R, O, T> & LoiFactoryObject<R, O, T> & LoiFactoryBase<T>
 
 export class LoiFactoryObject<R extends t.Props, O extends t.Props, T extends t.Any> extends LoiFactory<T> {
-  /** @internal */
-  [loiObjectRequired]: R
+  props: R
 
-  /** @internal */
-  [loiObjectOptional]: O
+  optionalProps: O
 
   /** @internal */
   static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T): LoiFactoryTypeObject<R, O, T> {
@@ -198,14 +191,38 @@ export class LoiFactoryObject<R extends t.Props, O extends t.Props, T extends t.
       option: <ILoiOptionObject>{ name: `instanceof ${constructor.name}`, instanceof: constructor }
     });
   }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public asBaseType(): t.Type<T['_A'], T['_O'], T['_I']> & { props: R, optionalProps: O } {
+    return this;
+  }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public finish() { return this.asBaseType(); }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public end() { return this.asBaseType(); }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public simple() { return this.asBaseType(); }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public clean() { return this.asBaseType(); }
 }
 
 export class LoiFactoryObjectInitial<R extends t.Props, O extends t.Props, T extends t.Any> extends LoiFactory<T> {
-  /** @internal */
-  [loiObjectRequired]: R
-
-  /** @internal */
-  [loiObjectOptional]: O
+  props: R
+  optionalProps: O
 
   /** @internal */
   static decorate<R extends t.Props, O extends t.Props, T extends t.Any>(t: T): LoiFactoryTypeObjectInitial<R, O, T> {
@@ -213,7 +230,7 @@ export class LoiFactoryObjectInitial<R extends t.Props, O extends t.Props, T ext
   }
 
   public strict() {
-    const type = new LoiTypeObjectStrict(this[loiObjectRequired], this[loiObjectOptional], this.name)
+    const type = new LoiTypeObjectStrict(this.props, this.optionalProps, this.name)
     return metadata(LoiFactoryObject.decorate<R, O, Clean<T>>(type), {
       parent: this,
       option: <ILoiOptionObject>{ name: `strict`, strict: true }
@@ -221,11 +238,39 @@ export class LoiFactoryObjectInitial<R extends t.Props, O extends t.Props, T ext
   }
 
   public violet() {
-    const type = new LoiTypeObjectViolet(this[loiObjectRequired], this[loiObjectOptional], this.name)
+    const type = new LoiTypeObjectViolet(this.props, this.optionalProps, this.name)
     return metadata(LoiFactoryObject.decorate<R, O, Clean<T>>(type), {
       parent: this,
       option: <ILoiOptionObject>{ name: `violet`, violet: true }
     });
+  }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public finish(): t.Type<T['_A'], T['_O'], T['_I']> & { props: R, optionalProps: O } {
+    return this;
+  }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public end(): t.Type<T['_A'], T['_O'], T['_I']> & { props: R, optionalProps: O } {
+    return this;
+  }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public simple(): t.Type<T['_A'], T['_O'], T['_I']> & { props: R, optionalProps: O } {
+    return this;
+  }
+
+  /**
+   * Return the base io-ts type without Loi decorators.
+   */
+  public clean(): t.Type<T['_A'], T['_O'], T['_I']> & { props: R, optionalProps: O } {
+    return this;
   }
 }
 
@@ -304,7 +349,7 @@ export function object(a?: any, b?: any, c?: any) {
   const decorated = metadata(LoiFactoryObjectInitial.decorate(type), {
     tag: name
   });
-  decorated[loiObjectRequired] = required;
-  decorated[loiObjectOptional] = optional;
+  (decorated as any).props = required;
+  (decorated as any).optionalProps = optional;
   return decorated;
 }
