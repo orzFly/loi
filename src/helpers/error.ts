@@ -14,6 +14,7 @@ export interface LoiValidationError extends Error {
 export interface LoiValidationErrorItem {
   type: string;
   path: string,
+  kind: string,
   message?: string;
 }
 
@@ -27,6 +28,7 @@ export function createErrorDetailItem(v: any, context: t.Context): LoiValidation
   return {
     type: "invalid",
     path: getRealContextPath(context),
+    kind: context[context.length - 1].type.name,
     message: `Invalid value \`${stringify(v)}' supplied to ${getRealContextPath(context)}: ${context[context.length - 1].type.name}.`
   }
 }
