@@ -22,6 +22,7 @@ export function createMessageFromTree(nodes: IValidationErrorTreeNodes, level: n
   const indent = Array(level).fill("  ").join("");
   const result: string[] = [];
   for (const key in nodes) {
+    /* istanbul ignore else */
     if (Object.prototype.hasOwnProperty.call(nodes, key)) {
       const node = nodes[key];
       const keys = Object.keys(node.nodes);
