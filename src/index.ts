@@ -16,7 +16,7 @@ export { enumeration, LoiFactoryEnum } from './types/Enum';
 export { date, LoiFactoryDate } from './types/Date';
 export { set } from './types/Set';
 export { taggedUnion } from './types/TaggedUnion';
-export { literal, never, null, undefined } from 'io-ts';
+export { literal, never, null, undefined } from './types/Literal';
 
 export { LoiDecoratorConvert } from './decorators/convert';
 export { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from './decorators/default';
