@@ -1,6 +1,7 @@
 /.nyc_output
 /coverage
 /lib
+/.npmrc
 
 # Logs
 logs
