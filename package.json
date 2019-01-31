@@ -32,6 +32,6 @@
     "watch": "node_modules/.bin/tsc -w"
   },
   "dependencies": {
-    "io-ts": "^1.3.0"
+    "io-ts": ">=1.3.0, <=1.3.3"
   }
 }
