@@ -15,7 +15,7 @@ export class LoiDecoratorNullable<RT extends t.Any, CVS extends (string | number
       (v: any): v is RT['_A'] | null => (v === null || castValues.indexOf(v) >= 0) ? true : type.is(v),
       (v: any, c: any) =>
         (v === null || castValues.indexOf(v) >= 0) ? t.success(null) : type.validate(v, c),
-      (v: any) => type.encode(v)
+      (v: any) => (v === null || castValues.indexOf(v) >= 0) ? v : type.encode(v)
     )
   }
 }

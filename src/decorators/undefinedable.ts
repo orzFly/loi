@@ -15,7 +15,7 @@ export class LoiDecoratorUndefinedable<RT extends t.Any, CVS extends (string | n
       (v: any): v is RT['_A'] | undefined => (v === undefined || castValues.indexOf(v) >= 0) ? true : type.is(v),
       (v: any, c: any) =>
         (v === undefined || castValues.indexOf(v) >= 0) ? t.success(undefined) : type.validate(v, c),
-      (v: any) => type.encode(v)
+      (v: any) => (v === undefined || castValues.indexOf(v) >= 0) ? v : type.encode(v)
     )
   }
 }
