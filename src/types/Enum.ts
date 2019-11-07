@@ -3,11 +3,6 @@ import { decorate, LoiFactory, metadata } from '../utilties/factory';
 import { isString } from '../utilties/lodash';
 import { LoiFactoryBase } from './Base';
 
-// /** @internal */
-// export interface ILoiOptionEnum extends ILoiOption {
-//   name: string,
-// }
-
 type Clean<T extends t.Any> = t.Type<T['_A'], T['_O'], T['_I']>
 export type LoiFactoryTypeEnum<E, T extends t.Any> = T & LoiFactoryEnum<E, T> & LoiFactoryBase<T>
 
