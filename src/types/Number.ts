@@ -1,10 +1,11 @@
-import { Predicate } from 'fp-ts/lib/function';
 import * as t from 'io-ts';
 import { LoiDecoratorConvert } from '../decorators/convert';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { isString } from '../utilties/lodash';
 import { mimic } from '../utilties/mimic';
 import { LoiFactoryBase } from './Base';
+
+type Predicate<A> = (a: A) => boolean;
 
 /** @internal */
 export interface ILoiOptionNumber extends ILoiOption {

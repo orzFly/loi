@@ -138,7 +138,7 @@ export class LoiTypeObjectViolet<R extends t.Props, O extends t.Props> extends t
           for (let i = 0; i < len; i++) {
             const key = keys[i]
             if (allProps.hasOwnProperty(key)) {
-              newObject[key] = o[key];
+              (newObject as any)[key] = o[key];
             }
           }
           return t.success(newObject)
