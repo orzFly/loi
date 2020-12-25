@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { loiTagTypeDecorator } from '../utilties/tag';
 
 export class LoiDecoratorConvert<RT extends t.Any, X = RT['_I']> extends t.Type<RT['_A'], RT['_O'], RT['_I']> {

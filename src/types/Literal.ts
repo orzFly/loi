@@ -1,7 +1,7 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { start } from './Base';
 
-export { literal } from 'io-ts';
+export { literal } from '../iots';
 
 export const nullType = start(t.null);
 export { nullType as null };

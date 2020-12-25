@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { getRealContextPath } from '../utilties/path';
 import { stringify } from '../utilties/stringify';
 import { createMessage } from './message';

@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from './iots';
 
 export type Any = t.Type<any, any, any>;
 export type TypeOf<RT extends t.Any> = RT['_A'];
@@ -28,3 +28,9 @@ export { validate, validateOrReturn, validateOrThrow } from './helpers/validate'
 export { LoiValidationError, LoiValidationErrorItem, LoiValidationResult, createError } from './helpers/error';
 export { createMessage } from './helpers/message';
 export { ensureSameType, ensureTypeSame } from './helpers/ensureSameType';
+
+export * as t from './iots';
+export { Either, Left, Right } from './iots/Either';
+export { Reporter } from './iots/Reporter';
+export { PathReporter } from './iots/PathReporter';
+export { ThrowReporter } from './iots/ThrowReporter';

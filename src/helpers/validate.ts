@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { createError, LoiValidationResult } from './error';
 
 export function validate<S, A>(value: S, type: t.Decoder<S, A>): t.Validation<A> {

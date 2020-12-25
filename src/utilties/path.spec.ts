@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import * as t from 'io-ts';
+import * as t from '../iots';
 import * as Loi from '../index';
 import { getContextPath, getJavaScriptContextPath, getRealContextPath } from './path';
 

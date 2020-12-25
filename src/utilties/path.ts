@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { isArrayType, isDictType, isUnionType } from './tag';
 
 /** @internal */

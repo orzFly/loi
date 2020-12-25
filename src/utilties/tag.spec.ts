@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { LoiDecoratorConvert } from '../decorators/convert';
 import { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from '../decorators/default';
 import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';

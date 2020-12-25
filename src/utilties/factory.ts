@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 
 /** @internal */
 export const loiTag = Symbol('loiTag')

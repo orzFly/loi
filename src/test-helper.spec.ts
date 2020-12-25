@@ -1,6 +1,6 @@
-import { Either } from 'fp-ts/lib/Either';
-import * as t from 'io-ts';
-import { PathReporter } from 'io-ts/lib/PathReporter';
+import * as t from './iots';
+import { Either } from './iots/Either';
+import { PathReporter } from './iots/PathReporter';
 
 export function shouldValidate<Right>(e: Either<t.ValidationError[], Right>) {
   return e.fold((err) => {

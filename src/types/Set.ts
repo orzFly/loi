@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { isPlainObject } from '../utilties/lodash';
 import { LoiFactoryTypeBase, start } from './Base';
 

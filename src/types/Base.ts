@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { LoiDecoratorDefault, LoiDecoratorDefaultResolver } from '../decorators/default';
 import { LoiDecoratorNotNullable, LoiDecoratorNullable } from '../decorators/nullable';
 import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';

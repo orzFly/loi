@@ -1,4 +1,4 @@
-import { appendContext, Dictionary, ExactType, failure, identity, interface as interfaceType, InterfaceType, IntersectionType, Mixed, mixed, OutputOf, RefinementType, StrictType, string, success, TaggedIntersectionArgument, Type, TypeOf, UnionType } from 'io-ts';
+import { appendContext, Dictionary, ExactType, failure, identity, interface as interfaceType, InterfaceType, IntersectionType, Mixed, mixed, OutputOf, RefinementType, StrictType, string, success, TaggedIntersectionArgument, Type, TypeOf, UnionType } from '../iots';
 import { isDecoratorType } from '../utilties/tag';
 import { LoiTypeObject, LoiTypeObjectStrict, LoiTypeObjectViolet } from './Object';
 

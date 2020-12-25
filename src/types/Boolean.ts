@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { LoiDecoratorConvert } from '../decorators/convert';
 import { LoiDecoratorNullAsUndefined } from '../decorators/nullAsUndefined';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';

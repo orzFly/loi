@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { loiTagTypeDecorator } from '../utilties/tag';
 
 export class LoiDecoratorUndefinedable<RT extends t.Any, CVS extends (string | number | boolean | null | undefined)[] = []> extends t.Type<RT['_A'] | undefined, RT['_O'] | undefined, RT['_I']> {

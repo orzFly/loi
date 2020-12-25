@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { loiTagTypeDecorator } from '../utilties//tag';
 
 // https://github.com/teamdigitale/italia-ts-commons/blob/1688059556e3b3532a73032ab923933f0403fcc5/src/types.ts#L158

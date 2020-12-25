@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 
 export const loiTagTypeDecorator = Symbol('loiTagTypeDecorator')
 export const loiTagTypeCompound = Symbol('loiTagTypeCompound')

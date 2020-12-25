@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { getJavaScriptContextPath } from '../utilties/path';
 import { stringify } from '../utilties/stringify';
 import { isUnionType } from '../utilties/tag';

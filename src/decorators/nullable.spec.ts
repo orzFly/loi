@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { shouldNotValidate, shouldValidate } from '../test-helper.spec';
 import { LoiDecoratorNotNullable, LoiDecoratorNullable } from './nullable';
 

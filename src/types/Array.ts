@@ -1,4 +1,4 @@
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { decorate, ILoiOption, LoiFactory, metadata } from '../utilties/factory';
 import { LoiFactoryBase } from './Base';
 

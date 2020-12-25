@@ -1,6 +1,6 @@
 {
   "name": "loi",
-  "version": "0.9.5",
+  "version": "0.10.0",
   "files": [
     "lib"
   ],
@@ -13,14 +13,13 @@
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "coveralls": "^3.0.7",
-    "fp-ts": "^1.0.0",
     "mocha": "^6.2.2",
     "nyc": "^14.1.1",
     "rimraf": "^3.0.0",
     "source-map-support": "^0.5.16",
-    "ts-node": "^8.4.1",
+    "ts-node": "^9.1.1",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.2"
+    "typescript": "^4.1.3"
   },
   "scripts": {
     "build": "tsc",
@@ -33,8 +32,5 @@
     "test:coveralls": "nyc report --reporter=text-lcov | coveralls",
     "test": "mocha --timeout 10000",
     "watch": "tsc -w"
-  },
-  "dependencies": {
-    "io-ts": ">=1.3.0 <=1.3.3"
   }
 }

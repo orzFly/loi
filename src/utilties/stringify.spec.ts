@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import * as t from 'io-ts';
+import * as t from '../iots';
 import { stringify } from './stringify';
 
 // tslint:disable:no-unused-expression // chai to be NaN
